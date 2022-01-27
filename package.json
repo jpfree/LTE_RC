@@ -9,7 +9,8 @@
         "electron:build": "vue-cli-service electron:build",
         "electron:serve": "vue-cli-service electron:serve",
         "postinstall": "electron-builder install-app-deps",
-        "postuninstall": "electron-builder install-app-deps"
+        "postuninstall": "electron-builder install-app-deps",
+        "rebuild": "electron-rebuild -f -w serialport"
     },
     "main": "background.js",
     "dependencies": {
@@ -25,6 +26,9 @@
         "moment": "^2.29.1",
         "mqtt": "^4.2.8",
         "nanoid": "^3.1.25",
+        "serialport": "^9.2.8",
+        "stylus": "^0.56.0",
+        "stylus-loader": "^6.2.0",
         "swiper": "^7.2.0",
         "underscore": "^1.13.1",
         "vue": "^2.6.11",
@@ -32,11 +36,13 @@
         "vue-draggable-resizable": "^2.3.0",
         "vue-flight-indicators": "^0.1.1",
         "vue-router": "^3.2.0",
+        "vue-sidebar-menu": "^4.8.1",
         "vue-simple-progress": "^1.1.1",
         "vue-webrtc": "^2.0.0",
         "vue2-google-maps": "^0.10.7",
         "vuedraggable": "^2.24.3",
         "vuejs-progress-bar": "^1.2.7",
+        "vuesax": "^3.12.2",
         "vuetify": "^2.4.0",
         "vuex": "^3.4.0"
     },
@@ -49,6 +55,7 @@
         "babel-eslint": "^10.1.0",
         "electron": "^13.0.0",
         "electron-devtools-installer": "^3.1.0",
+        "electron-rebuild": "^3.2.7",
         "eslint": "^6.7.2",
         "eslint-plugin-vue": "^6.2.2",
         "sass": "~1.32.0",

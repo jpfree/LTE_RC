@@ -7,7 +7,7 @@ import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import ProgressBar from 'vuejs-progress-bar'
-import VueCookies from "vue-cookies";
+import VueCookies from "vue-cookies"
 
 //쿠키를 사용한다.
 Vue.use(VueCookies);

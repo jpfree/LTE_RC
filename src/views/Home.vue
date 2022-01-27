@@ -1,17 +1,20 @@
 <template>
     <div>
+        <AddDrone/>
         <RCCalibration/>
     </div>
 </template>
 
 <script>
 import RCCalibration from "../components/RCCalibration";
+import AddDrone from "../components/AddDrone";
 
 export default {
     name: 'Home',
 
     components: {
-        RCCalibration,
+        AddDrone,
+        RCCalibration
     },
 
     created() {

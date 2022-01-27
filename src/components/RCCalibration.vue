@@ -1,5 +1,5 @@
 <template>
-    <v-container>
+    <v-container class="rc_cali">
         <v-row>
             <v-col cols="6">
                 <v-row justify="center">
@@ -149,6 +149,8 @@
 
 import {nanoid} from "nanoid";
 import mqtt from "mqtt";
+import EventBus from "@/EventBus";
+import SerialPort from "serialport";
 
 export default {
     name: 'RCCalibration',
@@ -168,7 +170,7 @@ export default {
                 password: 'keti_rc_calibration',
             },
             subscription: {
-                topic: '/Mobius/' + this.$store.state.VUE_APP_MOBIUS_GCS + '/RC_Data/' + this.$store.state.VUE_APP_MOBIUS_RC,
+                topic: '/Mobius/' + this.$store.state.VUE_APP_MOBIUS_GCS + '/RC_Data/' + this.$store.state.VUE_APP_MOBIUS_RCID,
                 qos: 0,
             },
             publish: {
@@ -176,7 +178,6 @@ export default {
                 qos: 0,
                 payload: '{ "msg": "Hello, I am browser." }',
             },
-            receiveNews: '',
             qosList: [
                 {label: 0, value: 0},
                 {label: 1, value: 1},
@@ -283,40 +284,61 @@ export default {
             max: 100,
 
             radio_cali_flag: false,
+
+            rcPort_info: {
+                Path: 'COM4',
+                BaudRate: 115200
+            },
+            rcPort: null,
+
+            RCstrFromeGCS: '',
+            RCstrFromeGCSLength: 0
         }
     },
     methods: {
         createConnection() {
-            if (this.client.connected) {
+            if (this.$store.state.client.connected) {
                 console.log('There is already a connected client. Destroyed connection and then reconnect.');
                 this.destroyConnection()
             }
-            if (!this.client.connected) {
+            if (!this.$store.state.client.connected) {
                 const {host, port, endpoint, ...options} = this.connection
                 const connectUrl = `ws://${host}:${port}${endpoint}`
+
+                // Connect serial for rc data
+                this.rcPortOpening(this.rcPort_info);
+
                 try {
-                    this.client = mqtt.connect(connectUrl, options)
+                    this.$store.state.client = mqtt.connect(connectUrl, options)
                 } catch (error) {
                     console.log('mqtt.connect error', error)
                 }
-                this.client.on('connect', () => {
+                this.$store.state.client.on('connect', () => {
                     console.log('Connection succeeded!')
                     this.doSubscribe()
                 })
-                this.client.on('error', error => {
+                this.$store.state.client.on('error', error => {
                     console.log('Connection failed', error)
                 })
-                this.client.on('message', (topic, message) => {
-                    this.receiveNews = this.receiveNews.concat(message)
-                    // console.log(`Received message ${message.toString('hex')} from topic ${topic}`)
-                    this.receiveFromRC(message.toString('hex'))
+                this.$store.state.client.on('message', (topic, message) => {
+                    // // console.log(`Received message ${message.toString('hex')} from topic ${topic}`)
+                    // this.receiveFromRC(message.toString('hex'))
+                    let payload = {};
+                    payload.topic = topic;
+                    payload.message = message;
+
+                    let topic_arr = topic.split('/')
+                    if (this.$store.state.VUE_APP_MOBIUS_RC === topic_arr[topic_arr.length - 1]) {
+                        console.log(payload)
+                        EventBus.$emit('on-message-handler-' + this.$store.state.VUE_APP_MOBIUS_RC, payload)
+                    }
                 })
             }
         },
         doSubscribe() {
-            if (this.client.connected) {
+            if (this.$store.state.client.connected) {
                 const {topic, qos} = this.subscription
-                this.client.subscribe(topic, {qos}, (error, res) => {
+                this.$store.state.client.subscribe(topic, {qos}, (error, res) => {
                     if (error) {
                         console.log('Subscribe to topics error', error)
                         // return
@@ -327,9 +349,9 @@ export default {
             }
         },
         doUnSubscribe() {
-            if (this.client.connected) {
+            if (this.$store.state.client.connected) {
                 const {topic} = this.subscription
-                this.client.unsubscribe(topic, error => {
+                this.$store.state.client.unsubscribe(topic, error => {
                     if (error) {
                         console.log('Unsubscribe error', error)
                     }
@@ -337,8 +359,8 @@ export default {
             }
         },
         doPublish(topic, payload) {
-            if (this.client.connected) {
-                this.client.publish(topic, payload, 0, error => {
+            if (this.$store.state.client.connected) {
+                this.$store.state.client.publish(topic, payload, 0, error => {
                     if (error) {
                         console.log('Publish error', error)
                     }
@@ -346,17 +368,68 @@ export default {
             }
         },
         destroyConnection() {
-            if (this.client.connected) {
+            if (this.$store.state.client.connected) {
                 try {
                     this.doUnSubscribe()
 
-                    this.client.end()
-                    this.client = {
+                    this.$store.state.client.end()
+                    this.$store.state.client = {
                         connected: false,
                     }
                     console.log('Successfully disconnected!')
                 } catch (error) {
                     console.log('Disconnect failed', error.toString())
+                }
+                this.rcPort.close()
+            }
+        },
+        rcPortOpening(port) {
+            if (this.rcPort == null) {
+                this.rcPort = new SerialPort(port.Path, {
+                    baudRate: parseInt(port.BaudRate, 10),
+                });
+
+                this.rcPort.on('open', this.rcPortOpen);
+                this.rcPort.on('close', this.rcPortClose);
+                this.rcPort.on('error', this.rcPortError);
+                this.rcPort.on('data', this.rcPortData);
+            } else {
+                if (this.rcPort.isOpen) {
+                    console.log('This is an already open RC port.')
+                } else {
+                    this.rcPort.open();
+                }
+            }
+        },
+        rcPortOpen() {
+            console.log('rcPort open. ' + this.rcPort_info.Path + ' Data rate: ' + this.rcPort_info.BaudRate);
+        },
+        rcPortClose() {
+            console.log('rcPort closed.');
+        },
+        rcPortError(error) {
+            console.log('[rcPort error]: ' + error.message);
+
+            setTimeout(this.rcPortOpening, 2000);
+        },
+        rcPortData(data) {
+            this.RCstrFromeGCS += data.toString('hex').toLowerCase();
+
+            while (this.RCstrFromeGCS.length >= 68) {
+                // console.log(this.RCstrFromeGCS);
+                let header1 = this.RCstrFromeGCS.substr(0, 2);
+                if (header1 === 'ff') {
+                    let RCLength = 34 * 2;
+
+                    this.receiveFromRC(this.RCstrFromeGCS.toString('hex'))
+
+                    if (this.$store.state.client.connected) {
+                        this.$store.state.client.publish('/Mobius/' + this.$store.state.VUE_APP_MOBIUS_GCS + '/RC_Data/' + this.$store.state.VUE_APP_MOBIUS_RC, Buffer.from(this.RCstrFromeGCS, 'hex'));
+                    }
+                    this.RCstrFromeGCS = this.RCstrFromeGCS.substr(RCLength);
+                    this.RCstrFromeGCSLength = 0;
+                } else {
+                    this.RCstrFromeGCS = this.RCstrFromeGCS.substr(2);
                 }
             }
         },
@@ -438,6 +511,9 @@ export default {
                 console.log('yaw reverse')
             }
         },
+        beforeDestroy() {
+            this.GcsAppBarReseted()
+        }
     },
     mounted() {
         setInterval(() => {
@@ -464,6 +540,11 @@ export default {
 </script>
 
 <style>
+.rc_cali {
+    position: absolute;
+    left: 280px;
+}
+
 .progress-bar {
     font-size: 16px;
     color: #000000;
