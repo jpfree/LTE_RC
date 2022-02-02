@@ -9,7 +9,6 @@
                 placeholder=""
                 label="Drone*"
                 required
-                :disabled="!MOBIUS_CONNECTION_CONNECTED"
                 style="v-text-field--outlined: white"
                 background-color="white"
             ></v-text-field>
@@ -21,11 +20,10 @@
                     @click="DroneADD"
                     elevation="5"
                     color="success"
-                    :disabled="!MOBIUS_CONNECTION_CONNECTED"
                 > ADD
                 </v-btn>
             </v-row>
-            <hr class="mt-7">
+            <div class="aside-line"></div>
             <v-row v-if="drone_list.length > 0" class="mx-2 white--text font-weight-bold">
                 Drone List
             </v-row>
@@ -144,7 +142,7 @@ export default {
             }
         },
         onMessageHandler(topic, message) {
-            if (this.$store.state.VUE_APP_MOBIUS_RC === message.toString()) {
+            if (this.$store.state.VUE_APP_MOBIUS_RC === message.toString().replace(/"/gi, "")) {
                 for (let idx in this.drone_list) {
                     this.$store.state.client.publish('/Mobius/' + this.$store.state.VUE_APP_MOBIUS_GCS + '/RC_Data/Cert/' + this.drone_list[idx].value1, Buffer.from(this.drone_list[idx].value1))
                 }
@@ -177,7 +175,7 @@ a:hover {
     position: fixed;
     top: 0px;
     left: 0px;
-    width: 250px;
+    width: 200px;
     height: 100%;
     background: rgb(39, 39, 40);
     padding: 150px 0;
@@ -190,6 +188,13 @@ a:hover {
 
 .theme--light.v-data-table tbody tr.v-data-table__selected:hover {
     background: rgb(124, 124, 124) !important;
+}
+
+.aside-line {
+    display: block;
+    width: calc(100% + 10px);
+    margin: 24px -5px 6px -5px;
+    border-bottom: 3px solid rgb(127, 130, 139);
 }
 </style>
 

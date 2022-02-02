@@ -4,12 +4,8 @@
     "private": true,
     "scripts": {
         "serve": "vue-cli-service serve",
-        "build": "vue-cli-service build",
-        "lint": "vue-cli-service lint",
         "electron:build": "vue-cli-service electron:build",
         "electron:serve": "vue-cli-service electron:serve",
-        "postinstall": "electron-builder install-app-deps",
-        "postuninstall": "electron-builder install-app-deps",
         "rebuild": "electron-rebuild -f -w serialport"
     },
     "main": "background.js",
@@ -89,6 +85,6 @@
     "license": "BSD-3-Clause",
     "repository": {
         "type": "git",
-        "url": "https://github.com/dnjstjr93/radio_calibration.git"
+        "url": "https://github.com/dnjstjr93/LTE_RC.git"
     }
 }

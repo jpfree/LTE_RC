@@ -4,7 +4,7 @@
             <v-toolbar-title>
                 <v-row no-gutters align="center">
                     <v-icon left>mdi-monitor-dashboard</v-icon>
-                    KETI Radio Calibration
+                    KETI LTE RC
                 </v-row>
             </v-toolbar-title>
 
@@ -42,7 +42,7 @@
                         dense hide-details outlined
                         ref="rc"
                         v-model="rc_id" :rules="rcID_rule"
-                        placeholder="RC1"
+                        placeholder="JWS"
                         label="RC ID*"
                         required
                         :disabled="MOBIUS_CONNECTION_CONNECTED"
@@ -73,20 +73,18 @@
 
 <script>
 import axios from 'axios'
+import EventBus from "@/EventBus";
 
 export default {
     name: "RCAppBar",
 
-    components: {
-        // WebrtcCard,
-        // WindowPortal
-    },
     data: function () {
         return {
             open: false,
             MOBIUS_DISCONNECTION_TEXT: 'Disconnect',
             MOBIUS_CONNECTION_TEXT: 'Connect',
-            MOBIUS_CONNECTION_CONNECTED: localStorage.getItem('mobius_connected') ? (localStorage.getItem('mobius_connected') === 'true') : false,
+            // MOBIUS_CONNECTION_CONNECTED: localStorage.getItem('mobius_connected') ? (localStorage.getItem('mobius_connected') === 'true') : false,
+            MOBIUS_CONNECTION_CONNECTED: false,
             MOBIUS_CONNECTION_DISABLED: false,
             update_idx: 0,
             formHasErrors: false,
@@ -143,12 +141,13 @@ export default {
 
             localStorage.setItem('mobius_host', self.host);
             localStorage.setItem('mobius_gcs', self.gcs);
-            localStorage.setItem('mobius_RC', self.rc_id);
+            localStorage.setItem('mobius_rc', self.rc_id);
 
             self.MOBIUS_CONNECTION_CONNECTED = true;
             self.$store.state.MOBIUS_CONNECTION_CONNECTED = true;
 
             localStorage.setItem('mobius_connected', self.MOBIUS_CONNECTION_CONNECTED);
+            EventBus.$emit('mqttConnection')
         },
 
         GcsAppBarReseted() {
@@ -156,6 +155,7 @@ export default {
             this.$store.state.MOBIUS_CONNECTION_CONNECTED = false;
 
             localStorage.setItem('mobius_connected', this.MOBIUS_CONNECTION_CONNECTED);
+            EventBus.$emit('mqttConnection')
         },
     },
     mounted() {

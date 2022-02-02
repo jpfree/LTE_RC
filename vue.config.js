@@ -13,7 +13,7 @@ module.exports = {
             builderOptions: {
                 // options placed here will be merged with default configuration and passed to electron-builder
                 appId: 'kr.re.keti.app',
-                productName: "radio_calibration",
+                productName: "LTE_RC",
                 win: {
                     icon: "./public/logo.png",
                     target: [
@@ -34,7 +34,7 @@ module.exports = {
                 //         owner: "dnjstjr93",
                 //         releaseType: "release",
                 //         channel: "latest",
-                //         url: "https://github.com/dnjstjr93/radio_calibration.git",
+                //         url: "https://github.com/dnjstjr93/LTE_RC.git",
                 //         private: true,
                 //         token: process.env.GH_TOKEN
                 //     }
