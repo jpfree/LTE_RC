@@ -45,11 +45,16 @@
                         color="primary"
                         :size="25"
                     ></v-progress-circular>
-                    <font-awesome-icon
-                        v-if="rc_hub_status.includes($store.state.control_drone[item.name].status) && $store.state.control_drone[item.name].status!=='ready'"
-                        :icon="iconName(item)"
-                        size="lg"
-                        :style="iconColor(item)"/>
+                    <v-avatar
+                        :style="{animationDuration: animationDuration}"
+                        class="v-avatar--metronome"
+                        size="24"
+                    >
+                        <font-awesome-icon
+                            v-if="rc_hub_status.includes($store.state.control_drone[item.name].status) && $store.state.control_drone[item.name].status!=='ready'"
+                            :icon="iconName(item)"
+                            :style="iconColor(item)"/>
+                    </v-avatar>
                 </template>
             </v-data-table>
             <v-row align="center" justify="space-around">
@@ -122,10 +127,15 @@ export default {
             ],
             drone_list: [],
             drone_selected: [],
-            rc_hub_status: ['disconnected', 'ready', 'connected', 'send', 'disabled']
+            rc_hub_status: ['disconnected', 'ready', 'connected', 'send', 'disabled'],
+
+            recv_counter: 1,
+            timer_id: null,
+            bpm: 40
         }
     },
     methods: {
+
         DroneADD() {
             let drone = {}
             drone.name = this.add_drone
@@ -245,14 +255,33 @@ export default {
             return style
         }
     },
+    computed: {
+        animationDuration() {
+            return `${60 / this.bpm}s`
+        },
+    },
+    created() {
+        this.timer_id = setInterval(() => {
+            this.bpm = this.recv_counter;
+
+            this.recv_counter = 1;
+
+        }, 60000);
+    },
     mounted() {
         EventBus.$on('update-table', (drone) => {
             this.UpdateTable(drone);
+        });
+        EventBus.$on('add-counter', () => {
+            this.recv_counter++;
         });
     },
     beforeDestroy() {
         this.drone_list = []
         this.add_drone = ""
+        if (this.timer_id) {
+            clearInterval(this.timer_id);
+        }
     }
 }
 </script>
@@ -290,6 +319,24 @@ a:hover {
     width: calc(100% + 10px);
     margin: 24px -5px 6px -5px;
     border-bottom: 3px solid rgb(127, 130, 139);
+}
+
+@keyframes metronome-example {
+    from {
+        transform: scale(.5);
+    }
+
+    to {
+        transform: scale(1);
+    }
+}
+
+.v-avatar--metronome {
+    animation-name: metronome-example;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    position: relative;
+    opacity: 1; /* for demo purpose  */
 }
 </style>
 

@@ -436,6 +436,7 @@ export default {
 
                     let topic_arr = topic.split('/')
                     if (topic_arr[topic_arr.length - 1] === 'status') {
+                        EventBus.$emit('add-counter')
                         if (message.toString() === 'disconnected') {
                             this.$store.state.control_drone[topic_arr[topic_arr.length - 2]].icon = 'unlink'
                             this.$store.state.control_drone[topic_arr[topic_arr.length - 2]].status = 'disconnected'
@@ -458,14 +459,6 @@ export default {
                         }
                         EventBus.$emit('update-table', topic_arr[topic_arr.length - 2])
                     }
-                    let payload = {};
-                    payload.topic = topic;
-                    payload.message = message;
-
-                    // if (this.$store.state.VUE_APP_MOBIUS_RC === topic_arr[topic_arr.length - 1]) {
-                    //     console.log(payload)
-                    //     EventBus.$emit('on-message-handler-' + this.$store.state.VUE_APP_MOBIUS_RC, payload)
-                    // }
                 })
             }
         },
