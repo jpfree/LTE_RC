@@ -432,17 +432,40 @@ export default {
                     console.log('Connection failed', error)
                 })
                 this.$store.state.client.on('message', (topic, message) => {
-                    console.log(`Received message ${message.toString()} from topic ${topic}`)
-                    // this.receiveFromRC(message.toString('hex'))
+                    // console.log(`Received message ${message.toString()} from topic ${topic}`)
+
+                    let topic_arr = topic.split('/')
+                    if (topic_arr[topic_arr.length - 1] === 'status') {
+                        if (message.toString() === 'disconnected') {
+                            this.$store.state.control_drone[topic_arr[topic_arr.length - 2]].icon = 'unlink'
+                            this.$store.state.control_drone[topic_arr[topic_arr.length - 2]].status = 'disconnected'
+                            this.$store.state.client.publish('/Mobius/' + this.$store.state.VUE_APP_MOBIUS_GCS + '/RC_Data/' + topic_arr[topic_arr.length - 2] + '/conn', Buffer.from('ready'))
+                        } else if (message.toString() === 'ready') {
+                            this.$store.state.control_drone[topic_arr[topic_arr.length - 2]].icon = 'spinner'
+                            this.$store.state.control_drone[topic_arr[topic_arr.length - 2]].status = 'ready'
+                        } else if (message.toString() === 'connected') {
+                            this.$store.state.control_drone[topic_arr[topic_arr.length - 2]].icon = 'link'
+                            this.$store.state.control_drone[topic_arr[topic_arr.length - 2]].status = 'connected'
+                        } else if (message.toString() === 'send') {
+                            this.$store.state.control_drone[topic_arr[topic_arr.length - 2]].icon = 'circle'
+                            this.$store.state.control_drone[topic_arr[topic_arr.length - 2]].status = 'send'
+                        } else if (message.toString() === 'send') {
+                            this.$store.state.control_drone[topic_arr[topic_arr.length - 2]].icon = 'times-circle'
+                            this.$store.state.control_drone[topic_arr[topic_arr.length - 2]].status = 'disabled'
+                        } else {
+                            this.$store.state.control_drone[topic_arr[topic_arr.length - 2]].icon = 'exclamation-circle'
+                            this.$store.state.control_drone[topic_arr[topic_arr.length - 2]].status = 'error'
+                        }
+                        EventBus.$emit('update-table', topic_arr[topic_arr.length - 2])
+                    }
                     let payload = {};
                     payload.topic = topic;
                     payload.message = message;
 
-                    let topic_arr = topic.split('/')
-                    if (this.$store.state.VUE_APP_MOBIUS_RC === topic_arr[topic_arr.length - 1]) {
-                        console.log(payload)
-                        EventBus.$emit('on-message-handler-' + this.$store.state.VUE_APP_MOBIUS_RC, payload)
-                    }
+                    // if (this.$store.state.VUE_APP_MOBIUS_RC === topic_arr[topic_arr.length - 1]) {
+                    //     console.log(payload)
+                    //     EventBus.$emit('on-message-handler-' + this.$store.state.VUE_APP_MOBIUS_RC, payload)
+                    // }
                 })
             }
         },

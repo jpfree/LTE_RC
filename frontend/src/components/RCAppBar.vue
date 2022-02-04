@@ -3,7 +3,6 @@
         <v-app-bar app color="dark" dark dense>
             <v-toolbar-title>
                 <v-row no-gutters align="center">
-                    <v-icon left>mdi-monitor-dashboard</v-icon>
                     KETI LTE RC
                 </v-row>
             </v-toolbar-title>

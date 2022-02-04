@@ -12,6 +12,7 @@ export default new Vuex.Store({
         client: {
             connected: false,
             loading: false
-        }
+        },
+        control_drone: {}
     },
 })

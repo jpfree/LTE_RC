@@ -3,12 +3,20 @@ import App from './App.vue'
 import store from './store'
 import router from './router'
 import vuetify from './plugins/vuetify'
-import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
+import {BootstrapVue, IconsPlugin} from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import ProgressBar from 'vuejs-progress-bar'
 import VueCookies from "vue-cookies"
+import {library} from '@fortawesome/fontawesome-svg-core'
+import {
+    faSpinner, faTimes, faTimesCircle, faUnlink, faLink, faCircle, faExclamationCircle
+} from '@fortawesome/free-solid-svg-icons'
+import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
 
+library.add(faSpinner, faTimes, faTimesCircle, faUnlink, faLink, faCircle, faExclamationCircle)
+
+Vue.component('font-awesome-icon', FontAwesomeIcon)
 //쿠키를 사용한다.
 Vue.use(VueCookies);
 Vue.use(BootstrapVue)
