@@ -44,16 +44,4 @@ export default {
 .rc_cali {
     position: absolute;
 }
-
-.progress-bar {
-    font-size: 16px;
-    color: #000000;
-}
-
-.progress-vertical {
-    font-size: 16px;
-    color: #000000;
-    transform: rotate(270deg);
-}
-
 </style>

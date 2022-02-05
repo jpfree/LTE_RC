@@ -1,5 +1,5 @@
 <template>
-    <v-container class="lte_rc">
+    <v-container class="lte_rc" fluid>
         <RCCalibration
             v-if="radio_cali_flag"
             :ch_raw="ch_raw"
@@ -12,138 +12,346 @@
             <v-col cols="6">
                 <v-row justify="center">
                     <v-col cols="10">
-                        <b-progress :max="max" height="3rem">
-                            <b-progress-bar :value="ch_value.ch1_value" class="black--text">
-                                <span>Roll  <strong>{{ ch_raw.ch1_raw }}</strong></span>
-                            </b-progress-bar>
-                        </b-progress>
+                        <v-progress-linear
+                            class="mt-2"
+                            v-model="ch_value.ch1_value"
+                            height="50"
+                            rounded
+                        >
+                            <span>Roll <strong>{{ ch_raw.ch1_raw }}</strong></span>
+                        </v-progress-linear>
                     </v-col>
                     <v-col cols="2">
-                        <input type="checkbox" v-model="reverse_roll" value="false">reverse
+                        <v-switch
+                            v-model="reverse_roll"
+                            inset
+                        ></v-switch>
                     </v-col>
                 </v-row>
-                <v-row class="mt-12 pt-9">
-                    <v-col cols="3" align="center">
-                        reverse<input type="checkbox" v-model="reverse_pitch" value="set_reverse">
+                <v-row justify="center" style="height: 90px;">
+                    <v-col cols="2" align-self="end" class="">
+                        <v-switch
+                            v-model="reverse_pitch"
+                            inset
+                        ></v-switch>
                     </v-col>
-                    <v-col cols="8" align="end" class="pr-8">
-                        <input type="checkbox" v-model="reverse_throttle" value="set_reverse">reverse
+                    <v-col cols="6"></v-col>
+                    <v-col cols="3" align-self="end" class="">
+                        <v-switch
+                            v-model="reverse_throttle"
+                            inset
+                        ></v-switch>
                     </v-col>
                 </v-row>
                 <v-row align="center"
-                       style="height: 200px;">
-                    <v-col cols="8" align="start" class="mx-n16 px-n16">
-                        <b-progress class="progress-vertical" :max="max" height="4rem">
-                            <b-progress-bar :value="ch_value.ch2_value" class="black--text">
-                                <span>Pitch <strong>{{ ch_raw.ch2_raw }}</strong></span>
-                            </b-progress-bar>
-                        </b-progress>
+                       style="height: 120px;"
+                       justify="center">
+                    <v-col cols="6" class="ml-n10 mr-n8">
+                        <v-progress-linear
+                            class="progress-vertical"
+                            v-model="ch_value.ch2_value"
+                            height="60"
+                            rounded
+                        >
+                            <span>Pitch <strong>{{ ch_raw.ch2_raw }}</strong></span>
+                        </v-progress-linear>
                     </v-col>
-                    <v-col cols="8" class="mx-n16 px-n16">
-                        <b-progress class="progress-vertical" :max="max" height="4rem">
-                            <b-progress-bar :value="ch_value.ch3_value" class="black--text">
-                                <span>Throttle  <strong>{{ ch_raw.ch3_raw }}</strong></span>
-                            </b-progress-bar>
-                        </b-progress>
+                    <v-col cols="6" class="mr-16">
+                        <v-progress-linear
+                            class="progress-vertical"
+                            v-model="ch_value.ch3_value"
+                            height="60"
+                            rounded
+                        >
+                            <span>Throttle <strong>{{ ch_raw.ch3_raw }}</strong></span>
+                        </v-progress-linear>
                     </v-col>
                 </v-row>
-                <v-row class="mt-16 pt-16">
+                <v-row class="mt-13 pt-13" align="center">
                     <v-col cols="10">
-                        <b-progress :max="max" height="3rem">
-                            <b-progress-bar :value="ch_value.ch4_value" class="black--text">
-                                <span>Yaw  <strong>{{ ch_raw.ch4_raw }}</strong></span>
-                            </b-progress-bar>
-                        </b-progress>
+                        <v-progress-linear
+                            v-model="ch_value.ch4_value"
+                            height="50"
+                            rounded
+                        >
+                            <span>Yaw <strong>{{ ch_raw.ch4_raw }}</strong></span>
+                        </v-progress-linear>
                     </v-col>
                     <v-col cols="2">
-                        <input type="checkbox" v-model="reverse_yaw" value="set_reverse">reverse
+                        <v-switch
+                            v-model="reverse_yaw"
+                            inset
+                        ></v-switch>
                     </v-col>
                 </v-row>
             </v-col>
             <v-col>
                 <v-row class="my-3">
                     <v-col cols="6">
-                        <b-progress :max="max" height="3rem">
-                            <b-progress-bar :value="ch_value.ch5_value" class="black--text">
-                                <span>Radio 5 <strong>{{ ch_raw.ch5_raw }} </strong></span>
-                            </b-progress-bar>
-                        </b-progress>
+                        <v-progress-linear
+                            v-model="ch_value.ch5_value"
+                            height="50"
+                            rounded
+                        >
+                            <span>Radio 5 <strong>{{ ch_raw.ch5_raw }}</strong></span>
+                        </v-progress-linear>
                     </v-col>
                     <v-col cols="6">
-                        <b-progress :max="max" height="3rem">
-                            <b-progress-bar :value="ch_value.ch10_value" class="black--text">
-                                <span>Radio 10 <strong>{{ ch_raw.ch10_raw }} </strong></span>
-                            </b-progress-bar>
-                        </b-progress>
+                        <v-progress-linear
+                            v-model="ch_value.ch10_value"
+                            height="50"
+                            rounded
+                        >
+                            <span>Radio 10 <strong>{{ ch_raw.ch10_raw }}</strong></span>
+                        </v-progress-linear>
                     </v-col>
                 </v-row>
                 <v-row class="my-3">
                     <v-col cols="6">
-                        <b-progress :max="max" height="3rem">
-                            <b-progress-bar :value="ch_value.ch6_value" class="black--text">
-                                <span>Radio 6 <strong>{{ ch_raw.ch6_raw }} </strong></span>
-                            </b-progress-bar>
-                        </b-progress>
+                        <v-progress-linear
+                            v-model="ch_value.ch6_value"
+                            height="50"
+                            rounded
+                        >
+                            <span>Radio 6 <strong>{{ ch_raw.ch6_raw }}</strong></span>
+                        </v-progress-linear>
                     </v-col>
                     <v-col cols="6">
-                        <b-progress :max="max" height="3rem">
-                            <b-progress-bar :value="ch_value.ch11_value" class="black--text">
-                                <span>Radio 11 <strong>{{ ch_raw.ch11_raw }} </strong></span>
-                            </b-progress-bar>
-                        </b-progress>
+                        <v-progress-linear
+                            v-model="ch_value.ch11_value"
+                            height="50"
+                            rounded
+                        >
+                            <span>Radio 11 <strong>{{ ch_raw.ch11_raw }}</strong></span>
+                        </v-progress-linear>
                     </v-col>
                 </v-row>
                 <v-row class="my-3">
                     <v-col cols="6">
-                        <b-progress :max="max" height="3rem">
-                            <b-progress-bar :value="ch_value.ch7_value" class="black--text">
-                                <span>Radio 7 <strong>{{ ch_raw.ch7_raw }} </strong></span>
-                            </b-progress-bar>
-                        </b-progress>
+                        <v-progress-linear
+                            v-model="ch_value.ch7_value"
+                            height="50"
+                            rounded
+                        >
+                            <span>Radio 7 <strong>{{ ch_raw.ch7_raw }}</strong></span>
+                        </v-progress-linear>
                     </v-col>
                     <v-col cols="6">
-                        <b-progress :max="max" height="3rem">
-                            <b-progress-bar :value="ch_value.ch12_value" class="black--text">
-                                <span>Radio 12 <strong>{{ ch_raw.ch12_raw }} </strong></span>
-                            </b-progress-bar>
-                        </b-progress>
+                        <v-progress-linear
+                            v-model="ch_value.ch12_value"
+                            height="50"
+                            rounded
+                        >
+                            <span>Radio 12 <strong>{{ ch_raw.ch12_raw }}</strong></span>
+                        </v-progress-linear>
                     </v-col>
                 </v-row>
                 <v-row class="my-3">
                     <v-col cols="6">
-                        <b-progress :max="max" height="3rem">
-                            <b-progress-bar :value="ch_value.ch8_value" class="black--text">
-                                <span>Radio 8 <strong>{{ ch_raw.ch8_raw }} </strong></span>
-                            </b-progress-bar>
-                        </b-progress>
+                        <v-progress-linear
+                            v-model="ch_value.ch8_value"
+                            height="50"
+                            rounded
+                        >
+                            <span>Radio 8 <strong>{{ ch_raw.ch8_raw }}</strong></span>
+                        </v-progress-linear>
                     </v-col>
                     <v-col cols="6">
-                        <b-progress :max="max" height="3rem">
-                            <b-progress-bar :value="ch_value.ch13_value" class="black--text">
-                                <span>Radio 13 <strong>{{ ch_raw.ch13_raw }} </strong></span>
-                            </b-progress-bar>
-                        </b-progress>
+                        <v-progress-linear
+                            v-model="ch_value.ch13_value"
+                            height="50"
+                            rounded
+                        >
+                            <span>Radio 13 <strong>{{ ch_raw.ch13_raw }}</strong></span>
+                        </v-progress-linear>
                     </v-col>
                 </v-row>
                 <v-row class="my-3">
                     <v-col cols="6">
-                        <b-progress :max="max" height="3rem">
-                            <b-progress-bar :value="ch_value.ch9_value" class="black--text">
-                                <span>Radio 9 <strong>{{ ch_raw.ch9_raw }} </strong></span>
-                            </b-progress-bar>
-                        </b-progress>
+                        <v-progress-linear
+                            v-model="ch_value.ch9_value"
+                            height="50"
+                            rounded
+                        >
+                            <span>Radio 9 <strong>{{ ch_raw.ch9_raw }}</strong></span>
+                        </v-progress-linear>
                     </v-col>
                     <v-col cols="6">
-                        <b-progress :max="max" height="3rem">
-                            <b-progress-bar :value="ch_value.ch14_value" class="black--text">
-                                <span>Radio 14 <strong>{{ ch_raw.ch14_raw }} </strong></span>
-                            </b-progress-bar>
-                        </b-progress>
+                        <v-progress-linear
+                            v-model="ch_value.ch14_value"
+                            height="50"
+                            rounded
+                        >
+                            <span>Radio 14 <strong>{{ ch_raw.ch14_raw }}</strong></span>
+                        </v-progress-linear>
                     </v-col>
                 </v-row>
-                <v-row class="mt-6" justify="center">
+                <v-row class="" justify="center">
                     <v-col cols="3" align="center">
                         <v-btn color="success" v-on:click="calibrateRadio"> 무선 보정</v-btn>
+                    </v-col>
+                </v-row>
+            </v-col>
+        </v-row>
+        <v-row>
+            <v-col cols="6">
+                <v-row justify="center">
+                    <v-col cols="10">
+                        <v-progress-linear
+                            class="mt-2"
+                            v-model="ch_value.ch17_value"
+                            height="50"
+                            rounded
+                        >
+                            <span>Pan <strong>{{ ch_raw.ch17_raw }}</strong></span>
+                        </v-progress-linear>
+                    </v-col>
+                    <v-col cols="2">
+                        <v-switch
+                            v-model="reverse_pan"
+                            inset
+                        ></v-switch>
+                    </v-col>
+                </v-row>
+                <v-row justify="end">
+                    <v-col cols="6" align="center">
+                        <v-switch
+                            v-model="reverse_tilt"
+                            inset
+                        ></v-switch>
+                    </v-col>
+                </v-row>
+                <v-row align="center"
+                       style="height: 120px;">
+                    <v-col cols="2"></v-col>
+                    <v-col cols="6" align-self="center">
+                        <v-progress-linear
+                            class="progress-vertical"
+                            v-model="ch_value.ch18_value"
+                            height="60"
+                            rounded
+                        >
+                            <span>Tilt <strong>{{ ch_raw.ch18_raw }}</strong></span>
+                        </v-progress-linear>
+                    </v-col>
+                </v-row>
+                <v-row class="mt-13 pt-13" align="center">
+                    <v-col cols="10">
+                        <v-progress-linear
+                            v-model="ch_value.ch19_value"
+                            height="50"
+                            rounded
+                        >
+                            <span>Zoom <strong>{{ ch_raw.ch19_raw }}</strong></span>
+                        </v-progress-linear>
+                    </v-col>
+                    <v-col cols="2">
+                        <v-switch
+                            v-model="reverse_zoom"
+                            inset
+                        ></v-switch>
+                    </v-col>
+                </v-row>
+            </v-col>
+            <v-col>
+                <v-row class="my-3">
+                    <v-col cols="6">
+                        <v-progress-linear
+                            v-model="ch_value.ch20_value"
+                            height="50"
+                            rounded
+                        >
+                            <span>Radio 20 <strong>{{ ch_raw.ch20_raw }}</strong></span>
+                        </v-progress-linear>
+                    </v-col>
+                    <v-col cols="6">
+                        <v-progress-linear
+                            v-model="ch_value.ch25_value"
+                            height="50"
+                            rounded
+                        >
+                            <span>Radio 25 <strong>{{ ch_raw.ch25_raw }}</strong></span>
+                        </v-progress-linear>
+                    </v-col>
+                </v-row>
+                <v-row class="my-3">
+                    <v-col cols="6">
+                        <v-progress-linear
+                            v-model="ch_value.ch21_value"
+                            height="50"
+                            rounded
+                        >
+                            <span>Radio 21 <strong>{{ ch_raw.ch21_raw }}</strong></span>
+                        </v-progress-linear>
+                    </v-col>
+                    <v-col cols="6">
+                        <v-progress-linear
+                            v-model="ch_value.ch26_value"
+                            height="50"
+                            rounded
+                        >
+                            <span>Radio 26 <strong>{{ ch_raw.ch26_raw }}</strong></span>
+                        </v-progress-linear>
+                    </v-col>
+                </v-row>
+                <v-row class="my-3">
+                    <v-col cols="6">
+                        <v-progress-linear
+                            v-model="ch_value.ch22_value"
+                            height="50"
+                            rounded
+                        >
+                            <span>Radio 22 <strong>{{ ch_raw.ch22_raw }}</strong></span>
+                        </v-progress-linear>
+                    </v-col>
+                    <v-col cols="6">
+                        <v-progress-linear
+                            v-model="ch_value.ch27_value"
+                            height="50"
+                            rounded
+                        >
+                            <span>Radio 27 <strong>{{ ch_raw.ch27_raw }}</strong></span>
+                        </v-progress-linear>
+                    </v-col>
+                </v-row>
+                <v-row class="my-3">
+                    <v-col cols="6">
+                        <v-progress-linear
+                            v-model="ch_value.ch23_value"
+                            height="50"
+                            rounded
+                        >
+                            <span>Radio 23 <strong>{{ ch_raw.ch23_raw }}</strong></span>
+                        </v-progress-linear>
+                    </v-col>
+                    <v-col cols="6">
+                        <v-progress-linear
+                            v-model="ch_value.ch13_value"
+                            height="50"
+                            rounded
+                        >
+                            <span>Radio 28 <strong>{{ ch_raw.ch28_raw }}</strong></span>
+                        </v-progress-linear>
+                    </v-col>
+                </v-row>
+                <v-row class="my-3">
+                    <v-col cols="6">
+                        <v-progress-linear
+                            v-model="ch_value.ch24_value"
+                            height="50"
+                            rounded
+                        >
+                            <span>Radio 24 <strong>{{ ch_raw.ch24_raw }}</strong></span>
+                        </v-progress-linear>
+                    </v-col>
+                    <v-col cols="6">
+                        <v-progress-linear
+                            v-model="ch_value.ch14_value"
+                            height="50"
+                            rounded
+                        >
+                            <span>Radio 29 <strong>{{ ch_raw.ch29_raw }}</strong></span>
+                        </v-progress-linear>
                     </v-col>
                 </v-row>
             </v-col>
@@ -381,6 +589,10 @@ export default {
             reverse_throttle: false,
             reverse_yaw: false,
 
+            reverse_pan: false,
+            reverse_tilt: false,
+            reverse_zoom: false,
+
             max: 100,
 
             radio_cali_flag: false,
@@ -574,7 +786,7 @@ export default {
         //     return Math.round(((x - 1500) * this.SBUS_RATE + 1000) / 8);
         // },
         min_max_scaler(val) {
-            return (val - this.SBUS2RC(0)) / (this.SBUS2RC(230) - this.SBUS2RC(0)) * 100;
+            return (val - this.SBUS2RC(0)) / (this.SBUS2RC(250) - this.SBUS2RC(0)) * 100;
         },
         receiveFromRC(hex_content_each) {
             // console.log('receiveFromRC - ' + hex_content_each)
@@ -647,13 +859,26 @@ export default {
             this.ch_raw.ch16_raw = parseInt(hex_content_each.substr(32, 2), 16)
             this.RCstrToDrone += this.ch_raw.ch16_raw.toString(16)
             this.ch_raw.ch16_raw = this.SBUS2RC(this.ch_raw.ch16_raw)
-            this.ch_raw.ch17_raw = parseInt(hex_content_each.substr(34, 2), 16)
+
+            if (this.reverse_pan) {
+                this.ch_raw.ch17_raw = 250 - parseInt(hex_content_each.substr(34, 2), 16)
+            } else {
+                this.ch_raw.ch17_raw = parseInt(hex_content_each.substr(34, 2), 16)
+            }
             this.RCstrToDrone += this.ch_raw.ch17_raw.toString(16)
             this.ch_raw.ch17_raw = this.SBUS2RC(this.ch_raw.ch17_raw)
-            this.ch_raw.ch18_raw = parseInt(hex_content_each.substr(36, 2), 16)
+            if (this.reverse_tilt) {
+                this.ch_raw.ch18_raw = 250 - parseInt(hex_content_each.substr(36, 2), 16)
+            } else {
+                this.ch_raw.ch18_raw = parseInt(hex_content_each.substr(36, 2), 16)
+            }
             this.RCstrToDrone += this.ch_raw.ch18_raw.toString(16)
             this.ch_raw.ch18_raw = this.SBUS2RC(this.ch_raw.ch18_raw)
-            this.ch_raw.ch19_raw = parseInt(hex_content_each.substr(38, 2), 16)
+            if (this.reverse_zoom) {
+                this.ch_raw.ch19_raw = 250 - parseInt(hex_content_each.substr(38, 2), 16)
+            } else {
+                this.ch_raw.ch19_raw = parseInt(hex_content_each.substr(38, 2), 16)
+            }
             this.RCstrToDrone += this.ch_raw.ch19_raw.toString(16)
             this.ch_raw.ch19_raw = this.SBUS2RC(this.ch_raw.ch19_raw)
             this.ch_raw.ch20_raw = parseInt(hex_content_each.substr(40, 2), 16)
@@ -780,7 +1005,8 @@ export default {
 <style>
 .lte_rc {
     position: absolute;
-    left: 280px;
+    left: 230px;
+    top: -10px;
 }
 
 .progress-bar {
@@ -789,8 +1015,8 @@ export default {
 }
 
 .progress-vertical {
-    font-size: 16px;
-    color: #000000;
+    /*font-size: 16px;*/
+    /*color: #000000;*/
     transform: rotate(270deg);
 }
 </style>
