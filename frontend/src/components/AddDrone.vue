@@ -46,12 +46,12 @@
                         :size="25"
                     ></v-progress-circular>
                     <v-avatar
+                        v-if="rc_hub_status.includes($store.state.control_drone[item.name].status) && $store.state.control_drone[item.name].status !== 'ready'"
                         :style="{animationDuration: animationDuration}"
                         class="v-avatar--metronome"
                         size="24"
                     >
                         <font-awesome-icon
-                            v-if="rc_hub_status.includes($store.state.control_drone[item.name].status) && $store.state.control_drone[item.name].status!=='ready'"
                             :icon="iconName(item)"
                             :style="iconColor(item)"/>
                     </v-avatar>
@@ -162,13 +162,11 @@ export default {
             for (let select = this.drone_selected.length; select > 0; select--) {
                 for (let idx = this.drone_list.length; idx > 0; idx--) {
                     if (this.drone_list[idx - 1].name === this.drone_selected[select - 1]) {
-                        let topic = '/Mobius/' + this.$store.state.VUE_APP_MOBIUS_GCS + '/RC_Data/Cert/' + this.drone_list[idx - 1].name
-                        this.$store.state.client.unsubscribe(topic, error => {
-                            if (error) {
-                                console.log('Unsubscribe error', error)
-                            }
-                            console.log('Unsubscribe to topics (', topic, ')');
-                        })
+                        let topic = '/Mobius/' + this.$store.state.VUE_APP_MOBIUS_GCS + '/RC_Data/' + this.drone_list[idx - 1].name + '/status'
+                        this.$store.state.client.unsubscribe(topic)
+                        topic = '/Mobius/' + this.$store.state.VUE_APP_MOBIUS_GCS + '/RC_Data/' + this.drone_list[idx - 1].name + '/conn'
+                        this.$store.state.client.publish(topic, Buffer.from('unsubscribe'))
+
                         this.drone_list.splice(idx - 1, 1)
                         this.drone_selected.splice(select - 1, 1)
                     }
@@ -178,9 +176,9 @@ export default {
         rowClicked: function (item, row) {
             let selectState = (row.isSelected) ? false : true
             row.select(selectState)
-            if (selectState === false) {
+            if (!selectState) {
                 this.drone_selected = this.drone_selected.filter(
-                    selectedKeyID => selectedKeyID === row.item.name)
+                    selectedKeyID => selectedKeyID !== row.item.name)
             } else {
                 this.drone_selected.push(row.item.name)
             }
@@ -244,7 +242,7 @@ export default {
                     } else if (this.drone_list[idx].status === 'ready') {
                         style.color = 'blue'
                     } else if (this.drone_list[idx].status === 'send') {
-                        style.color = 'green'
+                        style.color = this.bpm_color
                     } else if (this.drone_list[idx].status === 'disabled') {
                         style.color = 'red'
                     } else {
@@ -257,16 +255,21 @@ export default {
     },
     computed: {
         animationDuration() {
-            return `${60 / this.bpm}s`
+            return `${10 / this.bpm}s`
+        },
+        bpm_color() {
+            if (this.bpm < 3) return 'grey'
+            if (this.bpm < 6) return 'indigo'
+            if (this.bpm < 9) return 'teal'
+            if (this.bpm < 12) return 'green'
+            return 'red'
         },
     },
     created() {
         this.timer_id = setInterval(() => {
             this.bpm = this.recv_counter;
-
             this.recv_counter = 1;
-
-        }, 60000);
+        }, 10000);
     },
     mounted() {
         EventBus.$on('update-table', (drone) => {
@@ -274,14 +277,19 @@ export default {
         });
         EventBus.$on('add-counter', () => {
             this.recv_counter++;
+
         });
     },
     beforeDestroy() {
-        this.drone_list = []
         this.add_drone = ""
         if (this.timer_id) {
             clearInterval(this.timer_id);
         }
+        for (let idx in this.drone_list) {
+            let topic = '/Mobius/' + this.$store.state.VUE_APP_MOBIUS_GCS + '/RC_Data/' + this.drone_list[idx] + '/conn'
+            this.$store.state.client.publish(topic, Buffer.from('unsubscribe'))
+        }
+        this.drone_list = []
     }
 }
 </script>

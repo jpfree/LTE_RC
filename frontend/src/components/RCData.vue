@@ -615,7 +615,7 @@ export default {
     },
     mixins: [VueTimers],
     timers: {
-        SerialData: {time: 100, repeat: true}
+        SerialData: {time: 100, repeat: true},
     },
     methods: {
         createConnection() {
@@ -790,13 +790,13 @@ export default {
         },
         receiveFromRC(hex_content_each) {
             // console.log('receiveFromRC - ' + hex_content_each)
-            this.RCstrToDrone += 'ff'
+            // this.RCstrToDrone += 'ff'
             if (this.reverse_roll) {
                 this.ch_raw.ch1_raw = 250 - parseInt(hex_content_each.substr(2, 2), 16)
             } else {
                 this.ch_raw.ch1_raw = parseInt(hex_content_each.substr(2, 2), 16)
             }
-            this.RCstrToDrone += this.ch_raw.ch1_raw.toString(16)
+            // this.RCstrToDrone += this.ch_raw.ch1_raw.toString(16)
             this.ch_raw.ch1_raw = this.SBUS2RC(this.ch_raw.ch1_raw)
 
             if (this.reverse_pitch) {
@@ -804,7 +804,7 @@ export default {
             } else {
                 this.ch_raw.ch2_raw = parseInt(hex_content_each.substr(4, 2), 16)
             }
-            this.RCstrToDrone += this.ch_raw.ch2_raw.toString(16)
+            // this.RCstrToDrone += this.ch_raw.ch2_raw.toString(16)
             this.ch_raw.ch2_raw = this.SBUS2RC(this.ch_raw.ch2_raw)
 
             if (this.reverse_throttle) {
@@ -812,7 +812,7 @@ export default {
             } else {
                 this.ch_raw.ch3_raw = parseInt(hex_content_each.substr(6, 2), 16)
             }
-            this.RCstrToDrone += this.ch_raw.ch3_raw.toString(16)
+            // this.RCstrToDrone += this.ch_raw.ch3_raw.toString(16)
             this.ch_raw.ch3_raw = this.SBUS2RC(this.ch_raw.ch3_raw)
 
             if (this.reverse_yaw) {
@@ -820,44 +820,44 @@ export default {
             } else {
                 this.ch_raw.ch4_raw = parseInt(hex_content_each.substr(8, 2), 16)
             }
-            this.RCstrToDrone += this.ch_raw.ch4_raw.toString(16)
+            // this.RCstrToDrone += this.ch_raw.ch4_raw.toString(16)
             this.ch_raw.ch4_raw = this.SBUS2RC(this.ch_raw.ch4_raw)
 
             this.ch_raw.ch5_raw = parseInt(hex_content_each.substr(10, 2), 16)
-            this.RCstrToDrone += this.ch_raw.ch5_raw.toString(16)
+            // this.RCstrToDrone += this.ch_raw.ch5_raw.toString(16)
             this.ch_raw.ch5_raw = this.SBUS2RC(this.ch_raw.ch5_raw)
             this.ch_raw.ch6_raw = parseInt(hex_content_each.substr(12, 2), 16)
-            this.RCstrToDrone += this.ch_raw.ch6_raw.toString(16)
+            // this.RCstrToDrone += this.ch_raw.ch6_raw.toString(16)
             this.ch_raw.ch6_raw = this.SBUS2RC(this.ch_raw.ch6_raw)
             this.ch_raw.ch7_raw = parseInt(hex_content_each.substr(14, 2), 16)
-            this.RCstrToDrone += this.ch_raw.ch7_raw.toString(16)
+            // this.RCstrToDrone += this.ch_raw.ch7_raw.toString(16)
             this.ch_raw.ch7_raw = this.SBUS2RC(this.ch_raw.ch7_raw)
             this.ch_raw.ch8_raw = parseInt(hex_content_each.substr(16, 2), 16)
-            this.RCstrToDrone += this.ch_raw.ch8_raw.toString(16)
+            // this.RCstrToDrone += this.ch_raw.ch8_raw.toString(16)
             this.ch_raw.ch8_raw = this.SBUS2RC(this.ch_raw.ch8_raw)
             this.ch_raw.ch9_raw = parseInt(hex_content_each.substr(18, 2), 16)
-            this.RCstrToDrone += this.ch_raw.ch9_raw.toString(16)
+            // this.RCstrToDrone += this.ch_raw.ch9_raw.toString(16)
             this.ch_raw.ch9_raw = this.SBUS2RC(this.ch_raw.ch9_raw)
             this.ch_raw.ch10_raw = parseInt(hex_content_each.substr(20, 2), 16)
-            this.RCstrToDrone += this.ch_raw.ch10_raw.toString(16)
+            // this.RCstrToDrone += this.ch_raw.ch10_raw.toString(16)
             this.ch_raw.ch10_raw = this.SBUS2RC(this.ch_raw.ch10_raw)
             this.ch_raw.ch11_raw = parseInt(hex_content_each.substr(22, 2), 16)
-            this.RCstrToDrone += this.ch_raw.ch11_raw.toString(16)
+            // this.RCstrToDrone += this.ch_raw.ch11_raw.toString(16)
             this.ch_raw.ch11_raw = this.SBUS2RC(this.ch_raw.ch11_raw)
             this.ch_raw.ch12_raw = parseInt(hex_content_each.substr(24, 2), 16)
-            this.RCstrToDrone += this.ch_raw.ch12_raw.toString(16)
+            // this.RCstrToDrone += this.ch_raw.ch12_raw.toString(16)
             this.ch_raw.ch12_raw = this.SBUS2RC(this.ch_raw.ch12_raw)
             this.ch_raw.ch13_raw = parseInt(hex_content_each.substr(26, 2), 16)
-            this.RCstrToDrone += this.ch_raw.ch13_raw.toString(16)
+            // this.RCstrToDrone += this.ch_raw.ch13_raw.toString(16)
             this.ch_raw.ch13_raw = this.SBUS2RC(this.ch_raw.ch13_raw)
             this.ch_raw.ch14_raw = parseInt(hex_content_each.substr(28, 2), 16)
-            this.RCstrToDrone += this.ch_raw.ch14_raw.toString(16)
+            // this.RCstrToDrone += this.ch_raw.ch14_raw.toString(16)
             this.ch_raw.ch14_raw = this.SBUS2RC(this.ch_raw.ch14_raw)
             this.ch_raw.ch15_raw = parseInt(hex_content_each.substr(30, 2), 16)
-            this.RCstrToDrone += this.ch_raw.ch15_raw.toString(16)
+            // this.RCstrToDrone += this.ch_raw.ch15_raw.toString(16)
             this.ch_raw.ch15_raw = this.SBUS2RC(this.ch_raw.ch15_raw)
             this.ch_raw.ch16_raw = parseInt(hex_content_each.substr(32, 2), 16)
-            this.RCstrToDrone += this.ch_raw.ch16_raw.toString(16)
+            // this.RCstrToDrone += this.ch_raw.ch16_raw.toString(16)
             this.ch_raw.ch16_raw = this.SBUS2RC(this.ch_raw.ch16_raw)
 
             if (this.reverse_pan) {
@@ -865,60 +865,60 @@ export default {
             } else {
                 this.ch_raw.ch17_raw = parseInt(hex_content_each.substr(34, 2), 16)
             }
-            this.RCstrToDrone += this.ch_raw.ch17_raw.toString(16)
+            // this.RCstrToDrone += this.ch_raw.ch17_raw.toString(16)
             this.ch_raw.ch17_raw = this.SBUS2RC(this.ch_raw.ch17_raw)
             if (this.reverse_tilt) {
                 this.ch_raw.ch18_raw = 250 - parseInt(hex_content_each.substr(36, 2), 16)
             } else {
                 this.ch_raw.ch18_raw = parseInt(hex_content_each.substr(36, 2), 16)
             }
-            this.RCstrToDrone += this.ch_raw.ch18_raw.toString(16)
+            // this.RCstrToDrone += this.ch_raw.ch18_raw.toString(16)
             this.ch_raw.ch18_raw = this.SBUS2RC(this.ch_raw.ch18_raw)
             if (this.reverse_zoom) {
                 this.ch_raw.ch19_raw = 250 - parseInt(hex_content_each.substr(38, 2), 16)
             } else {
                 this.ch_raw.ch19_raw = parseInt(hex_content_each.substr(38, 2), 16)
             }
-            this.RCstrToDrone += this.ch_raw.ch19_raw.toString(16)
+            // this.RCstrToDrone += this.ch_raw.ch19_raw.toString(16)
             this.ch_raw.ch19_raw = this.SBUS2RC(this.ch_raw.ch19_raw)
             this.ch_raw.ch20_raw = parseInt(hex_content_each.substr(40, 2), 16)
-            this.RCstrToDrone += this.ch_raw.ch20_raw.toString(16)
+            // this.RCstrToDrone += this.ch_raw.ch20_raw.toString(16)
             this.ch_raw.ch20_raw = this.SBUS2RC(this.ch_raw.ch20_raw)
             this.ch_raw.ch21_raw = parseInt(hex_content_each.substr(42, 2), 16)
-            this.RCstrToDrone += this.ch_raw.ch21_raw.toString(16)
+            // this.RCstrToDrone += this.ch_raw.ch21_raw.toString(16)
             this.ch_raw.ch21_raw = this.SBUS2RC(this.ch_raw.ch21_raw)
             this.ch_raw.ch22_raw = parseInt(hex_content_each.substr(44, 2), 16)
-            this.RCstrToDrone += this.ch_raw.ch22_raw.toString(16)
+            // this.RCstrToDrone += this.ch_raw.ch22_raw.toString(16)
             this.ch_raw.ch22_raw = this.SBUS2RC(this.ch_raw.ch22_raw)
             this.ch_raw.ch23_raw = parseInt(hex_content_each.substr(46, 2), 16)
-            this.RCstrToDrone += this.ch_raw.ch23_raw.toString(16)
+            // this.RCstrToDrone += this.ch_raw.ch23_raw.toString(16)
             this.ch_raw.ch23_raw = this.SBUS2RC(this.ch_raw.ch23_raw)
             this.ch_raw.ch24_raw = parseInt(hex_content_each.substr(48, 2), 16)
-            this.RCstrToDrone += this.ch_raw.ch24_raw.toString(16)
+            // this.RCstrToDrone += this.ch_raw.ch24_raw.toString(16)
             this.ch_raw.ch24_raw = this.SBUS2RC(this.ch_raw.ch24_raw)
             this.ch_raw.ch25_raw = parseInt(hex_content_each.substr(50, 2), 16)
-            this.RCstrToDrone += this.ch_raw.ch25_raw.toString(16)
+            // this.RCstrToDrone += this.ch_raw.ch25_raw.toString(16)
             this.ch_raw.ch25_raw = this.SBUS2RC(this.ch_raw.ch25_raw)
             this.ch_raw.ch26_raw = parseInt(hex_content_each.substr(52, 2), 16)
-            this.RCstrToDrone += this.ch_raw.ch26_raw.toString(16)
+            // this.RCstrToDrone += this.ch_raw.ch26_raw.toString(16)
             this.ch_raw.ch26_raw = this.SBUS2RC(this.ch_raw.ch26_raw)
             this.ch_raw.ch27_raw = parseInt(hex_content_each.substr(54, 2), 16)
-            this.RCstrToDrone += this.ch_raw.ch27_raw.toString(16)
+            // this.RCstrToDrone += this.ch_raw.ch27_raw.toString(16)
             this.ch_raw.ch27_raw = this.SBUS2RC(this.ch_raw.ch27_raw)
             this.ch_raw.ch28_raw = parseInt(hex_content_each.substr(56, 2), 16)
-            this.RCstrToDrone += this.ch_raw.ch28_raw.toString(16)
+            // this.RCstrToDrone += this.ch_raw.ch28_raw.toString(16)
             this.ch_raw.ch28_raw = this.SBUS2RC(this.ch_raw.ch28_raw)
             this.ch_raw.ch29_raw = parseInt(hex_content_each.substr(58, 2), 16)
-            this.RCstrToDrone += this.ch_raw.ch29_raw.toString(16)
+            // this.RCstrToDrone += this.ch_raw.ch29_raw.toString(16)
             this.ch_raw.ch29_raw = this.SBUS2RC(this.ch_raw.ch29_raw)
             this.ch_raw.ch30_raw = parseInt(hex_content_each.substr(62, 2), 16)
-            this.RCstrToDrone += this.ch_raw.ch30_raw.toString(16)
+            // this.RCstrToDrone += this.ch_raw.ch30_raw.toString(16)
             this.ch_raw.ch30_raw = this.SBUS2RC(this.ch_raw.ch30_raw)
             this.ch_raw.ch31_raw = parseInt(hex_content_each.substr(64, 2), 16)
-            this.RCstrToDrone += this.ch_raw.ch31_raw.toString(16)
+            // this.RCstrToDrone += this.ch_raw.ch31_raw.toString(16)
             this.ch_raw.ch31_raw = this.SBUS2RC(this.ch_raw.ch31_raw)
             this.ch_raw.ch32_raw = parseInt(hex_content_each.substr(66, 2), 16)
-            this.RCstrToDrone += this.ch_raw.ch32_raw.toString(16)
+            // this.RCstrToDrone += this.ch_raw.ch32_raw.toString(16)
             this.ch_raw.ch32_raw = this.SBUS2RC(this.ch_raw.ch32_raw)
 
             // For displaying to progressbar
@@ -957,17 +957,13 @@ export default {
 
             if (this.$store.state.client.connected) {
                 if (!this.radio_cali_flag) {
-                    this.$store.state.client.publish('/Mobius/' + this.$store.state.VUE_APP_MOBIUS_GCS + '/RC_Data/' + this.$store.state.VUE_APP_MOBIUS_RC, Buffer.from(this.RCstrToDrone, 'hex'))
+                    this.$store.state.client.publish('/Mobius/' + this.$store.state.VUE_APP_MOBIUS_GCS + '/RC_Data/' + this.$store.state.VUE_APP_MOBIUS_RC, Buffer.from(hex_content_each, 'hex'))
                     this.RCstrToDrone = ''
                 }
             }
         },
         calibrateRadio() {
-            if (this.radio_cali_flag) {
-                this.radio_cali_flag = false
-            } else {
-                this.radio_cali_flag = true
-            }
+            this.radio_cali_flag = !this.radio_cali_flag;
             console.log(this.radio_cali_flag)
         },
         beforeDestroy() {
@@ -1007,11 +1003,6 @@ export default {
     position: absolute;
     left: 230px;
     top: -10px;
-}
-
-.progress-bar {
-    font-size: 16px;
-    color: #000000;
 }
 
 .progress-vertical {
