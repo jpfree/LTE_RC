@@ -1,103 +1,8 @@
 <template>
     <div>
         <div class='calileft'>
+            <h4 class="white--text mx-2">RC Calibration</h4>
             <v-row class="" justify="center">
-            </v-row>
-            <h3 class="white--text mx-2">RC Calibration</h3>
-            <v-row class="" justify="center">
-            </v-row>
-            <v-text-field
-                class="custom-placeholer-color mx-2 mt-10"
-                dense hide-details outlined
-                ref="drone"
-                v-model="add_drone" :rules="add_drone_rule"
-                placeholder=""
-                label="Drone*"
-                required
-                style="v-text-field--outlined: white"
-                background-color="white"
-            ></v-text-field>
-            <v-row align="center" justify="space-around">
-                <v-btn
-                    fab
-                    height="40"
-                    class="mt-2 rounded-lg"
-                    @click="DroneADD"
-                    elevation="5"
-                    color="success"
-                > ADD
-                </v-btn>
-            </v-row>
-            <div class="aside-line"></div>
-            <v-row v-if="drone_list.length > 0" class="mx-2 white--text font-weight-bold">
-                Drone List
-            </v-row>
-            <v-data-table
-                v-if="drone_list.length > 0"
-                :headers="header"
-                :items="drone_list"
-                item-key="name"
-                hide-default-header
-                hide-default-footer
-                class="elevation-1 mx-2 mt-5"
-                light
-                @click:row="rowClicked"
-            >
-                <template v-slot:item.icon="{ item }">
-                    <v-progress-circular
-                        v-if="$store.state.control_drone[item.name].status==='ready'"
-                        indeterminate
-                        color="primary"
-                        :size="25"
-                    ></v-progress-circular>
-                    <v-avatar
-                        v-if="rc_hub_status.includes($store.state.control_drone[item.name].status) && $store.state.control_drone[item.name].status !== 'ready'"
-                        :style="{animationDuration: animationDuration}"
-                        class="v-avatar--metronome"
-                        size="24"
-                    >
-                        <font-awesome-icon
-                            :icon="iconName(item)"
-                            :style="iconColor(item)"/>
-                    </v-avatar>
-                </template>
-            </v-data-table>
-            <v-row align="center" justify="space-around">
-                <v-btn
-                    v-if="drone_selected.length > 0"
-                    fab
-                    height="40"
-                    class="mt-2 rounded-lg"
-                    @click="DroneDELTE"
-                    elevation="5"
-                    color="error"
-                    :disabled="!MOBIUS_CONNECTION_CONNECTED"
-                > Delete
-                </v-btn>
-            </v-row>
-            <v-row align="center" justify="space-around">
-                <v-btn
-                    v-if="drone_selected.length > 0"
-                    fab
-                    height="40"
-                    class="mt-2 rounded-lg"
-                    @click="link"
-                    elevation="5"
-                    color="primary"
-                    :disabled="!MOBIUS_CONNECTION_CONNECTED"
-                > Link
-                </v-btn>
-                <v-btn
-                    v-if="drone_selected.length > 0"
-                    fab
-                    height="40"
-                    width="60"
-                    class="mt-2 rounded-lg"
-                    @click="unlink"
-                    elevation="5"
-                    :disabled="!MOBIUS_CONNECTION_CONNECTED"
-                > Unlink
-                </v-btn>
             </v-row>
         </div>
     </div>
@@ -116,180 +21,225 @@ export default {
                 v => !!v || 'Drone 이름은 필수 입력사항입니다.',
                 v => !/[~!@#$%^&*()+|<>?:{}]/.test(v) || 'Drone 이름에는 특수문자를 사용할 수 없습니다.'
             ],
+            selectedItem: 1,
             header: [
                 {
-                    text: 'name',
+                    text: 'channel',
                     align: 'center',
                     sortable: true,
-                    value: 'name',
+                    value: 'channel',
                 },
                 {
-                    text: 'icon',
+                    text: 'value',
                     align: 'center',
-                    sortable: false,
-                    value: 'icon',
+                    sortable: true,
+                    value: 'value',
                 }
             ],
-            drone_list: [],
-            drone_selected: [],
-            rc_hub_status: ['disconnected', 'ready', 'connected', 'send', 'disabled'],
-
-            recv_counter: 1,
-            timer_id: null,
-            bpm: 40
+            calibrated_value: [
+                {
+                    channel: 'ch1_max',
+                    value: 1500
+                },
+                {
+                    channel: 'ch1_trim',
+                    value: 1500
+                },
+                {
+                    channel: 'ch1_min',
+                    value: 1500
+                },
+                {
+                    channel: 'ch2_max',
+                    value: 1500
+                },
+                {
+                    channel: 'ch2_trim',
+                    value: 1500
+                },
+                {
+                    channel: 'ch2_min',
+                    value: 1500
+                },
+                {
+                    channel: 'ch3_max',
+                    value: 1500
+                },
+                {
+                    channel: 'ch3_trim',
+                    value: 1500
+                },
+                {
+                    channel: 'ch3_min',
+                    value: 1500
+                },
+                {
+                    channel: 'ch4_max',
+                    value: 1500
+                },
+                {
+                    channel: 'ch4_trim',
+                    value: 1500
+                },
+                {
+                    channel: 'ch4_min',
+                    value: 1500
+                },
+                {
+                    channel: 'ch5_max',
+                    value: 1500
+                },
+                {
+                    channel: 'ch5_trim',
+                    value: 1500
+                },
+                {
+                    channel: 'ch5_min',
+                    value: 1500
+                },
+                {
+                    channel: 'ch6_max',
+                    value: 1500
+                },
+                {
+                    channel: 'ch6_trim',
+                    value: 1500
+                },
+                {
+                    channel: 'ch6_min',
+                    value: 1500
+                },
+                {
+                    channel: 'ch7_max',
+                    value: 1500
+                },
+                {
+                    channel: 'ch7_trim',
+                    value: 1500
+                },
+                {
+                    channel: 'ch7_min',
+                    value: 1500
+                },
+                {
+                    channel: 'ch8_max',
+                    value: 1500
+                },
+                {
+                    channel: 'ch8_trim',
+                    value: 1500
+                },
+                {
+                    channel: 'ch8_min',
+                    value: 1500
+                },
+                {
+                    channel: 'ch9_max',
+                    value: 1500
+                },
+                {
+                    channel: 'ch9_trim',
+                    value: 1500
+                },
+                {
+                    channel: 'ch9_min',
+                    value: 1500
+                },
+                {
+                    channel: 'ch10_max',
+                    value: 1500
+                },
+                {
+                    channel: 'ch10_trim',
+                    value: 1500
+                },
+                {
+                    channel: 'ch10_min',
+                    value: 1500
+                },
+                {
+                    channel: 'ch11_max',
+                    value: 1500
+                },
+                {
+                    channel: 'ch11_trim',
+                    value: 1500
+                },
+                {
+                    channel: 'ch11_min',
+                    value: 1500
+                },
+                {
+                    channel: 'ch12_max',
+                    value: 1500
+                },
+                {
+                    channel: 'ch12_trim',
+                    value: 1500
+                },
+                {
+                    channel: 'ch12_min',
+                    value: 1500
+                },
+                {
+                    channel: 'ch13_max',
+                    value: 1500
+                },
+                {
+                    channel: 'ch13_trim',
+                    value: 1500
+                },
+                {
+                    channel: 'ch13_min',
+                    value: 1500
+                },
+                {
+                    channel: 'ch14_max',
+                    value: 1500
+                },
+                {
+                    channel: 'ch14_trim',
+                    value: 1500
+                },
+                {
+                    channel: 'ch14_min',
+                    value: 1500
+                },
+                {
+                    channel: 'ch15_max',
+                    value: 1500
+                },
+                {
+                    channel: 'ch15_trim',
+                    value: 1500
+                },
+                {
+                    channel: 'ch15_min',
+                    value: 1500
+                },
+                {
+                    channel: 'ch16_max',
+                    value: 1500
+                },
+                {
+                    channel: 'ch16_trim',
+                    value: 1500
+                },
+                {
+                    channel: 'ch16_min',
+                    value: 1500
+                }
+            ]
         }
     },
     methods: {
-
-        DroneADD() {
-            let drone = {}
-            drone.name = this.add_drone
-            drone.icon = 'times-circle'
-            drone.status = 'disabled'
-            this.drone_list.push(drone)
-
-            this.$store.state.control_drone[drone.name] = {
-                icon: 'times-circle',
-                status: 'disabled'
-            }
-
-            let topic = '/Mobius/' + this.$store.state.VUE_APP_MOBIUS_GCS + '/RC_Data/' + drone.name + '/status'
-            let qos = 0
-            this.$store.state.client.subscribe(topic, {qos}, (error, res) => {
-                if (error) {
-                    console.log('Subscribe to topics error', error)
-                }
-                this.subscribeSuccess = true
-                console.log('Subscribe to topics res', res)
-            })
-        },
-        DroneDELTE() {
-            for (let select = this.drone_selected.length; select > 0; select--) {
-                for (let idx = this.drone_list.length; idx > 0; idx--) {
-                    if (this.drone_list[idx - 1].name === this.drone_selected[select - 1]) {
-                        let topic = '/Mobius/' + this.$store.state.VUE_APP_MOBIUS_GCS + '/RC_Data/' + this.drone_list[idx - 1].name + '/status'
-                        this.$store.state.client.unsubscribe(topic)
-                        topic = '/Mobius/' + this.$store.state.VUE_APP_MOBIUS_GCS + '/RC_Data/' + this.drone_list[idx - 1].name + '/conn'
-                        this.$store.state.client.publish(topic, Buffer.from('unsubscribe'))
-
-                        this.drone_list.splice(idx - 1, 1)
-                        this.drone_selected.splice(select - 1, 1)
-                    }
-                }
-            }
-        },
-        rowClicked: function (item, row) {
-            let selectState = (row.isSelected) ? false : true
-            row.select(selectState)
-            if (!selectState) {
-                this.drone_selected = this.drone_selected.filter(
-                    selectedKeyID => selectedKeyID !== row.item.name)
-            } else {
-                this.drone_selected.push(row.item.name)
-            }
-        },
-        link() {
-            if (this.$store.state.client.connected) {
-                for (let idx in this.drone_selected) {
-                    if (this.$store.state.control_drone[this.drone_selected[idx]].status === 'ready') {
-                        let topic = '/Mobius/' + this.$store.state.VUE_APP_MOBIUS_GCS + '/RC_Data/' + this.drone_selected[idx] + '/conn'
-                        this.$store.state.client.publish(topic, Buffer.from(this.$store.state.VUE_APP_MOBIUS_RC))
-                    }
-                }
-            }
-        },
-        unlink() {
-            if (this.$store.state.client.connected) {
-                for (let idx in this.drone_selected) {
-                    let topic = '/Mobius/' + this.$store.state.VUE_APP_MOBIUS_GCS + '/RC_Data/' + this.drone_selected[idx] + '/conn'
-                    this.$store.state.client.publish(topic, Buffer.from('unsubscribe'))
-                }
-            }
-        },
-        UpdateTable(drone) {
-            for (let idx in this.drone_list) {
-                if (this.drone_list[idx].name === drone) {
-                    this.drone_list[idx].icon = this.$store.state.control_drone[drone].icon
-                    this.drone_list[idx].status = this.$store.state.control_drone[drone].status
-                }
-            }
-        },
-        iconName(item) {
-            let icon = ''
-            for (let idx in this.drone_list) {
-                if (this.drone_list[idx].name === item.name) {
-                    if (this.drone_list[idx].status === 'disconnected') {
-                        this.drone_list[idx].icon = 'unlink'
-                    } else if (this.drone_list[idx].status === 'connected') {
-                        this.drone_list[idx].icon = 'link'
-                    } else if (this.drone_list[idx].status === 'ready') {
-                        this.drone_list[idx].icon = 'spinner'
-                    } else if (this.drone_list[idx].status === 'send') {
-                        this.drone_list[idx].icon = 'circle'
-                    } else if (this.drone_list[idx].status === 'disabled') {
-                        this.drone_list[idx].icon = 'times-circle'
-                    } else {
-                        this.drone_list[idx].icon = 'exclamation-circle'
-                    }
-                }
-                icon = this.drone_list[idx].icon
-            }
-            return icon
-        },
-        iconColor(item) {
-            let style = {}
-            for (let idx in this.drone_list) {
-                if (this.drone_list[idx].name === item.name) {
-                    if (this.drone_list[idx].status === 'disconnected') {
-                        style.color = 'orange'
-                    } else if (this.drone_list[idx].status === 'connected') {
-                        style.color = 'black'
-                    } else if (this.drone_list[idx].status === 'ready') {
-                        style.color = 'blue'
-                    } else if (this.drone_list[idx].status === 'send') {
-                        style.color = this.bpm_color
-                    } else if (this.drone_list[idx].status === 'disabled') {
-                        style.color = 'red'
-                    } else {
-                        style.color = 'red'
-                    }
-                }
-            }
-            return style
-        },
-        calibrateRadio() {
-            this.radio_cali_flag = !this.radio_cali_flag;
-            console.log(this.radio_cali_flag)
-        },
-        openCali() {
-            window.open("https://google.com", "_blank");
-        },
-    },
-    computed: {
-        animationDuration() {
-            return `${10 / this.bpm}s`
-        },
-        bpm_color() {
-            if (this.bpm < 3) return 'grey'
-            if (this.bpm < 6) return 'indigo'
-            if (this.bpm < 9) return 'teal'
-            if (this.bpm < 12) return 'green'
-            return 'red'
-        },
-    },
-    created() {
-        this.timer_id = setInterval(() => {
-            this.bpm = this.recv_counter;
-            this.recv_counter = 1;
-        }, 10000);
+        cali_val() {
+            this.calibrated_value = this.$store.state.MinMaxTrim
+        }
     },
     mounted() {
-        EventBus.$on('update-table', (drone) => {
-            this.UpdateTable(drone);
-        });
-        EventBus.$on('add-counter', () => {
-            this.recv_counter++;
-
+        EventBus.$on('update-cali-table', () => {
+            this.cali_val();
         });
     },
     beforeDestroy() {

@@ -1,19 +1,20 @@
 <template>
     <div>
         <div class='left'>
-            <v-row class="" justify="center">
-                <router-link to="/calibration" align="center">
-                    <v-btn
-                        fab
-                        height="40"
-                        width="90%"
-                        class="rounded-lg"
-                        elevation="5"
-                        color="cyan"
-                        dark
-                    > Calibration
-                    </v-btn>
-                </router-link>
+            <v-row class="mb-6" justify="center">
+                    <router-link to="/calibration" align="center">
+                        <v-btn
+                            fab
+                            height="40"
+                            width="60%"
+                            class="rounded-lg"
+                            elevation="5"
+                            color="cyan"
+                            dark
+                            @click="calibration"
+                        > Calibration
+                        </v-btn>
+                    </router-link>
             </v-row>
             <v-text-field
                 class="custom-placeholer-color mx-2 mt-10"
@@ -265,7 +266,7 @@ export default {
                 }
             }
             return style
-        },
+        }
     },
     computed: {
         animationDuration() {
