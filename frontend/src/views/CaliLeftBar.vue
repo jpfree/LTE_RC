@@ -1,19 +1,10 @@
 <template>
     <div>
-        <div class='left'>
+        <div class='calileft'>
             <v-row class="" justify="center">
-                <router-link to="/calibration" align="center">
-                    <v-btn
-                        fab
-                        height="40"
-                        width="90%"
-                        class="rounded-lg"
-                        elevation="5"
-                        color="cyan"
-                        dark
-                    > Calibration
-                    </v-btn>
-                </router-link>
+            </v-row>
+            <h3 class="white--text mx-2">RC Calibration</h3>
+            <v-row class="" justify="center">
             </v-row>
             <v-text-field
                 class="custom-placeholer-color mx-2 mt-10"
@@ -115,7 +106,7 @@
 import EventBus from "../EventBus";
 
 export default {
-    name: 'AddDrone',
+    name: 'CalieftBar',
     data() {
         return {
             MOBIUS_CONNECTION_CONNECTED: localStorage.getItem('mobius_connected') ? (localStorage.getItem('mobius_connected') === 'true') : false,
@@ -266,6 +257,13 @@ export default {
             }
             return style
         },
+        calibrateRadio() {
+            this.radio_cali_flag = !this.radio_cali_flag;
+            console.log(this.radio_cali_flag)
+        },
+        openCali() {
+            window.open("https://google.com", "_blank");
+        },
     },
     computed: {
         animationDuration() {
@@ -317,7 +315,7 @@ a:hover {
     color: rgb(39, 39, 40);
 }
 
-.left {
+.calileft {
     position: fixed;
     top: 0px;
     left: 0px;

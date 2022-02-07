@@ -1,13 +1,5 @@
 <template>
     <v-container class="lte_rc" fluid>
-        <RCCalibration
-            v-if="radio_cali_flag"
-            :ch_raw="ch_raw"
-            :ch_value="ch_value"
-            :ch_min="ch_min"
-            :ch_trim="ch_trim"
-            :ch_max="ch_max"
-        ></RCCalibration>
         <v-row>
             <v-col cols="6">
                 <v-row justify="center">
@@ -186,11 +178,6 @@
                         </v-progress-linear>
                     </v-col>
                 </v-row>
-                <v-row class="" justify="center">
-                    <v-col cols="3" align="center">
-                        <v-btn color="success" v-on:click="calibrateRadio"> 무선 보정</v-btn>
-                    </v-col>
-                </v-row>
             </v-col>
         </v-row>
         <v-row>
@@ -366,13 +353,11 @@ import mqtt from "mqtt";
 import EventBus from "@/EventBus";
 import axios from "axios";
 import {mixin as VueTimers} from 'vue-timers'
-import RCCalibration from "../components/RCCalibration";
 
 export default {
     name: 'RCData',
 
     components: {
-        RCCalibration
     },
 
     data() {
@@ -961,10 +946,6 @@ export default {
                     this.RCstrToDrone = ''
                 }
             }
-        },
-        calibrateRadio() {
-            this.radio_cali_flag = !this.radio_cali_flag;
-            console.log(this.radio_cali_flag)
         },
         beforeDestroy() {
             this.destroyConnection()

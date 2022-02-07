@@ -1,7 +1,6 @@
 <template>
     <v-app>
         <RCAppBar/>
-
         <v-main>
             <router-view></router-view>
         </v-main>
