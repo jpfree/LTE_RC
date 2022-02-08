@@ -637,20 +637,20 @@ export default {
                         EventBus.$emit('add-counter')
                         if (message.toString() === 'disconnected') {
                             this.$store.state.control_drone[topic_arr[topic_arr.length - 2]].icon = 'unlink'
-                            this.$store.state.control_drone[topic_arr[topic_arr.length - 2]].status = 'disconnected'
+                            this.$store.state.control_drone[topic_arr[topic_arr.length - 2]].status = message.toString()
                             this.$store.state.client.publish('/Mobius/' + this.$store.state.VUE_APP_MOBIUS_GCS + '/RC_Data/' + topic_arr[topic_arr.length - 2] + '/conn', Buffer.from('ready'))
                         } else if (message.toString() === 'ready') {
                             this.$store.state.control_drone[topic_arr[topic_arr.length - 2]].icon = 'spinner'
-                            this.$store.state.control_drone[topic_arr[topic_arr.length - 2]].status = 'ready'
+                            this.$store.state.control_drone[topic_arr[topic_arr.length - 2]].status = message.toString()
                         } else if (message.toString() === 'connected') {
                             this.$store.state.control_drone[topic_arr[topic_arr.length - 2]].icon = 'link'
-                            this.$store.state.control_drone[topic_arr[topic_arr.length - 2]].status = 'connected'
+                            this.$store.state.control_drone[topic_arr[topic_arr.length - 2]].status = message.toString()
                         } else if (message.toString() === 'send') {
                             this.$store.state.control_drone[topic_arr[topic_arr.length - 2]].icon = 'circle'
-                            this.$store.state.control_drone[topic_arr[topic_arr.length - 2]].status = 'send'
-                        } else if (message.toString() === 'send') {
+                            this.$store.state.control_drone[topic_arr[topic_arr.length - 2]].status = message.toString()
+                        } else if (message.toString() === 'disabled') {
                             this.$store.state.control_drone[topic_arr[topic_arr.length - 2]].icon = 'times-circle'
-                            this.$store.state.control_drone[topic_arr[topic_arr.length - 2]].status = 'disabled'
+                            this.$store.state.control_drone[topic_arr[topic_arr.length - 2]].status = message.toString()
                         } else {
                             this.$store.state.control_drone[topic_arr[topic_arr.length - 2]].icon = 'exclamation-circle'
                             this.$store.state.control_drone[topic_arr[topic_arr.length - 2]].status = 'error'
