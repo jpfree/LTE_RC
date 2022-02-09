@@ -314,7 +314,7 @@
                     </v-col>
                     <v-col cols="6">
                         <v-progress-linear
-                            v-model="ch_value.ch13_value"
+                            v-model="ch_value.ch28_value"
                             height="50"
                             rounded
                         >
@@ -334,7 +334,7 @@
                     </v-col>
                     <v-col cols="6">
                         <v-progress-linear
-                            v-model="ch_value.ch14_value"
+                            v-model="ch_value.ch29_value"
                             height="50"
                             rounded
                         >
