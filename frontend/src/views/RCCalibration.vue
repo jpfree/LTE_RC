@@ -654,7 +654,7 @@ export default {
         SerialData() {
             axios.get('http://localhost:3000/serialdata')
                 .then((response) => {
-                    // console.log(response.data)
+                    console.log(response.data)
                     this.receiveFromRC(response.data)
                 })
         },

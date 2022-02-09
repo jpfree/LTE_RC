@@ -59,31 +59,22 @@ function rcPortError(error) {
 }
 
 function rcPortData(message) {
-    RCstrFromeGCS = message.toString('hex').toLowerCase();
-    let header1 = RCstrFromeGCS.substr(0, 2);
-    if (header1 === 'ff') {
-        RCData = RCstrFromeGCS;
-        // console.log(RCData);
-    }
+    RCstrFromeGCS += message.toString('hex').toLowerCase();
 
-    // while (RCstrFromeGCS.length >= 68) {
-    //   let header1 = RCstrFromeGCS.substr(0, 2);
-    //   if (header1 === 'ff') {
-    //     let RCLength = 34 * 2;
-    //
-    //     // console.log(RCstrFromeGCS.toString('hex'))
-    //     RCData = RCstrFromeGCS.toString('hex');
-    //     // receiveFromRC(RCstrFromeGCS.toString('hex'))
-    //
-    //     RCstrFromeGCS = RCstrFromeGCS.substr(RCLength);
-    //     RCstrFromeGCSLength = 0;
-    //   } else {
-    //     RCstrFromeGCS = RCstrFromeGCS.substr(2);
-    //   }
-    // }
+    while (RCstrFromeGCS.length >= 68) {
+        // console.log(RCstrFromeGCS);
+        let header1 = RCstrFromeGCS.substr(0, 2);
+        if (header1 === 'ff') {
+            let RCLength = 34 * 2;
+
+            RCData = RCstrFromeGCS;
+
+            RCstrFromeGCS = RCstrFromeGCS.substr(RCLength);
+            RCstrFromeGCSLength = 0;
+        } else {
+            RCstrFromeGCS = RCstrFromeGCS.substr(2);
+        }
+    }
 }
 
-// setInterval(function () {
-//   console.log(RCData)
-// })
 module.exports = router;
