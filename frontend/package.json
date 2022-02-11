@@ -21,6 +21,7 @@
         "core-js": "^3.6.5",
         "electron-log": "^4.4.1",
         "electron-updater": "^4.3.9",
+        "jspack": "^0.0.4",
         "moment": "^2.29.1",
         "mqtt": "^4.2.8",
         "nanoid": "^3.1.25",

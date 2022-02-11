@@ -77,6 +77,68 @@
                     </v-col>
                 </v-row>
             </v-col>
+            <v-col cols="6">
+                <v-row justify="center">
+                    <v-col cols="10">
+                        <v-progress-linear
+                            class="mt-2"
+                            v-model="ch_value.ch17_value"
+                            height="50"
+                            rounded
+                        >
+                            <span>Pan <strong>{{ ch_raw.ch17_raw }}</strong></span>
+                        </v-progress-linear>
+                    </v-col>
+                    <v-col cols="2">
+                        <v-switch
+                            v-model="reverse_pan"
+                            inset
+                        ></v-switch>
+                    </v-col>
+                </v-row>
+                <v-row justify="end">
+                    <v-col cols="6" align="center">
+                        <v-switch
+                            v-model="reverse_tilt"
+                            inset
+                        ></v-switch>
+                    </v-col>
+                </v-row>
+                <v-row align="center"
+                       style="height: 120px;">
+                    <v-col cols="2"></v-col>
+                    <v-col cols="6" align-self="center">
+                        <v-progress-linear
+                            class="progress-vertical"
+                            v-model="ch_value.ch18_value"
+                            height="60"
+                            rounded
+                        >
+                            <span>Tilt <strong>{{ ch_raw.ch18_raw }}</strong></span>
+                        </v-progress-linear>
+                    </v-col>
+                </v-row>
+                <v-row class="mt-13 pt-13" align="center">
+                    <v-col cols="10">
+                        <v-progress-linear
+                            v-model="ch_value.ch19_value"
+                            height="50"
+                            rounded
+                        >
+                            <span>Zoom <strong>{{ ch_raw.ch19_raw }}</strong></span>
+                        </v-progress-linear>
+                    </v-col>
+                    <v-col cols="2">
+                        <v-switch
+                            v-model="reverse_zoom"
+                            inset
+                        ></v-switch>
+                    </v-col>
+                </v-row>
+            </v-col>
+        </v-row>
+        <v-divider></v-divider>
+        <v-row>
             <v-col>
                 <v-row class="my-3">
                     <v-col cols="6">
@@ -176,68 +238,6 @@
                         >
                             <span>Radio 14 <strong>{{ ch_raw.ch14_raw }}</strong></span>
                         </v-progress-linear>
-                    </v-col>
-                </v-row>
-            </v-col>
-        </v-row>
-        <v-divider></v-divider>
-        <v-row>
-            <v-col cols="6">
-                <v-row justify="center">
-                    <v-col cols="10">
-                        <v-progress-linear
-                            class="mt-2"
-                            v-model="ch_value.ch17_value"
-                            height="50"
-                            rounded
-                        >
-                            <span>Pan <strong>{{ ch_raw.ch17_raw }}</strong></span>
-                        </v-progress-linear>
-                    </v-col>
-                    <v-col cols="2">
-                        <v-switch
-                            v-model="reverse_pan"
-                            inset
-                        ></v-switch>
-                    </v-col>
-                </v-row>
-                <v-row justify="end">
-                    <v-col cols="6" align="center">
-                        <v-switch
-                            v-model="reverse_tilt"
-                            inset
-                        ></v-switch>
-                    </v-col>
-                </v-row>
-                <v-row align="center"
-                       style="height: 120px;">
-                    <v-col cols="2"></v-col>
-                    <v-col cols="6" align-self="center">
-                        <v-progress-linear
-                            class="progress-vertical"
-                            v-model="ch_value.ch18_value"
-                            height="60"
-                            rounded
-                        >
-                            <span>Tilt <strong>{{ ch_raw.ch18_raw }}</strong></span>
-                        </v-progress-linear>
-                    </v-col>
-                </v-row>
-                <v-row class="mt-13 pt-13" align="center">
-                    <v-col cols="10">
-                        <v-progress-linear
-                            v-model="ch_value.ch19_value"
-                            height="50"
-                            rounded
-                        >
-                            <span>Zoom <strong>{{ ch_raw.ch19_raw }}</strong></span>
-                        </v-progress-linear>
-                    </v-col>
-                    <v-col cols="2">
-                        <v-switch
-                            v-model="reverse_zoom"
-                            inset
-                        ></v-switch>
                     </v-col>
                 </v-row>
             </v-col>
@@ -354,12 +354,12 @@ import mqtt from "mqtt";
 import EventBus from "@/EventBus";
 import axios from "axios";
 import {mixin as VueTimers} from 'vue-timers'
+import mavlink, {MAVLink} from '../mavlibrary/mavlink'
 
 export default {
     name: 'RCData',
 
-    components: {
-    },
+    components: {},
 
     data() {
         return {
@@ -394,6 +394,28 @@ export default {
             RC_RATE: 0.64,
             SBUS_RATE: 1.6,
 
+            mav_ch_raw: {
+                target_system: 1,
+                target_component: 1,
+                chan1_raw: 1500,
+                chan2_raw: 1500,
+                chan3_raw: 1500,
+                chan4_raw: 1500,
+                chan5_raw: 1158,
+                chan6_raw: 989,
+                chan7_raw: 989,
+                chan8_raw: 989,
+                chan9_raw: 989,
+                chan10_raw: 989,
+                chan11_raw: 989,
+                chan12_raw: 989,
+                chan13_raw: 989,
+                chan14_raw: 989,
+                chan15_raw: 989,
+                chan16_raw: 989,
+                chan17_raw: 1500,
+                chan18_raw: 1500
+            },
             ch_raw: {
                 ch1_raw: 1500,
                 ch2_raw: 1500,
@@ -635,22 +657,24 @@ export default {
                     let topic_arr = topic.split('/')
                     if (topic_arr[topic_arr.length - 1] === 'status') {
                         EventBus.$emit('add-counter')
-                        if (message.toString() === 'disconnected') {
+                        let msg = JSON.parse(message.toString())
+                        if (msg.status === 'disconnected') {
                             this.$store.state.control_drone[topic_arr[topic_arr.length - 2]].icon = 'unlink'
-                            this.$store.state.control_drone[topic_arr[topic_arr.length - 2]].status = message.toString()
+                            this.$store.state.control_drone[topic_arr[topic_arr.length - 2]].status = msg.status
                             this.$store.state.client.publish('/Mobius/' + this.$store.state.VUE_APP_MOBIUS_GCS + '/RC_Data/' + topic_arr[topic_arr.length - 2] + '/conn', Buffer.from('ready'))
-                        } else if (message.toString() === 'ready') {
+                        } else if (msg.status === 'ready') {
                             this.$store.state.control_drone[topic_arr[topic_arr.length - 2]].icon = 'spinner'
-                            this.$store.state.control_drone[topic_arr[topic_arr.length - 2]].status = message.toString()
-                        } else if (message.toString() === 'connected') {
+                            this.$store.state.control_drone[topic_arr[topic_arr.length - 2]].status = msg.status
+                            this.$store.state.control_drone[topic_arr[topic_arr.length - 2]].system_id = msg.system_id
+                        } else if (msg.status === 'connected') {
                             this.$store.state.control_drone[topic_arr[topic_arr.length - 2]].icon = 'link'
-                            this.$store.state.control_drone[topic_arr[topic_arr.length - 2]].status = message.toString()
-                        } else if (message.toString() === 'send') {
+                            this.$store.state.control_drone[topic_arr[topic_arr.length - 2]].status = msg.status
+                        } else if (msg.status === 'send') {
                             this.$store.state.control_drone[topic_arr[topic_arr.length - 2]].icon = 'circle'
-                            this.$store.state.control_drone[topic_arr[topic_arr.length - 2]].status = message.toString()
-                        } else if (message.toString() === 'disabled') {
+                            this.$store.state.control_drone[topic_arr[topic_arr.length - 2]].status = msg.status
+                        } else if (msg.status === 'disabled') {
                             this.$store.state.control_drone[topic_arr[topic_arr.length - 2]].icon = 'times-circle'
-                            this.$store.state.control_drone[topic_arr[topic_arr.length - 2]].status = message.toString()
+                            this.$store.state.control_drone[topic_arr[topic_arr.length - 2]].status = msg.status
                         } else {
                             this.$store.state.control_drone[topic_arr[topic_arr.length - 2]].icon = 'exclamation-circle'
                             this.$store.state.control_drone[topic_arr[topic_arr.length - 2]].status = 'error'
@@ -774,6 +798,52 @@ export default {
         min_max_scaler(val) {
             return (val - this.SBUS2RC(0)) / (this.SBUS2RC(250) - this.SBUS2RC(0)) * 100;
         },
+        mavlinkGenerateMessage(src_sys_id, src_comp_id, type, params) {
+            const mavlinkParser = new MAVLink(null/*logger*/, src_sys_id, src_comp_id);
+            try {
+                var mavMsg = null;
+                var genMsg = null;
+                //var targetSysId = sysId;
+                // var targetCompId = (params.targetCompId == undefined) ?
+                //     0 :
+                //     params.targetCompId;
+
+                switch (type) {
+                    case mavlink.MAVLINK_MSG_ID_RC_CHANNELS_OVERRIDE:
+                        mavMsg = new mavlink.messages.rc_channels_override(params.target_system,
+                            params.target_component,
+                            params.chan1_raw,
+                            params.chan2_raw,
+                            params.chan3_raw,
+                            params.chan4_raw,
+                            params.chan5_raw,
+                            params.chan6_raw,
+                            params.chan7_raw,
+                            params.chan8_raw,
+                            params.chan9_raw,
+                            params.chan10_raw,
+                            params.chan11_raw,
+                            params.chan12_raw,
+                            params.chan13_raw,
+                            params.chan14_raw,
+                            params.chan15_raw,
+                            params.chan16_raw,
+                            params.chan17_raw,
+                            params.chan18_raw,
+                        );
+                        break;
+                }
+            } catch (e) {
+                console.log('MAVLINK EX:' + e);
+            }
+
+            if (mavMsg) {
+                genMsg = Buffer.from(mavMsg.pack(mavlinkParser));
+                //console.log('>>>>> MAVLINK OUTGOING MSG: ' + genMsg.toString('hex'));
+            }
+
+            return genMsg;
+        },
         receiveFromRC(hex_content_each) {
             // console.log('receiveFromRC - ' + hex_content_each)
             // this.RCstrToDrone += 'ff'
@@ -784,6 +854,7 @@ export default {
             }
             // this.RCstrToDrone += this.ch_raw.ch1_raw.toString(16)
             this.ch_raw.ch1_raw = this.SBUS2RC(this.ch_raw.ch1_raw)
+            this.mav_ch_raw.ch1_raw = this.SBUS2RC(this.ch_raw.ch1_raw)
 
             if (this.reverse_pitch) {
                 this.ch_raw.ch2_raw = 250 - parseInt(hex_content_each.substr(4, 2), 16)
@@ -792,6 +863,7 @@ export default {
             }
             // this.RCstrToDrone += this.ch_raw.ch2_raw.toString(16)
             this.ch_raw.ch2_raw = this.SBUS2RC(this.ch_raw.ch2_raw)
+            this.mav_ch_raw.ch2_raw = this.SBUS2RC(this.ch_raw.ch2_raw)
 
             if (this.reverse_throttle) {
                 this.ch_raw.ch3_raw = 250 - parseInt(hex_content_each.substr(6, 2), 16)
@@ -800,6 +872,7 @@ export default {
             }
             // this.RCstrToDrone += this.ch_raw.ch3_raw.toString(16)
             this.ch_raw.ch3_raw = this.SBUS2RC(this.ch_raw.ch3_raw)
+            this.mav_ch_raw.ch3_raw = this.SBUS2RC(this.ch_raw.ch3_raw)
 
             if (this.reverse_yaw) {
                 this.ch_raw.ch4_raw = 250 - parseInt(hex_content_each.substr(8, 2), 16)
@@ -808,43 +881,67 @@ export default {
             }
             // this.RCstrToDrone += this.ch_raw.ch4_raw.toString(16)
             this.ch_raw.ch4_raw = this.SBUS2RC(this.ch_raw.ch4_raw)
+            this.mav_ch_raw.ch4_raw = this.SBUS2RC(this.ch_raw.ch4_raw)
 
             this.ch_raw.ch5_raw = parseInt(hex_content_each.substr(10, 2), 16)
             // this.RCstrToDrone += this.ch_raw.ch5_raw.toString(16)
             this.ch_raw.ch5_raw = this.SBUS2RC(this.ch_raw.ch5_raw)
+            this.mav_ch_raw.ch5_raw = this.SBUS2RC(this.ch_raw.ch5_raw)
+
             this.ch_raw.ch6_raw = parseInt(hex_content_each.substr(12, 2), 16)
             // this.RCstrToDrone += this.ch_raw.ch6_raw.toString(16)
             this.ch_raw.ch6_raw = this.SBUS2RC(this.ch_raw.ch6_raw)
+            this.mav_ch_raw.ch6_raw = this.SBUS2RC(this.ch_raw.ch6_raw)
+
             this.ch_raw.ch7_raw = parseInt(hex_content_each.substr(14, 2), 16)
             // this.RCstrToDrone += this.ch_raw.ch7_raw.toString(16)
             this.ch_raw.ch7_raw = this.SBUS2RC(this.ch_raw.ch7_raw)
+            this.mav_ch_raw.ch7_raw = this.SBUS2RC(this.ch_raw.ch7_raw)
+
             this.ch_raw.ch8_raw = parseInt(hex_content_each.substr(16, 2), 16)
             // this.RCstrToDrone += this.ch_raw.ch8_raw.toString(16)
             this.ch_raw.ch8_raw = this.SBUS2RC(this.ch_raw.ch8_raw)
+            this.mav_ch_raw.ch8_raw = this.SBUS2RC(this.ch_raw.ch8_raw)
+
             this.ch_raw.ch9_raw = parseInt(hex_content_each.substr(18, 2), 16)
             // this.RCstrToDrone += this.ch_raw.ch9_raw.toString(16)
             this.ch_raw.ch9_raw = this.SBUS2RC(this.ch_raw.ch9_raw)
+            this.mav_ch_raw.ch9_raw = this.SBUS2RC(this.ch_raw.ch9_raw)
+
             this.ch_raw.ch10_raw = parseInt(hex_content_each.substr(20, 2), 16)
             // this.RCstrToDrone += this.ch_raw.ch10_raw.toString(16)
             this.ch_raw.ch10_raw = this.SBUS2RC(this.ch_raw.ch10_raw)
+            this.mav_ch_raw.ch10_raw = this.SBUS2RC(this.ch_raw.ch10_raw)
+
             this.ch_raw.ch11_raw = parseInt(hex_content_each.substr(22, 2), 16)
             // this.RCstrToDrone += this.ch_raw.ch11_raw.toString(16)
             this.ch_raw.ch11_raw = this.SBUS2RC(this.ch_raw.ch11_raw)
+            this.mav_ch_raw.ch11_raw = this.SBUS2RC(this.ch_raw.ch11_raw)
+
             this.ch_raw.ch12_raw = parseInt(hex_content_each.substr(24, 2), 16)
             // this.RCstrToDrone += this.ch_raw.ch12_raw.toString(16)
             this.ch_raw.ch12_raw = this.SBUS2RC(this.ch_raw.ch12_raw)
+            this.mav_ch_raw.ch12_raw = this.SBUS2RC(this.ch_raw.ch12_raw)
+
             this.ch_raw.ch13_raw = parseInt(hex_content_each.substr(26, 2), 16)
             // this.RCstrToDrone += this.ch_raw.ch13_raw.toString(16)
             this.ch_raw.ch13_raw = this.SBUS2RC(this.ch_raw.ch13_raw)
+            this.mav_ch_raw.ch13_raw = this.SBUS2RC(this.ch_raw.ch13_raw)
+
             this.ch_raw.ch14_raw = parseInt(hex_content_each.substr(28, 2), 16)
             // this.RCstrToDrone += this.ch_raw.ch14_raw.toString(16)
             this.ch_raw.ch14_raw = this.SBUS2RC(this.ch_raw.ch14_raw)
+            this.mav_ch_raw.ch14_raw = this.SBUS2RC(this.ch_raw.ch14_raw)
+
             this.ch_raw.ch15_raw = parseInt(hex_content_each.substr(30, 2), 16)
             // this.RCstrToDrone += this.ch_raw.ch15_raw.toString(16)
             this.ch_raw.ch15_raw = this.SBUS2RC(this.ch_raw.ch15_raw)
+            this.mav_ch_raw.ch15_raw = this.SBUS2RC(this.ch_raw.ch15_raw)
+
             this.ch_raw.ch16_raw = parseInt(hex_content_each.substr(32, 2), 16)
             // this.RCstrToDrone += this.ch_raw.ch16_raw.toString(16)
             this.ch_raw.ch16_raw = this.SBUS2RC(this.ch_raw.ch16_raw)
+            this.mav_ch_raw.ch16_raw = this.SBUS2RC(this.ch_raw.ch16_raw)
 
             if (this.reverse_pan) {
                 this.ch_raw.ch17_raw = 250 - parseInt(hex_content_each.substr(34, 2), 16)
@@ -853,6 +950,8 @@ export default {
             }
             // this.RCstrToDrone += this.ch_raw.ch17_raw.toString(16)
             this.ch_raw.ch17_raw = this.SBUS2RC(this.ch_raw.ch17_raw)
+            this.mav_ch_raw.ch17_raw = this.SBUS2RC(this.ch_raw.ch17_raw)
+
             if (this.reverse_tilt) {
                 this.ch_raw.ch18_raw = 250 - parseInt(hex_content_each.substr(36, 2), 16)
             } else {
@@ -860,6 +959,8 @@ export default {
             }
             // this.RCstrToDrone += this.ch_raw.ch18_raw.toString(16)
             this.ch_raw.ch18_raw = this.SBUS2RC(this.ch_raw.ch18_raw)
+            this.mav_ch_raw.ch18_raw = this.SBUS2RC(this.ch_raw.ch18_raw)
+
             if (this.reverse_zoom) {
                 this.ch_raw.ch19_raw = 250 - parseInt(hex_content_each.substr(38, 2), 16)
             } else {
@@ -942,10 +1043,29 @@ export default {
             this.ch_value.ch32_value = this.min_max_scaler(this.ch_raw.ch32_raw)
 
             if (this.$store.state.client.connected) {
-                if (!this.radio_cali_flag) {
-                    this.$store.state.client.publish('/Mobius/' + this.$store.state.VUE_APP_MOBIUS_GCS + '/RC_Data/' + this.$store.state.VUE_APP_MOBIUS_RC, Buffer.from(hex_content_each, 'hex'))
-                    this.RCstrToDrone = ''
+                if (this.ch_raw.ch12_raw > 1700) {
+                    Object.keys(this.$store.state.control_drone).forEach((dName) => {
+                        if (this.$store.state.control_drone[dName].selected) {
+                            let topic = '/Mobius/' + this.$store.state.VUE_APP_MOBIUS_GCS + '/GCS_Data/' + dName
+
+                            this.mav_ch_raw.target_system = this.$store.state.control_drone[dName].system_id
+                            this.mav_ch_raw.target_component = 1
+
+                            try {
+                                let rc_signal = this.mavlinkGenerateMessage(255, 0xbe, mavlink.MAVLINK_MSG_ID_RC_CHANNELS_OVERRIDE, this.mav_ch_raw);
+                                if (rc_signal == null) {
+                                    console.log("mavlink message is null");
+                                } else {
+                                    this.$store.state.client.publish(topic, rc_signal);
+                                }
+                            } catch (ex) {
+                                console.log('[ERROR] ' + ex);
+                            }
+                        }
+                    })
                 }
+                this.$store.state.client.publish('/Mobius/' + this.$store.state.VUE_APP_MOBIUS_GCS + '/RC_Data/' + this.$store.state.VUE_APP_MOBIUS_RC, Buffer.from(hex_content_each, 'hex'))
+                this.RCstrToDrone = ''
             }
         },
         beforeDestroy() {

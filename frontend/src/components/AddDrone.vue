@@ -11,7 +11,6 @@
                             elevation="5"
                             color="cyan"
                             dark
-                            @click="calibration"
                         > Calibration
                         </v-btn>
                     </router-link>
@@ -194,8 +193,10 @@ export default {
             if (!selectState) {
                 this.drone_selected = this.drone_selected.filter(
                     selectedKeyID => selectedKeyID !== row.item.name)
+                this.$store.state.control_drone[row.item.name].selected = false
             } else {
                 this.drone_selected.push(row.item.name)
+                this.$store.state.control_drone[row.item.name].selected = true
             }
         },
         link() {
@@ -223,6 +224,7 @@ export default {
                     this.drone_list[idx].status = this.$store.state.control_drone[drone].status
                 }
             }
+            console.log(this.drone_list)
         },
         iconName(item) {
             let icon = ''
@@ -292,7 +294,6 @@ export default {
         });
         EventBus.$on('add-counter', () => {
             this.recv_counter++;
-
         });
     },
     beforeDestroy() {
