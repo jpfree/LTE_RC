@@ -632,8 +632,9 @@ export default {
                 this.destroyConnection()
             }
             if (!this.$store.state.client.connected) {
-                const {host, port, endpoint, ...options} = this.connection
-                const connectUrl = `ws://${host}:${port}${endpoint}`
+                const {port, endpoint, ...options} = this.connection
+                const serverip = this.$store.state.VUE_APP_MOBIUS_HOST
+                const connectUrl = `ws://${serverip}:${port}${endpoint}`
 
                 // Connect serial for rc data
                 // this.rcPortOpening(this.rcPort_info);
