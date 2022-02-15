@@ -364,7 +364,7 @@ export default {
     data() {
         return {
             connection: {
-                host: '203.253.128.177',
+                host: this.$store.state.VUE_APP_MOBIUS_HOST,
                 port: 8883,
                 endpoint: '/mqtt',
                 clean: true, // Reserved session
