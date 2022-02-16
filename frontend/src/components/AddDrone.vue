@@ -272,13 +272,13 @@ export default {
     },
     computed: {
         animationDuration() {
-            return `${10 / this.bpm}s`
+            return `${5 / this.bpm}s`
         },
         bpm_color() {
             if (this.bpm < 3) return 'grey'
             if (this.bpm < 6) return 'indigo'
-            if (this.bpm < 9) return 'teal'
-            if (this.bpm < 12) return 'green'
+            if (this.bpm < 9) return 'green'
+            if (this.bpm < 12) return 'lime'
             return 'red'
         },
     },
