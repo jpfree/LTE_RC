@@ -224,7 +224,7 @@ export default {
                     this.drone_list[idx].status = this.$store.state.control_drone[drone].status
                 }
             }
-            console.log(this.drone_list)
+            // console.log(this.drone_list)
         },
         iconName(item) {
             let icon = ''
