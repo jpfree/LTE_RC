@@ -2,18 +2,18 @@
     <div>
         <div class='left'>
             <v-row class="mb-6" justify="center">
-                    <router-link to="/calibration" align="center">
-                        <v-btn
-                            fab
-                            height="40"
-                            width="60%"
-                            class="rounded-lg"
-                            elevation="5"
-                            color="cyan"
-                            dark
-                        > Calibration
-                        </v-btn>
-                    </router-link>
+                <router-link to="/calibration" align="center">
+                    <v-btn
+                        fab
+                        height="40"
+                        width="60%"
+                        class="rounded-lg"
+                        elevation="5"
+                        color="cyan"
+                        dark
+                    > Calibration
+                    </v-btn>
+                </router-link>
             </v-row>
             <v-text-field
                 class="custom-placeholer-color mx-2 mt-10"
@@ -50,25 +50,22 @@
                 hide-default-footer
                 class="elevation-1 mx-2 mt-5"
                 light
-                @click:row="rowClicked"
-            >
+                @click:row="rowClicked">
                 <template v-slot:item.icon="{ item }">
                     <v-progress-circular
-                        v-if="$store.state.control_drone[item.name].status==='ready'"
+                        class="mt-n1"
+                        v-if="$store.state.control_drone[item.name].status === 'ready'"
                         indeterminate
                         color="primary"
                         :size="25"
                     ></v-progress-circular>
-                    <v-avatar
-                        v-if="rc_hub_status.includes($store.state.control_drone[item.name].status) && $store.state.control_drone[item.name].status !== 'ready'"
-                        :style="{animationDuration: animationDuration}"
-                        class="v-avatar--metronome"
-                        size="24"
-                    >
-                        <font-awesome-icon
-                            :icon="iconName(item)"
-                            :style="iconColor(item)"/>
-                    </v-avatar>
+                    <font-awesome-icon
+                        :id="`status_${item.name}`"
+                        class="mt-n1 v-avatar--metronome"
+                        v-if="$store.state.control_drone[item.name].status !== 'ready'"
+                        :icon="iconName(item)"
+                        :style="{color:iconColor(item), animationDuration: iconDuration(item)}"
+                        size="1x"/>
                 </template>
             </v-data-table>
             <v-row align="center" justify="space-around">
@@ -143,23 +140,42 @@ export default {
             drone_selected: [],
             rc_hub_status: ['disconnected', 'ready', 'connected', 'send', 'disabled'],
 
-            recv_counter: 1,
-            timer_id: null,
-            bpm: 40
         }
     },
     methods: {
-
         DroneADD() {
             let drone = {}
             drone.name = this.add_drone
             drone.icon = 'times-circle'
             drone.status = 'disabled'
+            drone.bpm = 1
+            drone.bpmcolor = 'red'
+            drone.recv_counter = 1
             this.drone_list.push(drone)
 
             this.$store.state.control_drone[drone.name] = {
                 icon: 'times-circle',
-                status: 'disabled'
+                status: 'disabled',
+                bpm: 1,
+                bpmcolor: 'red',
+                recv_counter: 1,
+                timer_id: setInterval(() => {
+                    this.$store.state.control_drone[drone.name].bpm = this.$store.state.control_drone[drone.name].recv_counter;
+                    this.$store.state.control_drone[drone.name].recv_counter = 1;
+                    if (this.$store.state.control_drone[drone.name].bpm === 1) {
+                        this.$store.state.control_drone[drone.name].icon = 'unlink'
+                        this.$store.state.control_drone[drone.name].status = 'disconnected'
+                        this.UpdateTable(drone.name)
+                        let topic = '/Mobius/' + this.$store.state.VUE_APP_MOBIUS_GCS + '/RC_Data/' + drone.name + '/conn'
+                        this.$store.state.client.publish(topic, Buffer.from('unsubscribe'))
+                    } else if (this.$store.state.control_drone[drone.name].bpm < 5) {
+                        this.$store.state.control_drone[drone.name].icon = 'exclamation-triangle'
+                    } else if (this.$store.state.control_drone[drone.name].bpm < 9) {
+                        this.$store.state.control_drone[drone.name].icon = 'play'
+                    } else if (this.$store.state.control_drone[drone.name].bpm < 12) {
+                        this.$store.state.control_drone[drone.name].icon = 'circle'
+                    }
+                }, 10000)
             }
 
             let topic = '/Mobius/' + this.$store.state.VUE_APP_MOBIUS_GCS + '/RC_Data/' + drone.name + '/status'
@@ -218,82 +234,74 @@ export default {
             }
         },
         UpdateTable(drone) {
-            for (let idx in this.drone_list) {
-                if (this.drone_list[idx].name === drone) {
-                    this.drone_list[idx].icon = this.$store.state.control_drone[drone].icon
-                    this.drone_list[idx].status = this.$store.state.control_drone[drone].status
+            if (this.drone_list.length === 0) {
+                this.drone_list.push(drone)
+            } else {
+                for (let idx in this.drone_list) {
+                    if (this.drone_list[idx].name === drone) {
+                        this.drone_list[idx].icon = this.$store.state.control_drone[drone].icon
+                        this.drone_list[idx].status = this.$store.state.control_drone[drone].status
+                        this.drone_list[idx].bpmcolor = this.$store.state.control_drone[drone].bpmcolor
+                    }
                 }
             }
-            // console.log(this.drone_list)
         },
         iconName(item) {
-            let icon = ''
-            for (let idx in this.drone_list) {
-                if (this.drone_list[idx].name === item.name) {
-                    if (this.drone_list[idx].status === 'disconnected') {
-                        this.drone_list[idx].icon = 'unlink'
-                    } else if (this.drone_list[idx].status === 'connected') {
-                        this.drone_list[idx].icon = 'link'
-                    } else if (this.drone_list[idx].status === 'ready') {
-                        this.drone_list[idx].icon = 'spinner'
-                    } else if (this.drone_list[idx].status === 'send') {
-                        this.drone_list[idx].icon = 'circle'
-                    } else if (this.drone_list[idx].status === 'disabled') {
-                        this.drone_list[idx].icon = 'times-circle'
-                    } else {
-                        this.drone_list[idx].icon = 'exclamation-circle'
-                    }
+            if (this.$store.state.control_drone[item.name].status === 'disconnected') {
+                this.$store.state.control_drone[item.name].icon = 'unlink'
+            } else if (this.$store.state.control_drone[item.name].status === 'ready') {
+                this.$store.state.control_drone[item.name].icon = 'spinner'
+            } else if (this.$store.state.control_drone[item.name].status === 'connected') {
+                this.$store.state.control_drone[item.name].icon = 'link'
+            } else if (this.$store.state.control_drone[item.name].status === 'send') {
+                if (this.$store.state.control_drone[item.name].bpm < 5) {
+                    this.$store.state.control_drone[item.name].icon = 'exclamation-triangle'
+                } else if (this.$store.state.control_drone[item.name].bpm < 9) {
+                    this.$store.state.control_drone[item.name].icon = 'play'
+                } else if (this.$store.state.control_drone[item.name].bpm < 12) {
+                    this.$store.state.control_drone[item.name].icon = 'circle'
                 }
-                icon = this.drone_list[idx].icon
+            } else if (this.$store.state.control_drone[item.name].status === 'disabled') {
+                this.$store.state.control_drone[item.name].icon = 'times-circle'
+            } else {
+                this.$store.state.control_drone[item.name].icon = 'exclamation-circle'
             }
-            return icon
+            return this.$store.state.control_drone[item.name].icon
         },
         iconColor(item) {
-            let style = {}
-            for (let idx in this.drone_list) {
-                if (this.drone_list[idx].name === item.name) {
-                    if (this.drone_list[idx].status === 'disconnected') {
-                        style.color = 'orange'
-                    } else if (this.drone_list[idx].status === 'connected') {
-                        style.color = 'black'
-                    } else if (this.drone_list[idx].status === 'ready') {
-                        style.color = 'blue'
-                    } else if (this.drone_list[idx].status === 'send') {
-                        style.color = this.bpm_color
-                    } else if (this.drone_list[idx].status === 'disabled') {
-                        style.color = 'red'
-                    } else {
-                        style.color = 'red'
-                    }
+            if (this.$store.state.control_drone[item.name].status === 'disconnected') {
+                this.$store.state.control_drone[item.name].bpmcolor =  'orange'
+            } else if (this.$store.state.control_drone[item.name].status === 'connected') {
+                this.$store.state.control_drone[item.name].bpmcolor =  'black'
+            } else if (this.$store.state.control_drone[item.name].status === 'ready') {
+                this.$store.state.control_drone[item.name].bpmcolor = 'blue'
+            } else if (this.$store.state.control_drone[item.name].status === 'send') {
+                if (this.$store.state.control_drone[item.name].bpm < 5) {
+                    this.$store.state.control_drone[item.name].bpmcolor = 'grey'
+                } else if (this.$store.state.control_drone[item.name].bpm < 9) {
+                    this.$store.state.control_drone[item.name].bpmcolor = 'orange'
+                } else if (this.$store.state.control_drone[item.name].bpm < 12) {
+                    this.$store.state.control_drone[item.name].bpmcolor = 'lime'
                 }
+            } else if (this.$store.state.control_drone[item.name].status === 'disabled') {
+                this.$store.state.control_drone[item.name].bpmcolor = 'red'
+            } else {
+                this.$store.state.control_drone[item.name].bpmcolor = 'red'
             }
-            return style
-        }
-    },
-    computed: {
-        animationDuration() {
-            return `${5 / this.bpm}s`
+            this.UpdateTable(item.name)
+            return this.$store.state.control_drone[item.name].bpmcolor
         },
-        bpm_color() {
-            if (this.bpm < 3) return 'grey'
-            if (this.bpm < 6) return 'indigo'
-            if (this.bpm < 9) return 'green'
-            if (this.bpm < 12) return 'lime'
-            return 'red'
+        iconDuration(item) {
+            return (2 / this.$store.state.control_drone[item.name].bpm).toString() + 's'
         },
-    },
-    created() {
-        this.timer_id = setInterval(() => {
-            this.bpm = this.recv_counter;
-            this.recv_counter = 1;
-        }, 10000);
     },
     mounted() {
         EventBus.$on('update-table', (drone) => {
             this.UpdateTable(drone);
         });
-        EventBus.$on('add-counter', () => {
-            this.recv_counter++;
+
+        EventBus.$on('add-counter', (drone) => {
+            this.$store.state.control_drone[drone].recv_counter++;
         });
     },
     beforeDestroy() {
@@ -338,6 +346,11 @@ a:hover {
     background: rgb(124, 124, 124) !important;
 }
 
+.control_drone td {
+    font-size: 20px !important;
+    font-weight: bold;
+}
+
 .aside-line {
     display: block;
     width: calc(100% + 10px);
@@ -351,7 +364,7 @@ a:hover {
     }
 
     to {
-        transform: scale(1);
+        transform: scale(1.5);
     }
 }
 
