@@ -67,7 +67,7 @@ function rcPortData(message) {
         if (header1 === 'ff') {
             let RCLength = 34 * 2;
 
-            RCData = RCstrFromeGCS;
+            RCData = RCstrFromeGCS.substr(0, RCLength);
 
             RCstrFromeGCS = RCstrFromeGCS.substr(RCLength);
             RCstrFromeGCSLength = 0;
