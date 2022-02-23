@@ -13,7 +13,7 @@ export default new Vuex.Store({
             connected: false,
             loading: false
         },
-        control_drone: {},
+        control_drone: JSON.parse(localStorage.getItem('control_drone_list')) ? JSON.parse(localStorage.getItem('control_drone_list')) : {},
         MinMaxTrim: [
             {
                 channel: 'ch1_max',

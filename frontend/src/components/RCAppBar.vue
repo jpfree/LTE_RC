@@ -1,8 +1,8 @@
 <template>
     <div>
-        <v-app-bar app color="dark" dark dense>
+        <v-app-bar app color="dark" dark dense height="60">
             <v-toolbar-title>
-                <v-row no-gutters align="center">
+                <v-row no-gutters align="center" style="font-size: 35px; font-weight: bold;">
                     KETI LTE RC
                 </v-row>
             </v-toolbar-title>
@@ -18,6 +18,7 @@
                         v-model="host" :rules="host_rule"
                         placeholder="203.253.128.177"
                         label="HOST*"
+                        style="font-size: 25px;"
                         required
                         :disabled="MOBIUS_CONNECTION_CONNECTED"
                     ></v-text-field>
@@ -30,6 +31,7 @@
                         v-model="gcs" :rules="gcs_rule"
                         placeholder="KETI_MUV"
                         label="GCS*"
+                        style="font-size: 25px;"
                         required
                         :disabled="MOBIUS_CONNECTION_CONNECTED"
                     ></v-text-field>
@@ -43,24 +45,29 @@
                         v-model="rc" :rules="rc_rule"
                         placeholder="JWS"
                         label="RC*"
+                        style="font-size: 25px;"
                         required
                         :disabled="MOBIUS_CONNECTION_CONNECTED"
                     ></v-text-field>
                 </v-col>
                 <v-col cols="4">
                     <v-btn
-                        class="mx-2 mt-1"
+                        class="mx-2"
                         tile @click="GcsAppBarCreated"
                         elevation="5"
                         color="primary"
+                        style="font-size: 20px;"
+                        height="45"
                         :disabled="MOBIUS_CONNECTION_CONNECTED"
                     > {{ MOBIUS_CONNECTION_TEXT }}
                     </v-btn>
                     <v-btn
-                        class="mx-2 mt-1"
+                        class="mx-2"
                         tile @click="GcsAppBarReseted"
                         elevation="2"
                         color="primary"
+                        style="font-size: 20px;"
+                        height="45"
                         :disabled="!MOBIUS_CONNECTION_CONNECTED"
                     > {{ MOBIUS_DISCONNECTION_TEXT }}
                     </v-btn>
@@ -173,5 +180,8 @@ export default {
 
 #create .v-btn--floating {
     position: relative;
+}
+.v-text-field >>> label {
+    font-size: 0.9em;
 }
 </style>

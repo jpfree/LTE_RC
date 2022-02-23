@@ -5,8 +5,9 @@
                 <router-link to="/calibration" align="center">
                     <v-btn
                         fab
-                        height="40"
+                        height="50"
                         width="60%"
+                        style="font-size: 20px;font-weight: bold"
                         class="rounded-lg"
                         elevation="5"
                         color="cyan"
@@ -16,23 +17,27 @@
                 </router-link>
             </v-row>
             <v-text-field
-                class="custom-placeholer-color mx-2 mt-10"
-                dense hide-details outlined
+                class="custom-placeholer-color mx-2 mt-8"
+                dense hide-details
                 ref="drone"
                 v-model="add_drone" :rules="add_drone_rule"
                 placeholder=""
                 label="Drone*"
                 required
-                style="v-text-field--outlined: white"
+                filled
+                height="60"
+                style="font-size: 25px;"
                 background-color="white"
             ></v-text-field>
             <v-row align="center" justify="space-around">
                 <v-btn
                     fab
-                    height="40"
+                    height="45"
+                    width="100"
                     class="mt-2 rounded-lg"
                     @click="DroneADD"
                     elevation="5"
+                    style="font-size: 20px;font-weight: bold"
                     color="success"
                 > ADD
                 </v-btn>
@@ -48,12 +53,12 @@
                 item-key="name"
                 hide-default-header
                 hide-default-footer
-                class="elevation-1 mx-2 mt-5"
+                class="control_drone_name elevation-1 mx-2 mt-5"
                 light
                 @click:row="rowClicked">
                 <template v-slot:item.icon="{ item }">
                     <v-progress-circular
-                        class="mt-n1"
+                        class="control_drone_icon mt-n1"
                         v-if="$store.state.control_drone[item.name].status === 'ready'"
                         indeterminate
                         color="primary"
@@ -61,7 +66,7 @@
                     ></v-progress-circular>
                     <font-awesome-icon
                         :id="`status_${item.name}`"
-                        class="mt-n1 v-avatar--metronome"
+                        class="control_drone_icon mt-n1 v-avatar--metronome"
                         v-if="$store.state.control_drone[item.name].status !== 'ready'"
                         :icon="iconName(item)"
                         :style="{color:iconColor(item), animationDuration: iconDuration(item)}"
@@ -72,11 +77,13 @@
                 <v-btn
                     v-if="drone_selected.length > 0"
                     fab
-                    height="40"
+                    height="45"
+                    width="100"
                     class="mt-2 rounded-lg"
                     @click="DroneDELTE"
                     elevation="5"
                     color="error"
+                    style="font-size: 20px;font-weight: bold"
                     :disabled="!MOBIUS_CONNECTION_CONNECTED"
                 > Delete
                 </v-btn>
@@ -85,22 +92,25 @@
                 <v-btn
                     v-if="drone_selected.length > 0"
                     fab
-                    height="40"
+                    height="45"
+                    width="100"
                     class="mt-2 rounded-lg"
                     @click="link"
                     elevation="5"
                     color="primary"
+                    style="font-size: 20px;font-weight: bold"
                     :disabled="!MOBIUS_CONNECTION_CONNECTED"
                 > Link
                 </v-btn>
                 <v-btn
                     v-if="drone_selected.length > 0"
                     fab
-                    height="40"
-                    width="60"
+                    height="45"
+                    width="100"
                     class="mt-2 rounded-lg"
                     @click="unlink"
                     elevation="5"
+                    style="font-size: 20px;font-weight: bold"
                     :disabled="!MOBIUS_CONNECTION_CONNECTED"
                 > Unlink
                 </v-btn>
@@ -136,7 +146,7 @@ export default {
                     value: 'icon',
                 }
             ],
-            drone_list: [],
+            drone_list: JSON.parse(localStorage.getItem('control_dronelist')) ? JSON.parse(localStorage.getItem('control_dronelist')) : [],
             drone_selected: [],
             rc_hub_status: ['disconnected', 'ready', 'connected', 'send', 'disabled'],
 
@@ -152,6 +162,8 @@ export default {
             drone.bpmcolor = 'red'
             drone.recv_counter = 1
             this.drone_list.push(drone)
+
+            localStorage.setItem('control_dronelist', JSON.stringify(this.drone_list));
 
             this.$store.state.control_drone[drone.name] = {
                 icon: 'times-circle',
@@ -177,6 +189,8 @@ export default {
                     }
                 }, 10000)
             }
+
+            localStorage.setItem('control_drone_list', JSON.stringify(this.$store.state.control_drone));
 
             let topic = '/Mobius/' + this.$store.state.VUE_APP_MOBIUS_GCS + '/RC_Data/' + drone.name + '/status'
             let qos = 0
@@ -270,9 +284,9 @@ export default {
         },
         iconColor(item) {
             if (this.$store.state.control_drone[item.name].status === 'disconnected') {
-                this.$store.state.control_drone[item.name].bpmcolor =  'orange'
+                this.$store.state.control_drone[item.name].bpmcolor = 'orange'
             } else if (this.$store.state.control_drone[item.name].status === 'connected') {
-                this.$store.state.control_drone[item.name].bpmcolor =  'black'
+                this.$store.state.control_drone[item.name].bpmcolor = 'black'
             } else if (this.$store.state.control_drone[item.name].status === 'ready') {
                 this.$store.state.control_drone[item.name].bpmcolor = 'blue'
             } else if (this.$store.state.control_drone[item.name].status === 'send') {
@@ -331,7 +345,7 @@ a:hover {
     position: fixed;
     top: 0px;
     left: 0px;
-    width: 200px;
+    width: 310px;
     height: 100%;
     background: rgb(39, 39, 40);
     padding: 150px 0;
@@ -346,9 +360,14 @@ a:hover {
     background: rgb(124, 124, 124) !important;
 }
 
-.control_drone td {
-    font-size: 20px !important;
+.control_drone_name td {
+    font-size: 23px !important;
     font-weight: bold;
+}
+
+.control_drone_icon {
+    font-size: 17px !important;
+    vertical-align: middle;
 }
 
 .aside-line {
@@ -387,5 +406,7 @@ hr {
     color: white;
     padding-top: 3px;
 }
-
+.v-text-field >>> label {
+    font-size: 0.8em;
+}
 </style>
