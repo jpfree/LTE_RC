@@ -17,11 +17,12 @@ in frontend (Only if you need to run the front separately)
 > cd backend
 > npm run start
 ```
+You can now open http://localhost:3000
 
-#### Autorun via `pm2` on boot
+### Autorun via `pm2` on boot
 1. Register PM2_HOME system variable to an environment variable
- - variable - PM2_HOME
- - value - C:\etc\\.pm2
+- variable - PM2_HOME
+- value - C:\etc\\.pm2
 
 2. Install [pm2](https://pm2.keymetrics.io/) and [pm2-windows-service](https://github.com/jon-hall/pm2-windows-service) packages for autorun
 ```
@@ -58,6 +59,7 @@ PM2 service installed and started.
 > pm2 start backend\bin\www --name LTE-RC
 > pm2 save   
 ```
+7. You can now open http://localhost:3000
 
 ### Caveats
 - If you need to change the serial port, you can change it in `backend\routes\index.js`. (The default serial port is COM2.)
