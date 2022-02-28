@@ -59,7 +59,7 @@ PM2 service installed and started.
 > pm2 start backend\bin\www --name LTE-RC
 > pm2 save   
 ```
-7. You can now open http://localhost:3000
+7. After reboot, open http://localhost:3000.
 
 ### Caveats
 - If you need to change the serial port, you can change it in `backend\routes\index.js`. (The default serial port is COM2.)
