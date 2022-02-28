@@ -1,6 +1,6 @@
 # LTE_RC
 
-## Installation
+### Installation
 in backend
 ```
 > cd backend
@@ -12,13 +12,13 @@ in frontend (Only if you need to run the front separately)
 > npm install
 ```
 
-## Run
+### Run
 ```
 > cd backend
 > npm run start
 ```
 
-### Autorun via `pm2` on boot
+#### Autorun via `pm2` on boot
 1. Register PM2_HOME system variable to an environment variable
  - variable - PM2_HOME
  - value - C:\etc\\.pm2
@@ -59,5 +59,5 @@ PM2 service installed and started.
 > pm2 save   
 ```
 
-## Caveats
+### Caveats
 - If you need to change the serial port, you can change it in `backend\routes\index.js`. (The default serial port is COM2.)
