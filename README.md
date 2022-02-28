@@ -2,18 +2,18 @@
 
 ### Installation
 in backend
-```
+```shell
 > cd backend
 > npm install 
 ```
 in frontend (Only if you need to run the front separately)
-```
+```shell
 > cd frontend
 > npm install
 ```
 
 ### Run
-```
+```shell
 > cd backend
 > npm run start
 ```
@@ -25,15 +25,15 @@ You can now open http://localhost:3000
 - value - C:\etc\\.pm2
 
 2. Install [pm2](https://pm2.keymetrics.io/) and [pm2-windows-service](https://github.com/jon-hall/pm2-windows-service) packages for autorun
-```
+```shell
 > npm install pm2-windows-service pm2 -g
 ```
 3. Install the Service
-```
+```shell
 > pm2-service-install
 ```
 4. Configuration
-```
+```shell
 > Perform environment setup (recommended)? Yes
 
 > Set PM2_HOME? Yes
@@ -55,7 +55,7 @@ PM2 service installed and started.
 ```
 5. Reopen the Command Prompt with ***Administrative Privileges***
 6. Run the app and save
-```
+```shell
 > pm2 start backend\bin\www --name LTE-RC
 > pm2 save   
 ```
