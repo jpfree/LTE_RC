@@ -662,6 +662,7 @@ export default {
                             drone.system_id = this.$store.state.control_drone[drone.name].system_id
                             EventBus.$emit('update-table', drone)
 
+                            clearInterval(this.$store.state.control_drone[drone.name].timer_id)
                             this.$store.state.control_drone[drone.name] = {
                                 icon: 'times-circle',
                                 status: 'disabled',
@@ -1139,21 +1140,21 @@ export default {
         }
     },
     mounted() {
-        setInterval(() => {
-            this.trim_count = this.trim_count + 500
-            if (this.trim_count <= 2000) {
-                this.ch_trim.ch1_trim = this.ch_raw.ch1_raw
-                this.ch_trim.ch2_trim = this.ch_raw.ch2_raw
-                this.ch_trim.ch3_trim = this.ch_raw.ch3_raw
-                this.ch_trim.ch4_trim = this.ch_raw.ch4_raw
-                // console.log('this.ch1_trim', this.ch1_trim)
-                // console.log('this.ch2_trim', this.ch2_trim)
-                // console.log('this.ch3_trim', this.ch3_trim)
-                // console.log('this.ch4_trim', this.ch4_trim)
-            } else {
-                clearInterval()
-            }
-        }, 500)
+        // setInterval(() => {
+        //     this.trim_count = this.trim_count + 500
+        //     if (this.trim_count <= 2000) {
+        //         this.ch_trim.ch1_trim = this.ch_raw.ch1_raw
+        //         this.ch_trim.ch2_trim = this.ch_raw.ch2_raw
+        //         this.ch_trim.ch3_trim = this.ch_raw.ch3_raw
+        //         this.ch_trim.ch4_trim = this.ch_raw.ch4_raw
+        //         // console.log('this.ch1_trim', this.ch1_trim)
+        //         // console.log('this.ch2_trim', this.ch2_trim)
+        //         // console.log('this.ch3_trim', this.ch3_trim)
+        //         // console.log('this.ch4_trim', this.ch4_trim)
+        //     } else {
+        //         clearInterval()
+        //     }
+        // }, 500)
 
         EventBus.$on('mqttConnection', () => {
             if (this.$store.state.MOBIUS_CONNECTION_CONNECTED) {

@@ -166,6 +166,7 @@ export default {
 
             localStorage.setItem('control_dronelist', JSON.stringify(this.drone_list));
 
+            clearInterval(this.$store.state.control_drone[drone.name].timer_id)
             this.$store.state.control_drone[drone.name] = {
                 icon: 'times-circle',
                 status: 'disabled',
