@@ -944,7 +944,7 @@ export default {
 
             this.ch_raw.ch5_raw = parseInt(hex_content_each.substr(10, 2), 16)
             // this.RCstrToDrone += this.ch_raw.ch5_raw.toString(16)
-            this.ch_raw.ch5_raw = this.SBUS2RC(this.ch_raw.ch5_raw) - 10
+            this.ch_raw.ch5_raw = this.SBUS2RC(this.ch_raw.ch5_raw) - 5
             this.mav_ch_raw.ch5_raw = this.ch_raw.ch5_raw
 
             this.ch_raw.ch6_raw = parseInt(hex_content_each.substr(12, 2), 16)
