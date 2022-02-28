@@ -659,6 +659,7 @@ export default {
                             drone.bpm = 1
                             drone.bpmcolor = 'red'
                             drone.recv_counter = 1
+                            drone.system_id = this.$store.state.control_drone[drone.name].system_id
                             EventBus.$emit('update-table', drone)
 
                             this.$store.state.control_drone[drone.name] = {
@@ -667,6 +668,8 @@ export default {
                                 bpm: 1,
                                 bpmcolor: 'red',
                                 recv_counter: 1,
+                                system_id: this.$store.state.control_drone[drone.name].system_id,
+                                selected: true,
                                 timer_id: setInterval(() => {
                                     this.$store.state.control_drone[drone.name].bpm = this.$store.state.control_drone[drone.name].recv_counter;
                                     this.$store.state.control_drone[drone.name].recv_counter = 1;
@@ -679,9 +682,11 @@ export default {
                                     }
                                 }, 10000)
                             }
+                            console.log('control_drone Info -', this.$store.state.control_drone[drone.name])
 
                             let topic = '/Mobius/' + this.$store.state.VUE_APP_MOBIUS_GCS + '/RC_Data/' + drone.name + '/status'
                             let qos = 0
+                            this.$store.state.client.unsubscribe(topic)
                             this.$store.state.client.subscribe(topic, {qos}, (error, res) => {
                                 if (error) {
                                     console.log('Subscribe to topics error', error)
@@ -715,6 +720,7 @@ export default {
                             this.$store.state.control_drone[drone].icon = 'spinner'
                             this.$store.state.control_drone[drone].status = msg.status
                             this.$store.state.control_drone[drone].system_id = msg.system_id
+                            localStorage.setItem('control_drone_list', JSON.stringify(this.$store.state.control_drone));
                         } else if (msg.status === 'connected') {
                             this.$store.state.control_drone[drone].icon = 'link'
                             this.$store.state.control_drone[drone].status = msg.status
