@@ -1109,7 +1109,7 @@ export default {
             this.ch_value.ch32_value = this.min_max_scaler(this.ch_raw.ch32_raw)
 
             if (this.$store.state.client.connected) {
-                if (this.ch_raw.ch12_raw > 1700) {
+                if (this.ch_raw.ch11_raw > 1700) {
                     Object.keys(this.$store.state.control_drone).forEach((dName) => {
                         if (this.$store.state.control_drone[dName].selected) {
                             let topic = '/Mobius/' + this.$store.state.VUE_APP_MOBIUS_GCS + '/GCS_Data/' + dName

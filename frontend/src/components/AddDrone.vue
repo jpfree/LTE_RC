@@ -324,11 +324,9 @@ export default {
     },
     beforeDestroy() {
         this.add_drone = ""
-        if (this.timer_id) {
-            clearInterval(this.timer_id);
-        }
+
         for (let idx in this.drone_list) {
-            let topic = '/Mobius/' + this.$store.state.VUE_APP_MOBIUS_GCS + '/RC_Data/' + this.drone_list[idx] + '/conn'
+            let topic = '/Mobius/' + this.$store.state.VUE_APP_MOBIUS_GCS + '/RC_Data/' + this.drone_list[idx].name + '/conn'
             this.$store.state.client.publish(topic, Buffer.from('unsubscribe'))
         }
         this.drone_list = []
