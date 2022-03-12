@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const cors = require('cors');
 
 var indexRouter = require('./routes/index');
 
@@ -11,6 +12,14 @@ var app = express();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
+let corsOption = {
+
+  origin: 'http://localhost:8080', // 허락하는 요청 주소
+
+  credentials: true // true로 하면 설정한 내용을 response 헤더에 추가 해줍니다.
+
+}
+app.use(cors(corsOption));
 
 app.use(logger('dev'));
 app.use(express.json());

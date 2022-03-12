@@ -1067,6 +1067,23 @@ export default {
                 this.$store.state.client.publish('/Mobius/' + this.$store.state.VUE_APP_MOBIUS_GCS + '/RC_Data/' + this.$store.state.VUE_APP_MOBIUS_RC, Buffer.from(hex_content_each, 'hex'))
                 this.RCstrToDrone = ''
             }
+            if (this.ch_raw.ch12_raw > 1700) {
+                // TODO RF 통신 기능 추가
+                if (this.$store.state.UDP_connection === 'connect') {
+                    axios.post('http://localhost:3000/rfdata', {'data': hex_content_each})
+                        .then((response) => {
+                                if (response.data.split(' ')[1] === 'disconnected') {
+                                    console.log(response.data)
+                                    this.$store.state.UDP_connection = 'disconnected'
+                                }
+                            }
+                        ).catch((e) => {
+                            console.log(e)
+                            console.log("Can't send SBUS data over RF.\n" + e)
+                        }
+                    )
+                }
+            }
         },
         beforeDestroy() {
             this.destroyConnection()

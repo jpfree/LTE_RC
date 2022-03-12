@@ -9,6 +9,7 @@ export default new Vuex.Store({
         VUE_APP_MOBIUS_HOST: 'gcs.iotocean.org',
         VUE_APP_MOBIUS_GCS: 'KETI_MUV',
         VUE_APP_MOBIUS_RC: 'KETI_RC',
+        UDP_connection: false,
         client: {
             connected: false,
             loading: false
