@@ -1,35 +1,23 @@
 <template>
     <div>
         <div class='left'>
-            <v-row class="mb-6" justify="center">
-                <router-link to="/calibration" align="center">
-                    <v-btn
-                        fab
-                        height="50"
-                        width="60%"
-                        style="font-size: 20px;font-weight: bold"
-                        class="rounded-lg"
-                        elevation="5"
-                        color="cyan"
-                        dark
-                    > Calibration
-                    </v-btn>
-                </router-link>
+            <v-row class="ml-2 white--text font-weight-bold" style="font-size: 22px">
+                Drone Name
             </v-row>
             <v-text-field
-                class="custom-placeholer-color mx-2 mt-8"
-                dense hide-details
+                class="custom-placeholer-color mx-2 mt-5"
+                dense
                 ref="drone"
                 v-model="add_drone" :rules="add_drone_rule"
                 placeholder=""
-                label="Drone*"
+                label="Drone Name*"
                 required
                 filled
                 height="60"
                 style="font-size: 25px;"
                 background-color="white"
             ></v-text-field>
-            <v-row align="center" justify="space-around">
+            <v-row class="mt-n2" align="center" justify="space-around">
                 <v-btn
                     fab
                     height="45"
@@ -42,8 +30,8 @@
                 > ADD
                 </v-btn>
             </v-row>
-            <div class="aside-line"></div>
-            <v-row v-if="drone_list.length > 0" class="mx-2 white--text font-weight-bold">
+            <div class="mt-8 aside-line"></div>
+            <v-row class="mt-4 ml-2 white--text font-weight-bold" style="font-size: 22px">
                 Drone List
             </v-row>
             <v-data-table
@@ -73,7 +61,7 @@
                         size="1x"/>
                 </template>
             </v-data-table>
-            <v-row align="center" justify="space-around">
+            <v-row class="mt-1" align="center" justify="space-around">
                 <v-btn
                     v-if="drone_selected.length > 0"
                     fab
@@ -154,72 +142,84 @@ export default {
     },
     methods: {
         DroneADD() {
-            let drone = {}
-            drone.name = this.add_drone
-            drone.icon = 'times-circle'
-            drone.status = 'disabled'
-            drone.bpm = 1
-            drone.bpmcolor = 'red'
-            drone.recv_counter = 1
-            drone.system_id = 1
-            this.drone_list.push(drone)
+            if (this.$store.state.client.connected) {
+                let drone = {}
+                drone.name = this.add_drone
+                drone.icon = 'times-circle'
+                drone.status = 'disabled'
+                drone.bpm = 1
+                drone.bpmcolor = 'red'
+                drone.recv_counter = 1
+                drone.system_id = 1
+                this.drone_list.push(drone)
 
-            localStorage.setItem('control_dronelist', JSON.stringify(this.drone_list));
+                localStorage.setItem('control_dronelist', JSON.stringify(this.drone_list));
 
-            clearInterval(this.$store.state.control_drone[drone.name].timer_id)
-            this.$store.state.control_drone[drone.name] = {
-                icon: 'times-circle',
-                status: 'disabled',
-                bpm: 1,
-                bpmcolor: 'red',
-                recv_counter: 1,
-                system_id: 1,
-                timer_id: setInterval(() => {
-                    this.$store.state.control_drone[drone.name].bpm = this.$store.state.control_drone[drone.name].recv_counter;
-                    this.$store.state.control_drone[drone.name].recv_counter = 1;
-                    if (this.$store.state.control_drone[drone.name].bpm === 1) {
-                        this.$store.state.control_drone[drone.name].icon = 'unlink'
-                        this.$store.state.control_drone[drone.name].status = 'disconnected'
-                        this.UpdateTable(drone.name)
-                        let topic = '/Mobius/' + this.$store.state.VUE_APP_MOBIUS_GCS + '/RC_Data/' + drone.name + '/conn'
-                        this.$store.state.client.publish(topic, Buffer.from('unsubscribe'))
-                    } else if (this.$store.state.control_drone[drone.name].bpm < 5) {
-                        this.$store.state.control_drone[drone.name].icon = 'exclamation-triangle'
-                    } else if (this.$store.state.control_drone[drone.name].bpm < 9) {
-                        this.$store.state.control_drone[drone.name].icon = 'play'
-                    } else if (this.$store.state.control_drone[drone.name].bpm < 12) {
-                        this.$store.state.control_drone[drone.name].icon = 'circle'
-                    }
-                }, 10000)
-            }
-
-            localStorage.setItem('control_drone_list', JSON.stringify(this.$store.state.control_drone));
-
-            let topic = '/Mobius/' + this.$store.state.VUE_APP_MOBIUS_GCS + '/RC_Data/' + drone.name + '/status'
-            let qos = 0
-            this.$store.state.client.unsubscribe(topic)
-            this.$store.state.client.subscribe(topic, {qos}, (error, res) => {
-                if (error) {
-                    console.log('Subscribe to topics error', error)
+                this.$store.state.control_drone[drone.name] = {
+                    icon: 'times-circle',
+                    status: 'disabled',
+                    bpm: 1,
+                    bpmcolor: 'red',
+                    recv_counter: 1,
+                    system_id: 1,
+                    timer_id: setInterval(() => {
+                        this.$store.state.control_drone[drone.name].bpm = this.$store.state.control_drone[drone.name].recv_counter;
+                        this.$store.state.control_drone[drone.name].recv_counter = 1;
+                        if (this.$store.state.control_drone[drone.name].bpm === 1) {
+                            this.$store.state.control_drone[drone.name].icon = 'unlink'
+                            this.$store.state.control_drone[drone.name].status = 'disconnected'
+                            this.UpdateTable(drone.name)
+                            let topic = '/Mobius/' + this.$store.state.VUE_APP_MOBIUS_GCS + '/RC_Data/' + drone.name + '/conn'
+                            this.$store.state.client.publish(topic, Buffer.from('unsubscribe'))
+                        } else if (this.$store.state.control_drone[drone.name].bpm < 5) {
+                            this.$store.state.control_drone[drone.name].icon = 'exclamation-triangle'
+                        } else if (this.$store.state.control_drone[drone.name].bpm < 9) {
+                            this.$store.state.control_drone[drone.name].icon = 'play'
+                        } else if (this.$store.state.control_drone[drone.name].bpm < 12) {
+                            this.$store.state.control_drone[drone.name].icon = 'circle'
+                        }
+                    }, 10000)
                 }
-                this.subscribeSuccess = true
-                console.log('Subscribe to topics res', res)
-            })
+
+                localStorage.setItem('control_drone_list', JSON.stringify(this.$store.state.control_drone));
+
+                let topic = '/Mobius/' + this.$store.state.VUE_APP_MOBIUS_GCS + '/RC_Data/' + drone.name + '/status'
+                let qos = 0
+                this.$store.state.client.unsubscribe(topic)
+                this.$store.state.client.subscribe(topic, {qos}, (error, res) => {
+                    if (error) {
+                        console.log('Subscribe to topics error', error)
+                    }
+                    this.subscribeSuccess = true
+                    console.log('Subscribe to topics res', res)
+                })
+            } else {
+                console.log('disconnected with Mobius')
+            }
         },
         DroneDELTE() {
             for (let select = this.drone_selected.length; select > 0; select--) {
                 for (let idx = this.drone_list.length; idx > 0; idx--) {
                     if (this.drone_list[idx - 1].name === this.drone_selected[select - 1]) {
                         let topic = '/Mobius/' + this.$store.state.VUE_APP_MOBIUS_GCS + '/RC_Data/' + this.drone_list[idx - 1].name + '/status'
-                        this.$store.state.client.unsubscribe(topic)
-                        topic = '/Mobius/' + this.$store.state.VUE_APP_MOBIUS_GCS + '/RC_Data/' + this.drone_list[idx - 1].name + '/conn'
-                        this.$store.state.client.publish(topic, Buffer.from('unsubscribe'))
+                        try {
+                            this.$store.state.client.unsubscribe(topic)
+                            topic = '/Mobius/' + this.$store.state.VUE_APP_MOBIUS_GCS + '/RC_Data/' + this.drone_list[idx - 1].name + '/conn'
+                            this.$store.state.client.publish(topic, Buffer.from('unsubscribe'))
+                        } catch (e) {
+                            console.log('Disconnected with server')
+                        }
 
+                        clearInterval(this.$store.state.control_drone[this.drone_list[idx - 1].name].timer_id)
+
+                        delete this.$store.state.control_drone[this.drone_list[idx - 1].name]
                         this.drone_list.splice(idx - 1, 1)
                         this.drone_selected.splice(select - 1, 1)
                     }
                 }
             }
+            localStorage.setItem('control_dronelist', JSON.stringify(this.drone_list));
+            localStorage.setItem('control_drone_list', JSON.stringify(this.$store.state.control_drone));
         },
         rowClicked: function (item, row) {
             let selectState = (row.isSelected) ? false : true
@@ -325,9 +325,11 @@ export default {
     beforeDestroy() {
         this.add_drone = ""
 
-        for (let idx in this.drone_list) {
-            let topic = '/Mobius/' + this.$store.state.VUE_APP_MOBIUS_GCS + '/RC_Data/' + this.drone_list[idx].name + '/conn'
-            this.$store.state.client.publish(topic, Buffer.from('unsubscribe'))
+        if (this.$store.state.client.connected) {
+            for (let idx in this.drone_list) {
+                let topic = '/Mobius/' + this.$store.state.VUE_APP_MOBIUS_GCS + '/RC_Data/' + this.drone_list[idx].name + '/conn'
+                this.$store.state.client.publish(topic, Buffer.from('unsubscribe'))
+            }
         }
         this.drone_list = []
     }
@@ -408,6 +410,7 @@ hr {
     color: white;
     padding-top: 3px;
 }
+
 .v-text-field >>> label {
     font-size: 0.8em;
 }

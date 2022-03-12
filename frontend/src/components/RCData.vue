@@ -45,7 +45,7 @@
                             height="60"
                             rounded
                         >
-                             <span style="font-size: 25px">Pitch <strong>{{ ch_raw.ch2_raw }}</strong></span>
+                            <span style="font-size: 25px">Pitch <strong>{{ ch_raw.ch2_raw }}</strong></span>
                         </v-progress-linear>
                     </v-col>
                     <v-col cols="6" class="mr-16">
@@ -55,7 +55,7 @@
                             height="60"
                             rounded
                         >
-                             <span style="font-size: 25px">Throttle <strong>{{ ch_raw.ch3_raw }}</strong></span>
+                            <span style="font-size: 25px">Throttle <strong>{{ ch_raw.ch3_raw }}</strong></span>
                         </v-progress-linear>
                     </v-col>
                 </v-row>
@@ -66,7 +66,7 @@
                             height="50"
                             rounded
                         >
-                             <span style="font-size: 25px">Yaw <strong>{{ ch_raw.ch4_raw }}</strong></span>
+                            <span style="font-size: 25px">Yaw <strong>{{ ch_raw.ch4_raw }}</strong></span>
                         </v-progress-linear>
                     </v-col>
                     <v-col cols="2">
@@ -86,7 +86,7 @@
                             height="50"
                             rounded
                         >
-                             <span style="font-size: 25px">Pan <strong>{{ ch_raw.ch17_raw }}</strong></span>
+                            <span style="font-size: 25px">Pan <strong>{{ ch_raw.ch17_raw }}</strong></span>
                         </v-progress-linear>
                     </v-col>
                     <v-col cols="2">
@@ -114,7 +114,7 @@
                             height="60"
                             rounded
                         >
-                             <span style="font-size: 25px">Tilt <strong>{{ ch_raw.ch18_raw }}</strong></span>
+                            <span style="font-size: 25px">Tilt <strong>{{ ch_raw.ch18_raw }}</strong></span>
                         </v-progress-linear>
                     </v-col>
                 </v-row>
@@ -125,7 +125,7 @@
                             height="50"
                             rounded
                         >
-                             <span style="font-size: 25px">Zoom <strong>{{ ch_raw.ch19_raw }}</strong></span>
+                            <span style="font-size: 25px">Zoom <strong>{{ ch_raw.ch19_raw }}</strong></span>
                         </v-progress-linear>
                     </v-col>
                     <v-col cols="2">
@@ -147,7 +147,7 @@
                             height="50"
                             rounded
                         >
-                             <span style="font-size: 25px">Radio 5 <strong>{{ ch_raw.ch5_raw }}</strong></span>
+                            <span style="font-size: 25px">Radio 5 <strong>{{ ch_raw.ch5_raw }}</strong></span>
                         </v-progress-linear>
                     </v-col>
                     <v-col cols="6">
@@ -156,7 +156,7 @@
                             height="50"
                             rounded
                         >
-                             <span style="font-size: 25px">Radio 10 <strong>{{ ch_raw.ch10_raw }}</strong></span>
+                            <span style="font-size: 25px">Radio 10 <strong>{{ ch_raw.ch10_raw }}</strong></span>
                         </v-progress-linear>
                     </v-col>
                 </v-row>
@@ -167,7 +167,7 @@
                             height="50"
                             rounded
                         >
-                             <span style="font-size: 25px">Radio 6 <strong>{{ ch_raw.ch6_raw }}</strong></span>
+                            <span style="font-size: 25px">Radio 6 <strong>{{ ch_raw.ch6_raw }}</strong></span>
                         </v-progress-linear>
                     </v-col>
                     <v-col cols="6">
@@ -176,7 +176,7 @@
                             height="50"
                             rounded
                         >
-                             <span style="font-size: 25px">Radio 11 <strong>{{ ch_raw.ch11_raw }}</strong></span>
+                            <span style="font-size: 25px">Radio 11 <strong>{{ ch_raw.ch11_raw }}</strong></span>
                         </v-progress-linear>
                     </v-col>
                 </v-row>
@@ -187,7 +187,7 @@
                             height="50"
                             rounded
                         >
-                             <span style="font-size: 25px">Radio 7 <strong>{{ ch_raw.ch7_raw }}</strong></span>
+                            <span style="font-size: 25px">Radio 7 <strong>{{ ch_raw.ch7_raw }}</strong></span>
                         </v-progress-linear>
                     </v-col>
                     <v-col cols="6">
@@ -196,7 +196,7 @@
                             height="50"
                             rounded
                         >
-                             <span style="font-size: 25px">Radio 12 <strong>{{ ch_raw.ch12_raw }}</strong></span>
+                            <span style="font-size: 25px">Radio 12 <strong>{{ ch_raw.ch12_raw }}</strong></span>
                         </v-progress-linear>
                     </v-col>
                 </v-row>
@@ -207,7 +207,7 @@
                             height="50"
                             rounded
                         >
-                             <span style="font-size: 25px">Radio 8 <strong>{{ ch_raw.ch8_raw }}</strong></span>
+                            <span style="font-size: 25px">Radio 8 <strong>{{ ch_raw.ch8_raw }}</strong></span>
                         </v-progress-linear>
                     </v-col>
                     <v-col cols="6">
@@ -216,7 +216,7 @@
                             height="50"
                             rounded
                         >
-                             <span style="font-size: 25px">Radio 13 <strong>{{ ch_raw.ch13_raw }}</strong></span>
+                            <span style="font-size: 25px">Radio 13 <strong>{{ ch_raw.ch13_raw }}</strong></span>
                         </v-progress-linear>
                     </v-col>
                 </v-row>
@@ -227,7 +227,7 @@
                             height="50"
                             rounded
                         >
-                             <span style="font-size: 25px">Radio 9 <strong>{{ ch_raw.ch9_raw }}</strong></span>
+                            <span style="font-size: 25px">Radio 9 <strong>{{ ch_raw.ch9_raw }}</strong></span>
                         </v-progress-linear>
                     </v-col>
                     <v-col cols="6">
@@ -236,7 +236,7 @@
                             height="50"
                             rounded
                         >
-                             <span style="font-size: 25px">Radio 14 <strong>{{ ch_raw.ch14_raw }}</strong></span>
+                            <span style="font-size: 25px">Radio 14 <strong>{{ ch_raw.ch14_raw }}</strong></span>
                         </v-progress-linear>
                     </v-col>
                 </v-row>
@@ -249,7 +249,7 @@
                             height="50"
                             rounded
                         >
-                             <span style="font-size: 25px">Radio 20 <strong>{{ ch_raw.ch20_raw }}</strong></span>
+                            <span style="font-size: 25px">Radio 20 <strong>{{ ch_raw.ch20_raw }}</strong></span>
                         </v-progress-linear>
                     </v-col>
                     <v-col cols="6">
@@ -258,7 +258,7 @@
                             height="50"
                             rounded
                         >
-                             <span style="font-size: 25px">Radio 25 <strong>{{ ch_raw.ch25_raw }}</strong></span>
+                            <span style="font-size: 25px">Radio 25 <strong>{{ ch_raw.ch25_raw }}</strong></span>
                         </v-progress-linear>
                     </v-col>
                 </v-row>
@@ -269,7 +269,7 @@
                             height="50"
                             rounded
                         >
-                             <span style="font-size: 25px">Radio 21 <strong>{{ ch_raw.ch21_raw }}</strong></span>
+                            <span style="font-size: 25px">Radio 21 <strong>{{ ch_raw.ch21_raw }}</strong></span>
                         </v-progress-linear>
                     </v-col>
                     <v-col cols="6">
@@ -278,7 +278,7 @@
                             height="50"
                             rounded
                         >
-                             <span style="font-size: 25px">Radio 26 <strong>{{ ch_raw.ch26_raw }}</strong></span>
+                            <span style="font-size: 25px">Radio 26 <strong>{{ ch_raw.ch26_raw }}</strong></span>
                         </v-progress-linear>
                     </v-col>
                 </v-row>
@@ -289,7 +289,7 @@
                             height="50"
                             rounded
                         >
-                             <span style="font-size: 25px">Radio 22 <strong>{{ ch_raw.ch22_raw }}</strong></span>
+                            <span style="font-size: 25px">Radio 22 <strong>{{ ch_raw.ch22_raw }}</strong></span>
                         </v-progress-linear>
                     </v-col>
                     <v-col cols="6">
@@ -298,7 +298,7 @@
                             height="50"
                             rounded
                         >
-                             <span style="font-size: 25px">Radio 27 <strong>{{ ch_raw.ch27_raw }}</strong></span>
+                            <span style="font-size: 25px">Radio 27 <strong>{{ ch_raw.ch27_raw }}</strong></span>
                         </v-progress-linear>
                     </v-col>
                 </v-row>
@@ -309,7 +309,7 @@
                             height="50"
                             rounded
                         >
-                             <span style="font-size: 25px">Radio 23 <strong>{{ ch_raw.ch23_raw }}</strong></span>
+                            <span style="font-size: 25px">Radio 23 <strong>{{ ch_raw.ch23_raw }}</strong></span>
                         </v-progress-linear>
                     </v-col>
                     <v-col cols="6">
@@ -318,7 +318,7 @@
                             height="50"
                             rounded
                         >
-                             <span style="font-size: 25px">Radio 28 <strong>{{ ch_raw.ch28_raw }}</strong></span>
+                            <span style="font-size: 25px">Radio 28 <strong>{{ ch_raw.ch28_raw }}</strong></span>
                         </v-progress-linear>
                     </v-col>
                 </v-row>
@@ -329,7 +329,7 @@
                             height="50"
                             rounded
                         >
-                             <span style="font-size: 25px">Radio 24 <strong>{{ ch_raw.ch24_raw }}</strong></span>
+                            <span style="font-size: 25px">Radio 24 <strong>{{ ch_raw.ch24_raw }}</strong></span>
                         </v-progress-linear>
                     </v-col>
                     <v-col cols="6">
@@ -338,7 +338,7 @@
                             height="50"
                             rounded
                         >
-                             <span style="font-size: 25px">Radio 29 <strong>{{ ch_raw.ch29_raw }}</strong></span>
+                            <span style="font-size: 25px">Radio 29 <strong>{{ ch_raw.ch29_raw }}</strong></span>
                         </v-progress-linear>
                     </v-col>
                 </v-row>
@@ -363,7 +363,7 @@ export default {
 
     data() {
         return {
-            snackbar:false,
+            snackbar: false,
             connection: {
                 host: this.$store.state.VUE_APP_MOBIUS_HOST,
                 port: 8883,
@@ -639,10 +639,6 @@ export default {
                 const serverip = this.$store.state.VUE_APP_MOBIUS_HOST
                 const connectUrl = `ws://${serverip}:${port}${endpoint}`
 
-                // Connect serial for rc data
-                // this.rcPortOpening(this.rcPort_info);
-                this.$timer.start('SerialData')
-
                 try {
                     this.$store.state.client = mqtt.connect(connectUrl, options)
                 } catch (error) {
@@ -771,15 +767,6 @@ export default {
                 }
             }
         },
-        // doPublish(topic, payload) {
-        //     if (this.$store.state.client.connected) {
-        //         this.$store.state.client.publish(topic, payload, 0, error => {
-        //             if (error) {
-        //                 console.log('Publish error', error)
-        //             }
-        //         })
-        //     }
-        // },
         destroyConnection() {
             if (this.$store.state.client.connected) {
                 try {
@@ -797,53 +784,6 @@ export default {
                 this.$timer.stop('SerialData')
             }
         },
-        // rcPortOpening(port) {
-        //     if (this.rcPort == null) {
-        //         this.rcPort = new SerialPort(port.Path, {
-        //             baudRate: parseInt(port.BaudRate, 10),
-        //         });
-        //
-        //         this.rcPort.on('open', this.rcPortOpen);
-        //         this.rcPort.on('close', this.rcPortClose);
-        //         this.rcPort.on('error', this.rcPortError);
-        //         this.rcPort.on('data', this.rcPortData);
-        //     } else {
-        //         if (this.rcPort.isOpen) {
-        //             console.log('This is an already open RC port.')
-        //         } else {
-        //             this.rcPort.open();
-        //         }
-        //     }
-        // },
-        // rcPortOpen() {
-        //     console.log('rcPort open. ' + this.rcPort_info.Path + ' Data rate: ' + this.rcPort_info.BaudRate);
-        // },
-        // rcPortClose() {
-        //     console.log('rcPort closed.');
-        // },
-        // rcPortError(error) {
-        //     console.log('[rcPort error]: ' + error.message);
-        //
-        //     setTimeout(this.rcPortOpening, 2000);
-        // },
-        // rcPortData(message) {
-        //     this.RCstrFromeGCS += message.toString('hex').toLowerCase();
-        //
-        //     while (this.RCstrFromeGCS.length >= 68) {
-        //         // console.log(this.RCstrFromeGCS);
-        //         let header1 = this.RCstrFromeGCS.substr(0, 2);
-        //         if (header1 === 'ff') {
-        //             let RCLength = 34 * 2;
-        //
-        //             this.receiveFromRC(this.RCstrFromeGCS.toString('hex'))
-        //
-        //             this.RCstrFromeGCS = this.RCstrFromeGCS.substr(RCLength);
-        //             this.RCstrFromeGCSLength = 0;
-        //         } else {
-        //             this.RCstrFromeGCS = this.RCstrFromeGCS.substr(2);
-        //         }
-        //     }
-        // },
         SerialData() {
             axios.get('http://localhost:3000/serialdata')
                 .then((response) => {
@@ -851,16 +791,13 @@ export default {
                     }
                 ).catch(() => {
                     this.ErrorLog.level = 'error'
-                    this.ErrorLog.message = "Can't recieve SBUS Data"
+                    this.ErrorLog.message = "Cannot receive SBUS data"
                 }
             )
         },
         SBUS2RC(x) {
             return Math.round((x * 8 + 1 - 1000) * this.RC_RATE + 1500);
         },
-        // RC2SBUS(x) {
-        //     return Math.round(((x - 1500) * this.SBUS_RATE + 1000) / 8);
-        // },
         min_max_scaler(val) {
             return (val - this.SBUS2RC(0)) / (this.SBUS2RC(250) - this.SBUS2RC(0)) * 100;
         },
@@ -869,10 +806,6 @@ export default {
             try {
                 var mavMsg = null;
                 var genMsg = null;
-                //var targetSysId = sysId;
-                // var targetCompId = (params.targetCompId == undefined) ?
-                //     0 :
-                //     params.targetCompId;
 
                 switch (type) {
                     case mavlink.MAVLINK_MSG_ID_RC_CHANNELS_OVERRIDE:
@@ -1140,21 +1073,7 @@ export default {
         }
     },
     mounted() {
-        // setInterval(() => {
-        //     this.trim_count = this.trim_count + 500
-        //     if (this.trim_count <= 2000) {
-        //         this.ch_trim.ch1_trim = this.ch_raw.ch1_raw
-        //         this.ch_trim.ch2_trim = this.ch_raw.ch2_raw
-        //         this.ch_trim.ch3_trim = this.ch_raw.ch3_raw
-        //         this.ch_trim.ch4_trim = this.ch_raw.ch4_raw
-        //         // console.log('this.ch1_trim', this.ch1_trim)
-        //         // console.log('this.ch2_trim', this.ch2_trim)
-        //         // console.log('this.ch3_trim', this.ch3_trim)
-        //         // console.log('this.ch4_trim', this.ch4_trim)
-        //     } else {
-        //         clearInterval()
-        //     }
-        // }, 500)
+        this.$timer.start('SerialData')
 
         EventBus.$on('mqttConnection', () => {
             if (this.$store.state.MOBIUS_CONNECTION_CONNECTED) {

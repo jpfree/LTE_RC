@@ -16,7 +16,7 @@
                         dense hide-details outlined
                         ref="host"
                         v-model="host" :rules="host_rule"
-                        placeholder="203.253.128.177"
+                        placeholder="gcs.iotocean.org"
                         label="HOST*"
                         style="font-size: 25px;"
                         required
@@ -119,29 +119,6 @@ export default {
             self.$store.state.VUE_APP_MOBIUS_HOST = self.host;
             self.$store.state.VUE_APP_MOBIUS_GCS = self.gcs;
             self.$store.state.VUE_APP_MOBIUS_RC = self.rc;
-
-            // // Retrieve rc_approval
-            // axios({
-            //     validateStatus: function (status) {
-            //         // 상태 코드가 500 이상일 경우 거부. 나머지(500보다 작은)는 허용.
-            //         return status < 500;
-            //     },
-            //     method: 'get',
-            //     url: 'http://' + self.$store.state.VUE_APP_MOBIUS_HOST + ':7579/Mobius/MUV/rc_approval/' + self.$store.state.VUE_APP_MOBIUS_RC + '/la',
-            //     headers: {
-            //         'X-M2M-RI': String(parseInt(Math.random() * 10000)),
-            //         'X-M2M-Origin': 'SVue',
-            //         'Content-Type': 'application/json;ty=4'
-            //     }
-            // }).then(
-            //     function (res) {
-            //         self.$store.state.VUE_APP_MOBIUS_RC = res.data['m2m:cin'].con.rc
-            //     }
-            // ).catch(
-            //     function (err) {
-            //         console.log(err.message)
-            //     }
-            // )
 
             localStorage.setItem('mobius_host', self.host);
             localStorage.setItem('mobius_gcs', self.gcs);
