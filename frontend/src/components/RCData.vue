@@ -781,7 +781,7 @@ export default {
                     console.log('Disconnect failed', error.toString())
                 }
                 // this.rcPort.close()
-                this.$timer.stop('SerialData')
+                // this.$timer.stop('SerialData')
             }
         },
         SerialData() {
@@ -1087,6 +1087,7 @@ export default {
         },
         beforeDestroy() {
             this.destroyConnection()
+            this.$timer.stop('SerialData')
         }
     },
     mounted() {
