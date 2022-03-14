@@ -133,7 +133,7 @@
                 required
                 filled
                 height="60"
-                style="font-size: 20px;"
+                style="font-size: 25px;"
                 background-color="white"
             ></v-text-field>
             <v-data-table
