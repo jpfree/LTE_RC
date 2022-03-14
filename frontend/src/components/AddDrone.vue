@@ -47,7 +47,7 @@
                 <template v-slot:item.icon="{ item }">
                     <v-progress-circular
                         class="control_drone_icon mt-n1"
-                        v-if="$store.state.control_drone[item.name].status === 'ready'"
+                        v-if="$store.state.control_drone[item.name].status === 'ready' && $store.state.control_drone[item.name].status !== 'RF'"
                         indeterminate
                         color="primary"
                         :size="25"
@@ -55,10 +55,17 @@
                     <font-awesome-icon
                         :id="`status_${item.name}`"
                         class="control_drone_icon mt-n1 v-avatar--metronome"
-                        v-if="$store.state.control_drone[item.name].status !== 'ready'"
+                        v-if="$store.state.control_drone[item.name].status !== 'ready' && $store.state.control_drone[item.name].status !== 'RF'"
                         :icon="iconName(item)"
                         :style="{color:iconColor(item), animationDuration: iconDuration(item)}"
                         size="1x"/>
+                    <thead v-if="$store.state.control_drone[item.name].status === 'RF'">
+                    <tr>
+                        <th class="text-left">
+                            RF
+                        </th>
+                    </tr>
+                    </thead>
                 </template>
             </v-data-table>
             <v-row class="mt-1" align="center" justify="space-around">

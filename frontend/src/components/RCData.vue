@@ -707,37 +707,39 @@ export default {
                     let status = topic_arr[topic_arr.length - 1]
 
                     if (status === 'status') {
-                        EventBus.$emit('add-counter', drone)
-                        let msg = JSON.parse(message.toString())
-                        if (msg.status === 'disconnected') {
-                            this.$store.state.control_drone[drone].icon = 'unlink'
-                            this.$store.state.control_drone[drone].status = msg.status
-                            this.$store.state.client.publish('/Mobius/' + this.$store.state.VUE_APP_MOBIUS_GCS + '/RC_Data/' + drone + '/conn', Buffer.from('ready'))
-                        } else if (msg.status === 'ready') {
-                            this.$store.state.control_drone[drone].icon = 'spinner'
-                            this.$store.state.control_drone[drone].status = msg.status
-                            this.$store.state.control_drone[drone].system_id = msg.system_id
-                            localStorage.setItem('control_drone_list', JSON.stringify(this.$store.state.control_drone));
-                        } else if (msg.status === 'connected') {
-                            this.$store.state.control_drone[drone].icon = 'link'
-                            this.$store.state.control_drone[drone].status = msg.status
-                        } else if (msg.status === 'send') {
-                            if (this.$store.state.control_drone[drone].bpm < 5) {
-                                this.$store.state.control_drone[drone].icon = 'exclamation-triangle'
-                            } else if (this.$store.state.control_drone[drone].bpm < 9) {
-                                this.$store.state.control_drone[drone].icon = 'play'
-                            } else if (this.$store.state.control_drone[drone].bpm < 12) {
-                                this.$store.state.control_drone[drone].icon = 'circle'
+                        if (this.ch_raw.ch12_raw <= 1700) {
+                            EventBus.$emit('add-counter', drone)
+                            let msg = JSON.parse(message.toString())
+                            if (msg.status === 'disconnected') {
+                                this.$store.state.control_drone[drone].icon = 'unlink'
+                                this.$store.state.control_drone[drone].status = msg.status
+                                this.$store.state.client.publish('/Mobius/' + this.$store.state.VUE_APP_MOBIUS_GCS + '/RC_Data/' + drone + '/conn', Buffer.from('ready'))
+                            } else if (msg.status === 'ready') {
+                                this.$store.state.control_drone[drone].icon = 'spinner'
+                                this.$store.state.control_drone[drone].status = msg.status
+                                this.$store.state.control_drone[drone].system_id = msg.system_id
+                                localStorage.setItem('control_drone_list', JSON.stringify(this.$store.state.control_drone));
+                            } else if (msg.status === 'connected') {
+                                this.$store.state.control_drone[drone].icon = 'link'
+                                this.$store.state.control_drone[drone].status = msg.status
+                            } else if (msg.status === 'send') {
+                                if (this.$store.state.control_drone[drone].bpm < 5) {
+                                    this.$store.state.control_drone[drone].icon = 'exclamation-triangle'
+                                } else if (this.$store.state.control_drone[drone].bpm < 9) {
+                                    this.$store.state.control_drone[drone].icon = 'play'
+                                } else if (this.$store.state.control_drone[drone].bpm < 12) {
+                                    this.$store.state.control_drone[drone].icon = 'circle'
+                                }
+                                this.$store.state.control_drone[drone].status = msg.status
+                            } else if (msg.status === 'disabled') {
+                                this.$store.state.control_drone[drone].icon = 'times-circle'
+                                this.$store.state.control_drone[drone].status = msg.status
+                            } else {
+                                this.$store.state.control_drone[drone].icon = 'exclamation-circle'
+                                this.$store.state.control_drone[drone].status = 'error'
                             }
-                            this.$store.state.control_drone[drone].status = msg.status
-                        } else if (msg.status === 'disabled') {
-                            this.$store.state.control_drone[drone].icon = 'times-circle'
-                            this.$store.state.control_drone[drone].status = msg.status
-                        } else {
-                            this.$store.state.control_drone[drone].icon = 'exclamation-circle'
-                            this.$store.state.control_drone[drone].status = 'error'
+                            EventBus.$emit('update-table', drone)
                         }
-                        EventBus.$emit('update-table', drone)
                     }
                 })
             }
@@ -1067,7 +1069,11 @@ export default {
                 this.$store.state.client.publish('/Mobius/' + this.$store.state.VUE_APP_MOBIUS_GCS + '/RC_Data/' + this.$store.state.VUE_APP_MOBIUS_RC, Buffer.from(hex_content_each, 'hex'))
                 this.RCstrToDrone = ''
             }
+
             if (this.ch_raw.ch12_raw > 1700) {
+                Object.keys(this.$store.state.control_drone).forEach((dName) => {
+                    this.$store.state.control_drone[dName].status = 'RF'
+                })
                 // TODO RF 통신 기능 추가
                 if (this.$store.state.UDP_connection === 'connect') {
                     axios.post('http://localhost:3000/rfdata', {'data': hex_content_each})
