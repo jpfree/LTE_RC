@@ -237,14 +237,15 @@
                 > Unlink
                 </v-btn>
             </v-row>
-            <v-row class="mb-6" justify="center" style="position: absolute; top: calc(100% - 15%); width: 100%">
+            <div class="mt-8 mb-4 aside-line"></div>
+            <v-row justify="center" style="position:absolute; bottom:3%;width: 100%">
                 <router-link to="/calibration" align="center">
                     <v-btn
                         fab
                         height="50"
                         width="60%"
                         style="font-size: 20px;font-weight: bold"
-                        class="rounded-lg"
+                        class="rounded-lg ml-5"
                         elevation="5"
                         color="cyan"
                         dark
@@ -599,7 +600,7 @@ a:hover {
     width: 310px;
     height: 100%;
     background: rgb(39, 39, 40);
-    padding: 150px 0;
+    padding: 90px 0;
     overflow: hidden;
 }
 
