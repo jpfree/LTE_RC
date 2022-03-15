@@ -1,6 +1,21 @@
 <template>
     <div>
         <div class='left'>
+            <v-row class="ml-2 white--text font-weight-bold" style="font-size: 25px">
+                MAVLink Version
+            </v-row>
+            <v-row class="mx-1 mb-2">
+                <v-col>
+                    <v-select
+                        class="text-h5"
+                        v-model="mavVersion"
+                        :items="mavVersions"
+                        @change="selectedMavVersion($event)"
+                        dark outlined flat hide-details
+                    ></v-select>
+                </v-col>
+            </v-row>
+            <div class="my-4 aside-line"></div>
             <v-row class="ml-2 white--text font-weight-bold" style="font-size: 22px">
                 Drone Name
             </v-row>
@@ -249,7 +264,7 @@ export default {
     name: 'AddDrone',
     data() {
         return {
-            MOBIUS_CONNECTION_CONNECTED: localStorage.getItem('mobius_connected') ? (localStorage.getItem('mobius_connected') === 'true') : false,
+            MOBIUS_CONNECTION_CONNECTED: (localStorage.getItem('mobius_connected') === 'true') ? localStorage.getItem('mobius_connected') : false,
 
             add_drone: "",
             add_drone_rule: [
@@ -290,7 +305,10 @@ export default {
                     value: 'name',
                 }
             ],
-            udp_list: []
+            udp_list: [],
+
+            mavVersion: 'v1',
+            mavVersions: ['v1', 'v2'],
         }
     },
     mixins: [VueTimers],
@@ -298,6 +316,13 @@ export default {
         SerialPorts: {time: 2000, repeat: true},
     },
     methods: {
+        selectedMavVersion: function (event) {
+            // console.log("selectedMavVersion", event)
+            this.mavVersion = event;
+            this.$store.state.mavVersion = event;
+
+            localStorage.setItem('mavVersion', this.mavVersion);
+        },
         DroneADD() {
             if (this.$store.state.client.connected) {
                 let drone = {}

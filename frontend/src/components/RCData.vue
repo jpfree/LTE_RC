@@ -619,9 +619,7 @@ export default {
 
             RCstrToDrone: '',
 
-            logs: [],
-            address: 'ws://localhost:8000',
-
+            logs: []
         }
     },
     mixins: [VueTimers],
@@ -804,7 +802,7 @@ export default {
             return (val - this.SBUS2RC(0)) / (this.SBUS2RC(250) - this.SBUS2RC(0)) * 100;
         },
         mavlinkGenerateMessage(src_sys_id, src_comp_id, type, params) {
-            const mavlinkParser = new MAVLink(null/*logger*/, src_sys_id, src_comp_id);
+            const mavlinkParser = new MAVLink(null/*logger*/, src_sys_id, src_comp_id, this.$store.state.mavVersion);
             try {
                 var mavMsg = null;
                 var genMsg = null;
@@ -1057,7 +1055,7 @@ export default {
                                 if (rc_signal == null) {
                                     console.log("mavlink message is null");
                                 } else {
-                                    // console.log(this.mav_ch_raw.ch1_raw)
+                                    // console.log(rc_signal.toString('hex'))
                                     this.$store.state.client.publish(topic, rc_signal);
                                 }
                             } catch (ex) {

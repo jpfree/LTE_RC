@@ -9,7 +9,11 @@ export default new Vuex.Store({
         VUE_APP_MOBIUS_HOST: 'gcs.iotocean.org',
         VUE_APP_MOBIUS_GCS: 'KETI_MUV',
         VUE_APP_MOBIUS_RC: 'KETI_RC',
+
+        mavVersion: (localStorage.getItem('mavVersion') === 'v1') ? localStorage.getItem('mavVersion') : 'v2',
+
         UDP_connection: false,
+
         client: {
             connected: false,
             loading: false
