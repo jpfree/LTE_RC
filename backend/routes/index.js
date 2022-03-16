@@ -34,25 +34,47 @@ router.post('/rfflag', function (req, res, next) {
             res.send('It is not a connected ' + req.body.host + ':' + req.body.port);
         }
     } else {
-        rfUDP[req.body.host + ':' + req.body.port] = {}
-        rfUDP[req.body.host + ':' + req.body.port].host = req.body.host;
-        rfUDP[req.body.host + ':' + req.body.port].port = parseInt(req.body.port);
-        rfUDP[req.body.host + ':' + req.body.port].status = req.body.connection;
-        rfUDP[req.body.host + ':' + req.body.port].client = dgram.createSocket('udp4');
-        res.send('Connect ' + rfUDP[req.body.host + ':' + req.body.port].host + ':' + rfUDP[req.body.host + ':' + req.body.port].port);
+        if (!rfUDP.hasOwnProperty(req.body.host + ':' + req.body.port)) {
+            rfUDP[req.body.host + ':' + req.body.port] = {}
+            rfUDP[req.body.host + ':' + req.body.port].host = req.body.host;
+            rfUDP[req.body.host + ':' + req.body.port].port = parseInt(req.body.port);
+            rfUDP[req.body.host + ':' + req.body.port].status = req.body.connection;
+            rfUDP[req.body.host + ':' + req.body.port].client = dgram.createSocket('udp4');
+            res.send('Connect ' + rfUDP[req.body.host + ':' + req.body.port].host + ':' + rfUDP[req.body.host + ':' + req.body.port].port);
+        } else {
+            if (rfUDP[req.body.host + ':' + req.body.port].hasOwnProperty('status')) {
+                if (rfUDP[req.body.host + ':' + req.body.port].status === 'disconnect') {
+                    rfUDP[req.body.host + ':' + req.body.port].host = req.body.host;
+                    rfUDP[req.body.host + ':' + req.body.port].port = parseInt(req.body.port);
+                    rfUDP[req.body.host + ':' + req.body.port].status = req.body.connection;
+                    rfUDP[req.body.host + ':' + req.body.port].client = dgram.createSocket('udp4');
+                    res.send('Connect ' + rfUDP[req.body.host + ':' + req.body.port].host + ':' + rfUDP[req.body.host + ':' + req.body.port].port);
+                } else {
+                    res.send('Already connected to ' + rfUDP[req.body.host + ':' + req.body.port].host + ':' + rfUDP[req.body.host + ':' + req.body.port].port);
+                }
+            } else {
+                rfUDP[req.body.host + ':' + req.body.port] = {}
+                rfUDP[req.body.host + ':' + req.body.port].host = req.body.host;
+                rfUDP[req.body.host + ':' + req.body.port].port = parseInt(req.body.port);
+                rfUDP[req.body.host + ':' + req.body.port].status = req.body.connection;
+                rfUDP[req.body.host + ':' + req.body.port].client = dgram.createSocket('udp4');
+                res.send('Reconnect ' + rfUDP[req.body.host + ':' + req.body.port].host + ':' + rfUDP[req.body.host + ':' + req.body.port].port);
+            }
+        }
     }
 });
-setInterval(function (){
-    for (let idx in Object.keys(rfUDP)){
-        rfUDP[Object.keys(rfUDP)[idx]].client.send(RCData, 0, RCData.length, rfUDP[Object.keys(rfUDP)[idx]].port, rfUDP[Object.keys(rfUDP)[idx]].host,
-                function (err) {
-                    if (err) {
-                        console.log(err)
-                        console.log('['+rfUDP[Object.keys(rfUDP)[idx]].host + ':' + rfUDP[Object.keys(rfUDP)[idx]].port+'] Failure of data transmission via RF');
-                        return;
-                    }
+
+setInterval(function () {
+    for (let idx in Object.keys(rfUDP)) {
+        rfUDP[Object.keys(rfUDP)[idx]].client.send(Buffer.from(RCData, 'hex'), 0, Buffer.from(RCData, 'hex').length, rfUDP[Object.keys(rfUDP)[idx]].port, rfUDP[Object.keys(rfUDP)[idx]].host,
+            function (err) {
+                if (err) {
+                    console.log(err)
+                    console.log('[' + rfUDP[Object.keys(rfUDP)[idx]].host + ':' + rfUDP[Object.keys(rfUDP)[idx]].port + '] Failure of data transmission via RF');
+                    return;
                 }
-            );
+            }
+        );
     }
 }, 40);
 
