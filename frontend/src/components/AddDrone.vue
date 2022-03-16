@@ -526,13 +526,44 @@ export default {
             if (del) {
                 if (serverIP.name.includes('localhost')) {
                     let serverIP_arr = serverIP.name.split(':')
-                    this.udp_list = this.udp_list.filter(ip => ip.name !== '127.0.0.1:' + serverIP_arr[1])
-                    this.$store.state.udp_selected = this.$store.state.udp_selected.filter(ip => ip !== '127.0.0.1:' + serverIP_arr[1])
-                    delete this.$store.state.UDP_connection['127.0.0.1:' + serverIP_arr[1]]
+
+                    this.$store.state.UDP_connection['127.0.0.1:' + serverIP_arr[1]] = 'disconnect'
+                    axios.post('http://localhost:3000/rfflag', {
+                        "connection": this.$store.state.UDP_connection['127.0.0.1:' + serverIP_arr[1]],
+                        "host": '127.0.0.1',
+                        "port": serverIP_arr[1]
+                    })
+                        .then((response) => {
+                                console.log(response.data)
+                                this.udp_list = this.udp_list.filter(ip => ip.name !== '127.0.0.1:' + serverIP_arr[1])
+                                this.$store.state.udp_selected = this.$store.state.udp_selected.filter(ip => ip !== '127.0.0.1:' + serverIP_arr[1])
+                                delete this.$store.state.UDP_connection['127.0.0.1:' + serverIP_arr[1]]
+                            }
+                        ).catch((e) => {
+                            console.log("Could not send UDP disconnect message")
+                            console.log(e)
+                        }
+                    )
                 } else {
-                    this.udp_list = this.udp_list.filter(ip => ip.name !== serverIP.name)
-                    this.$store.state.udp_selected = this.$store.state.udp_selected.filter(ip => ip !== serverIP.name)
-                    delete this.$store.state.UDP_connection[serverIP.name]
+                    let serverIP_arr = serverIP.name.split(':')
+
+                    this.$store.state.UDP_connection[serverIP.name] = 'disconnect'
+                    axios.post('http://localhost:3000/rfflag', {
+                        "connection": this.$store.state.UDP_connection[serverIP.name],
+                        "host": serverIP_arr[0],
+                        "port": serverIP_arr[1]
+                    })
+                        .then((response) => {
+                                console.log(response.data)
+                                this.udp_list = this.udp_list.filter(ip => ip.name !== serverIP.name)
+                                this.$store.state.udp_selected = this.$store.state.udp_selected.filter(ip => ip !== serverIP.name)
+                                delete this.$store.state.UDP_connection[serverIP.name]
+                            }
+                        ).catch((e) => {
+                            console.log("Could not send UDP disconnect message")
+                            console.log(e)
+                        }
+                    )
                 }
             } else {
                 this.udp_list.forEach((item) => {
