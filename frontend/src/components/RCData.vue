@@ -1041,8 +1041,9 @@ export default {
             this.ch_value.ch31_value = this.min_max_scaler(this.ch_raw.ch31_raw)
             this.ch_value.ch32_value = this.min_max_scaler(this.ch_raw.ch32_raw)
 
-            if (this.$store.state.client.connected) {
-                if (this.ch_raw.ch11_raw > 1700) {
+            if (this.$store.state.client.connected) {  // LTE
+                // TODO: 드론 상태가 connected 또는 send일 경우
+                if (this.ch_raw.ch11_raw > 1700) {  // MAVLink
                     Object.keys(this.$store.state.control_drone).forEach((dName) => {
                         if (this.$store.state.control_drone[dName].selected) {
                             let topic = '/Mobius/' + this.$store.state.VUE_APP_MOBIUS_GCS + '/GCS_Data/' + dName
@@ -1064,29 +1065,15 @@ export default {
                         }
                     })
                 }
+                // TODO: else로 변경
                 this.$store.state.client.publish('/Mobius/' + this.$store.state.VUE_APP_MOBIUS_GCS + '/RC_Data/' + this.$store.state.VUE_APP_MOBIUS_RC, Buffer.from(hex_content_each, 'hex'))
-                this.RCstrToDrone = ''
+                // this.RCstrToDrone = ''
             }
 
-            if (this.ch_raw.ch12_raw > 1700) {
+            if (this.ch_raw.ch12_raw > 1700) {  // RF
                 Object.keys(this.$store.state.control_drone).forEach((dName) => {
                     this.$store.state.control_drone[dName].status = 'RF'
                 })
-                // TODO RF 통신 기능 추가
-                if (this.$store.state.UDP_connection === 'connect') {
-                    axios.post('http://localhost:3000/rfdata', {'data': hex_content_each})
-                        .then((response) => {
-                                if (response.data.split(' ')[1] === 'disconnected') {
-                                    console.log(response.data)
-                                    this.$store.state.UDP_connection = 'disconnected'
-                                }
-                            }
-                        ).catch((e) => {
-                            console.log(e)
-                            console.log("Can't send SBUS data over RF.\n" + e)
-                        }
-                    )
-                }
             }
         },
         beforeDestroy() {

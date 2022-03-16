@@ -4,10 +4,7 @@
     "private": true,
     "scripts": {
         "build": "vue-cli-service build",
-        "serve": "vue-cli-service serve",
-        "electron:build": "vue-cli-service electron:build",
-        "electron:serve": "vue-cli-service electron:serve",
-        "rebuild": "electron-rebuild -f -w serialport"
+        "serve": "vue-cli-service serve"
     },
     "main": "background.js",
     "dependencies": {

@@ -14,15 +14,7 @@ let RCData = '';
 let RCstrFromeGCS = '';
 let RCstrFromeGCSLength = 0;
 
-let rfPort = null;
-
-let SerialPortsList = [];
-let SerialPortsObject = [];
-
-let rfUDP = null;
-let rfUDP_Status = 'disconnect'
-let HOST = '';
-let PORT = 0;
+let rfUDP = {};
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -33,56 +25,36 @@ router.get('/serialdata', function (req, res, next) {
     res.set({'access-control-allow-origin': '*'});
     res.send(RCData);
 });
-router.get('/serialports', function (req, res, next) {
-    res.set({'access-control-allow-origin': '*'});
-    res.send(SerialPortsObject);
-});
-router.post('/rfport', function (req, res, next) {
-    setTimeout(RFSerialConnect, 500, req.body.port);
-    res.send('[ ' + req.body.port + ' ]' + ' receive success');
-});
 router.post('/rfflag', function (req, res, next) {
     if (req.body.connection === 'disconnect') {
-        // TODO: UDP Close
-        HOST = '';
-        PORT = 1;
-        rfUDP_Status = req.body.connection;
-        if (rfUDP !== null) {
-            rfUDP.close();
+        if (rfUDP.hasOwnProperty(req.body.host + ':' + req.body.port)) {
+            res.send('Disconnect ' + rfUDP[req.body.host + ':' + req.body.port].host + ':' + rfUDP[req.body.host + ':' + req.body.port].port);
+            delete rfUDP[req.body.host + ':' + req.body.port]
+        } else {
+            res.send('It is not a connected ' + req.body.host + ':' + req.body.port);
         }
-        res.send('Disconnect UDP..');
     } else {
-        // TODO: UDP Open
-        HOST = req.body.host;
-        PORT = parseInt(req.body.port);
-        rfUDP_Status = req.body.connection;
-        rfUDP = dgram.createSocket('udp4');
-        res.send('Connect UDP..');
+        rfUDP[req.body.host + ':' + req.body.port] = {}
+        rfUDP[req.body.host + ':' + req.body.port].host = req.body.host;
+        rfUDP[req.body.host + ':' + req.body.port].port = parseInt(req.body.port);
+        rfUDP[req.body.host + ':' + req.body.port].status = req.body.connection;
+        rfUDP[req.body.host + ':' + req.body.port].client = dgram.createSocket('udp4');
+        res.send('Connect ' + rfUDP[req.body.host + ':' + req.body.port].host + ':' + rfUDP[req.body.host + ':' + req.body.port].port);
     }
 });
-router.post('/rfdata', function (req, res, next) {
-    if (rfPort !== null) {
-        rfPort.write(Buffer.from(req.body.data, 'hex'));
-        res.send('[Serial] Success of data transmission via RF');
-    } else if (rfUDP !== null) {
-        if (rfUDP_Status === 'connect') {
-            rfUDP.send(Buffer.from(req.body.data, 'hex'), 0, Buffer.from(req.body.data, 'hex').length, PORT, HOST,
+setInterval(function (){
+    for (let idx in Object.keys(rfUDP)){
+        rfUDP[Object.keys(rfUDP)[idx]].client.send(RCData, 0, RCData.length, rfUDP[Object.keys(rfUDP)[idx]].port, rfUDP[Object.keys(rfUDP)[idx]].host,
                 function (err) {
                     if (err) {
                         console.log(err)
-                        res.send('[UDP] Failure of data transmission via RF');
-                        // console.log('Failure of data transmission via RF', err);
+                        console.log('['+rfUDP[Object.keys(rfUDP)[idx]].host + ':' + rfUDP[Object.keys(rfUDP)[idx]].port+'] Failure of data transmission via RF');
                         return;
-                    } else {
-                        res.send('[UDP] Success of data transmission via RF');
                     }
                 }
             );
-        } else {
-            res.send('[UDP] disconnected');
-        }
     }
-});
+}, 40);
 
 rcPortOpening();
 
@@ -136,79 +108,6 @@ function rcPortData(message) {
             RCstrFromeGCS = RCstrFromeGCS.substr(2);
         }
     }
-}
-
-let tempSerialPort = null;
-setInterval(function () {
-    SerialPort.list().then(function (ports) {
-        ports.forEach(function (port) {
-            if (!SerialPortsList.includes(port.path)) {
-                SerialPortsList.push(port.path)
-                SerialPortsObject.push({"title": port.path, "status": "Free"})
-
-                tempSerialPort = new SerialPort(port.path, {
-                    baudRate: parseInt(115200, 10),
-                });
-                tempSerialPort.on('open', function () {
-                    tempSerialPort.close()
-                });
-                tempSerialPort.on('close', function () {
-                    SerialPortsObject.forEach((list) => {
-                        if (list.title === port.path) {
-                            list.status = "Free"
-                        }
-                    })
-                });
-                tempSerialPort.on('error', function () {
-                    SerialPortsObject.forEach((list) => {
-                        if (list.title === port.path) {
-                            list.status = "Using"
-                        }
-                    })
-                });
-                tempSerialPort.on('data', function (data) {
-                    // TODO: 암호화 모듈 구분
-                });
-            }
-        })
-    });
-}, 2000);
-
-function RFSerialConnect(port) {
-    if (rfPort === null) {
-        rfPort = new SerialPort(port, {
-            baudRate: parseInt(115200, 10),
-        });
-
-        rfPort.on('open', rfPortOpen);
-        rfPort.on('close', rfPortClose);
-        rfPort.on('error', rfPortError);
-        rfPort.on('data', rfPortData);
-    } else {
-        if (rfPort.isOpen) {
-            console.log('This is an already open RC port.')
-        } else {
-            rfPort.open();
-        }
-    }
-}
-
-function rfPortOpen() {
-    console.log('rfPort open. ' + rfPort.path + ' Data rate: ' + rfPort.baudRate);
-}
-
-function rfPortClose() {
-    console.log('rfPort closed.');
-}
-
-function rfPortError(error) {
-    console.log('[rfPort error]: ' + error.message);
-
-    setTimeout(RFSerialConnect, 2000);
-}
-
-function rfPortData(message) {
-    console.log(message.toString())
 }
 
 module.exports = router;

@@ -12,7 +12,8 @@ export default new Vuex.Store({
 
         mavVersion: (localStorage.getItem('mavVersion') === 'v1') ? localStorage.getItem('mavVersion') : 'v2',
 
-        UDP_connection: false,
+        UDP_connection: {},
+        udp_selected: [],
 
         client: {
             connected: false,

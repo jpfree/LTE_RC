@@ -10,11 +10,20 @@ import ProgressBar from 'vuejs-progress-bar'
 import VueCookies from "vue-cookies"
 import {library} from '@fortawesome/fontawesome-svg-core'
 import {
-    faSpinner, faTimes, faTimesCircle, faUnlink, faLink, faCircle, faExclamationCircle, faPlay, faExclamationTriangle
+    faSpinner,
+    faTimes,
+    faTimesCircle,
+    faUnlink,
+    faLink,
+    faCircle,
+    faExclamationCircle,
+    faPlay,
+    faExclamationTriangle,
+    faTrash
 } from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
 
-library.add(faSpinner, faTimes, faTimesCircle, faUnlink, faLink, faCircle, faExclamationCircle, faPlay, faExclamationTriangle)
+library.add(faSpinner, faTimes, faTimesCircle, faUnlink, faLink, faCircle, faExclamationCircle, faPlay, faExclamationTriangle, faTrash)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 //쿠키를 사용한다.

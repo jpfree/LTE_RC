@@ -90,7 +90,7 @@
                     height="45"
                     width="100"
                     class="mt-2 rounded-lg"
-                    @click="DroneDELTE"
+                    @click="DroneDELETE"
                     elevation="5"
                     color="error"
                     style="font-size: 20px;font-weight: bold"
@@ -126,24 +126,24 @@
                 </v-btn>
             </v-row>
             <div class="mt-8 aside-line"></div>
-            <v-row class="ml-2 white--text font-weight-bold" style="font-size: 22px">
+            <v-row class="ml-2 mb-3 white--text font-weight-bold" style="font-size: 22px">
                 RF Protocol
             </v-row>
-            <v-row align="center" class="mt-1 ml-2 white--text font-weight-bold" style="font-size: 20px;">
-                <v-col cols="2" align="end" class="mr-2">
-                    UDP
-                </v-col>
-                <v-col cols="2" class="mr-1">
-                    <v-switch
-                        v-model="RF_Protocol"
-                        inset
-                        color="red"
-                    ></v-switch>
-                </v-col>
-                <v-col cols="7" align="start">
-                    Serial
-                </v-col>
-            </v-row>
+            <!--            <v-row align="center" class="ml-2 white&#45;&#45;text font-weight-bold" style="font-size: 20px;">-->
+            <!--                <v-col cols="2" align="end" class="mr-2">-->
+            <!--                    UDP-->
+            <!--                </v-col>-->
+            <!--                <v-col cols="2" class="mr-1">-->
+            <!--                    <v-switch-->
+            <!--                        v-model="RF_Protocol"-->
+            <!--                        inset-->
+            <!--                        color="red"-->
+            <!--                    ></v-switch>-->
+            <!--                </v-col>-->
+            <!--                <v-col cols="7" align="start">-->
+            <!--                    Serial-->
+            <!--                </v-col>-->
+            <!--            </v-row>-->
             <v-text-field
                 v-if="!RF_Protocol"
                 class="custom-placeholer-color mx-2"
@@ -165,8 +165,27 @@
                 item-key="name"
                 hide-default-header
                 hide-default-footer
-                class="control_drone_name elevation-1 mx-2 "
-            ></v-data-table>
+                class="control_drone_name elevation-1 mx-2 mt-n2"
+                @click:row="UDProwClicked">
+                <template v-slot:item.delete="{ item }">
+                    <v-btn
+                        fab
+                        height="40"
+                        width="50"
+                        class="rounded-lg"
+                        @click="setUDPServer(item, true)"
+                        elevation="5"
+                        style="font-size: 20px;font-weight: bold"
+                        color="error"
+                    >
+                        <font-awesome-icon
+                            class="control_drone_icon mt-n1 v-avatar--metronome"
+                            icon="trash"
+                            style="color: white"
+                            size="2x"/>
+                    </v-btn>
+                </template>
+            </v-data-table>
             <v-row v-if="!RF_Protocol" class="mt-2" align="center" justify="space-around">
                 <v-btn
                     fab
@@ -179,38 +198,6 @@
                     color="success"
                 > ADD Server
                 </v-btn>
-            </v-row>
-            <v-row v-if="RF_Protocol" class="mt-2 mb-6" justify="center">
-                <v-menu
-                    bottom offset-y>
-                    <template v-slot:activator="{ on, attrs }">
-                        <v-btn
-                            v-if="$store.state.UDP_connection !== 'connect'"
-                            class="mb-16"
-                            style="font-size: 20px; font-weight: bold"
-                            width="60%"
-                            height="50"
-                            color="primary"
-                            dark
-                            v-bind="attrs"
-                            v-on="on"
-                        >
-                            Select Serial
-                        </v-btn>
-                    </template>
-                    <v-list>
-                        <v-list-item
-                            v-for="(item, index) in SerialPortsList"
-                            :key="index"
-                            @click="RFSerialPort(SerialPortsList[index].title)"
-                        >
-                            <v-list-item-title
-                                style="font-size: 18px"
-                            >{{ item.title }} {{ item.status }}
-                            </v-list-item-title>
-                        </v-list-item>
-                    </v-list>
-                </v-menu>
             </v-row>
             <v-row align="center" justify="space-around">
                 <v-btn
@@ -258,7 +245,6 @@
 </template>
 <script>
 import EventBus from "../EventBus";
-import {mixin as VueTimers} from "vue-timers";
 import axios from "axios";
 
 export default {
@@ -289,14 +275,14 @@ export default {
             drone_list: JSON.parse(localStorage.getItem('control_dronelist')) ? JSON.parse(localStorage.getItem('control_dronelist')) : [],
             drone_selected: [],
             rc_hub_status: ['disconnected', 'ready', 'connected', 'send', 'disabled'],
-            SerialPortsList: [],
 
             RF_Protocol: false,
             UDPServerIP: '',
             UDPServerIP_rule: [
                 v => !!v || '서버 주소는 필수 입력사항입니다.',
                 v => !/[~!@#$%^&*()+|<>?{}]/.test(v) || '서버 주소에는 특수문자를 사용할 수 없습니다.',
-                v => !!/[:]/.test(v) || '올바른 서버 주소가 아닙니다.'
+                v => !!/[:]/.test(v) || '올바른 서버 주소가 아닙니다.',
+                v => !!(v && (v.split('.')).length === 4 || v.includes('localhost')) || '올바른 서버 주소가 아닙니다.',
             ],
             udp_header: [
                 {
@@ -304,6 +290,12 @@ export default {
                     align: 'center',
                     sortable: true,
                     value: 'name',
+                },
+                {
+                    text: 'delete',
+                    align: 'center',
+                    sortable: true,
+                    value: 'delete',
                 }
             ],
             udp_list: [],
@@ -311,10 +303,6 @@ export default {
             mavVersion: 'v1',
             mavVersions: ['v1', 'v2'],
         }
-    },
-    mixins: [VueTimers],
-    timers: {
-        SerialPorts: {time: 2000, repeat: true},
     },
     methods: {
         selectedMavVersion: function (event) {
@@ -380,7 +368,7 @@ export default {
                 console.log('disconnected with Mobius')
             }
         },
-        DroneDELTE() {
+        DroneDELETE() {
             for (let select = this.drone_selected.length; select > 0; select--) {
                 for (let idx = this.drone_list.length; idx > 0; idx--) {
                     if (this.drone_list[idx - 1].name === this.drone_selected[select - 1]) {
@@ -496,71 +484,101 @@ export default {
             return (2 / this.$store.state.control_drone[item.name].bpm).toString() + 's'
         },
         RFlink() {
-            let serverip = this.UDPServerIP.split(':')
-            this.$store.state.UDP_connection = 'connect'
-            axios.post('http://localhost:3000/rfflag', {
-                "connection": this.$store.state.UDP_connection,
-                "host": serverip[0],
-                "port": serverip[1]
-            })
-                .then((response) => {
-                        console.log(response.data)
+            this.$store.state.udp_selected.forEach((udpHostPort) => {
+                let serverip = udpHostPort.split(':')
+                this.$store.state.UDP_connection[udpHostPort] = 'connect'
+                axios.post('http://localhost:3000/rfflag', {
+                    "connection": this.$store.state.UDP_connection[udpHostPort],
+                    "host": serverip[0],
+                    "port": serverip[1]
+                })
+                    .then((response) => {
+                            console.log(response.data)
+                        }
+                    ).catch((e) => {
+                        console.log("Could not send UDP connect message")
+                        console.log(e)
                     }
-                ).catch(() => {
-                    console.log("Could not send UDP connect message")
-                }
-            )
+                )
+            })
         },
         RFunlink() {
-            this.$store.state.UDP_connection = 'disconnect'
-            axios.post('http://localhost:3000/rfflag', {
-                "connection": this.$store.state.UDP_connection
-            })
-                .then((response) => {
-                        console.log(response.data)
+            this.$store.state.udp_selected.forEach((udpHostPort) => {
+                let serverip = udpHostPort.split(':')
+                this.$store.state.UDP_connection[udpHostPort] = 'disconnect'
+                axios.post('http://localhost:3000/rfflag', {
+                    "connection": this.$store.state.UDP_connection[udpHostPort],
+                    "host": serverip[0],
+                    "port": serverip[1]
+                })
+                    .then((response) => {
+                            console.log(response.data)
+                        }
+                    ).catch((e) => {
+                        console.log("Could not send UDP disconnect message")
+                        console.log(e)
                     }
-                ).catch(() => {
-                    console.log("Could not send UDP disconnect message")
-                }
-            )
+                )
+            })
         },
-        setUDPServer(serverIP) {
+        setUDPServer(serverIP, del = false) {
             let flag = 0
-            this.udp_list.forEach((item) => {
-                if (item.name.includes(serverIP)) {
-                    flag = 1
+            if (del) {
+                if (serverIP.name.includes('localhost')) {
+                    let serverIP_arr = serverIP.name.split(':')
+                    this.udp_list = this.udp_list.filter(ip => ip.name !== '127.0.0.1:' + serverIP_arr[1])
+                    this.$store.state.udp_selected = this.$store.state.udp_selected.filter(ip => ip !== '127.0.0.1:' + serverIP_arr[1])
+                    delete this.$store.state.UDP_connection['127.0.0.1:' + serverIP_arr[1]]
+                } else {
+                    this.udp_list = this.udp_list.filter(ip => ip.name !== serverIP.name)
+                    this.$store.state.udp_selected = this.$store.state.udp_selected.filter(ip => ip !== serverIP.name)
+                    delete this.$store.state.UDP_connection[serverIP.name]
                 }
-            })
-            if (flag === 0) {
-                this.udp_list.push({"name": serverIP})
+            } else {
+                this.udp_list.forEach((item) => {
+                    if (serverIP.includes('localhost')) {
+                        let serverIP_arr = serverIP.split(':')
+                        if (item.name.includes('127.0.0.1:' + serverIP_arr[1])) {
+                            flag = 1
+                        }
+                    } else {
+                        if (item.name.includes(serverIP)) {
+                            flag = 1
+                        }
+                    }
+                })
+                if (flag === 0) {
+                    if (serverIP.includes('localhost')) {
+                        let serverIP_arr = serverIP.split(':')
+                        this.udp_list.push({"name": '127.0.0.1:' + serverIP_arr[1]})
+                        this.$store.state.UDP_connection['127.0.0.1:' + serverIP_arr[1]] = 'disconnect'
+                    } else {
+                        this.udp_list.push({"name": serverIP})
+                        this.$store.state.UDP_connection[serverIP] = 'disconnect'
+                    }
+                }
             }
-            console.log(this.udp_list)
         },
-        SerialPorts() {
-            axios.get('http://localhost:3000/serialports')
-                .then((response) => {
-                        this.SerialPortsList = response.data
+        UDProwClicked: function (item, row) {
+            this.udp_list.forEach((item) => {
+                if (item.name.includes(row.item.name)) {
+                    let selectState = (row.isSelected) ? false : true
+                    row.select(selectState)
+                    if (!selectState) {
+                        this.$store.state.udp_selected = this.$store.state.udp_selected.filter(
+                            selectedKeyID => selectedKeyID !== row.item.name)
+                        // this.$store.state.control_drone[row.item.name].selected = false
+                    } else {
+                        this.$store.state.udp_selected.push(row.item.name)
+                        // this.$store.state.udp_selected.push(row.item.name)
+                        // this.$store.state.control_drone[row.item.name].selected = true
                     }
-                ).catch(() => {
-                    console.log("Can't find serial port")
                 }
-            )
-        },
-        RFSerialPort(port) {
-            axios.post('http://localhost:3000/rfport', {
-                "port": port
             })
-                .then((response) => {
-                        console.log(response.data)
-                    }
-                ).catch(() => {
-                    console.log("Couldn't send serial port for RF")
-                }
-            )
-        }
+            console.log('UDProwClicked', this.$store.state.udp_selected)
+        },
     },
     mounted() {
-        this.$timer.start('SerialPorts')
         EventBus.$on('update-table', (drone) => {
             this.UpdateTable(drone);
         });
@@ -579,7 +597,6 @@ export default {
             }
         }
         this.drone_list = []
-        this.$timer.stop('SerialPorts')
     }
 }
 </script>
