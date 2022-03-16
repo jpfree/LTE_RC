@@ -606,7 +606,7 @@ export default {
                     }
                 }
             })
-            console.log('UDProwClicked', this.$store.state.udp_selected)
+            // console.log('UDProwClicked', this.$store.state.udp_selected)
         },
     },
     mounted() {
