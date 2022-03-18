@@ -1042,30 +1042,30 @@ export default {
             this.ch_value.ch32_value = this.min_max_scaler(this.ch_raw.ch32_raw)
 
             if (this.$store.state.client.connected) {  // LTE
-                // TODO: 드론 상태가 connected 또는 send일 경우
                 if (this.ch_raw.ch11_raw > 1700) {  // MAVLink
                     Object.keys(this.$store.state.control_drone).forEach((dName) => {
                         if (this.$store.state.control_drone[dName].selected) {
-                            let topic = '/Mobius/' + this.$store.state.VUE_APP_MOBIUS_GCS + '/GCS_Data/' + dName
+                            if (this.$store.state.control_drone[dName].status === 'connected' || this.$store.state.control_drone[dName].status === 'send') {
+                                let topic = '/Mobius/' + this.$store.state.VUE_APP_MOBIUS_GCS + '/GCS_Data/' + dName
 
-                            this.mav_ch_raw.target_system = this.$store.state.control_drone[dName].system_id
-                            this.mav_ch_raw.target_component = 1
+                                this.mav_ch_raw.target_system = this.$store.state.control_drone[dName].system_id
+                                this.mav_ch_raw.target_component = 1
 
-                            try {
-                                let rc_signal = this.mavlinkGenerateMessage(255, 0xbe, mavlink.MAVLINK_MSG_ID_RC_CHANNELS_OVERRIDE, this.mav_ch_raw);
-                                if (rc_signal == null) {
-                                    console.log("mavlink message is null");
-                                } else {
-                                    // console.log(rc_signal.toString('hex'))
-                                    this.$store.state.client.publish(topic, rc_signal);
+                                try {
+                                    let rc_signal = this.mavlinkGenerateMessage(255, 0xbe, mavlink.MAVLINK_MSG_ID_RC_CHANNELS_OVERRIDE, this.mav_ch_raw);
+                                    if (rc_signal == null) {
+                                        console.log("mavlink message is null");
+                                    } else {
+                                        // console.log(rc_signal.toString('hex'))
+                                        this.$store.state.client.publish(topic, rc_signal);
+                                    }
+                                } catch (ex) {
+                                    console.log('[ERROR] ' + ex);
                                 }
-                            } catch (ex) {
-                                console.log('[ERROR] ' + ex);
                             }
                         }
                     })
                 }
-                // TODO: else로 변경
                 this.$store.state.client.publish('/Mobius/' + this.$store.state.VUE_APP_MOBIUS_GCS + '/RC_Data/' + this.$store.state.VUE_APP_MOBIUS_RC, Buffer.from(hex_content_each, 'hex'))
                 // this.RCstrToDrone = ''
             }
