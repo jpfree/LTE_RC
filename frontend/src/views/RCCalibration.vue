@@ -16,7 +16,7 @@
                             </div>
                             <div class="v-line" :style="{left:ch_min_val.ch1_min_val+'%'}">
                             </div>
-                            <span>Roll <strong>{{ ch_raw.ch1_raw }}</strong></span>
+                            <span style="font-size: 25px">Roll <strong>{{ ch_raw.ch1_raw }}</strong></span>
                         </v-progress-linear>
                     </v-col>
                     <v-col cols="2">
@@ -55,7 +55,7 @@
                             </div>
                             <div class="v-line" :style="{left:ch_min_val.ch2_min_val+'%'}">
                             </div>
-                            <span>Pitch <strong>{{ ch_raw.ch2_raw }}</strong></span>
+                            <span style="font-size: 25px">Pitch <strong>{{ ch_raw.ch2_raw }}</strong></span>
                         </v-progress-linear>
                     </v-col>
                     <v-col cols="6" class="mr-16">
@@ -69,7 +69,7 @@
                             </div>
                             <div class="v-line" :style="{left:ch_min_val.ch3_min_val+'%'}">
                             </div>
-                            <span>Throttle <strong>{{ ch_raw.ch3_raw }}</strong></span>
+                            <span style="font-size: 25px">Throttle <strong>{{ ch_raw.ch3_raw }}</strong></span>
                         </v-progress-linear>
                     </v-col>
                 </v-row>
@@ -84,7 +84,7 @@
                             </div>
                             <div class="v-line" :style="{left:ch_min_val.ch4_min_val+'%'}">
                             </div>
-                            <span>Yaw <strong>{{ ch_raw.ch4_raw }}</strong></span>
+                            <span style="font-size: 25px">Yaw <strong>{{ ch_raw.ch4_raw }}</strong></span>
                         </v-progress-linear>
                     </v-col>
                     <v-col cols="2">
@@ -107,7 +107,7 @@
                             </div>
                             <div class="v-line" :style="{left:ch_min_val.ch5_min_val+'%'}">
                             </div>
-                            <span>Radio 5 <strong>{{ ch_raw.ch5_raw }}</strong></span>
+                            <span style="font-size: 25px">Radio 5 <strong>{{ ch_raw.ch5_raw }}</strong></span>
                         </v-progress-linear>
                     </v-col>
                     <v-col cols="6">
@@ -120,7 +120,7 @@
                             </div>
                             <div class="v-line" :style="{left:ch_min_val.ch10_min_val+'%'}">
                             </div>
-                            <span>Radio 10 <strong>{{ ch_raw.ch10_raw }}</strong></span>
+                             <span style="font-size: 25px">Radio 10 <strong>{{ ch_raw.ch10_raw }}</strong></span>
                         </v-progress-linear>
                     </v-col>
                 </v-row>
@@ -135,7 +135,7 @@
                             </div>
                             <div class="v-line" :style="{left:ch_min_val.ch6_min_val+'%'}">
                             </div>
-                            <span>Radio 6 <strong>{{ ch_raw.ch6_raw }}</strong></span>
+                             <span style="font-size: 25px">Radio 6 <strong>{{ ch_raw.ch6_raw }}</strong></span>
                         </v-progress-linear>
                     </v-col>
                     <v-col cols="6">
@@ -148,7 +148,7 @@
                             </div>
                             <div class="v-line" :style="{left:ch_min_val.ch11_min_val+'%'}">
                             </div>
-                            <span>Radio 11 <strong>{{ ch_raw.ch11_raw }}</strong></span>
+                             <span style="font-size: 25px">Radio 11 <strong>{{ ch_raw.ch11_raw }}</strong></span>
                         </v-progress-linear>
                     </v-col>
                 </v-row>
@@ -163,7 +163,7 @@
                             </div>
                             <div class="v-line" :style="{left:ch_min_val.ch7_min_val+'%'}">
                             </div>
-                            <span>Radio 7 <strong>{{ ch_raw.ch7_raw }}</strong></span>
+                             <span style="font-size: 25px">Radio 7 <strong>{{ ch_raw.ch7_raw }}</strong></span>
                         </v-progress-linear>
                     </v-col>
                     <v-col cols="6">
@@ -176,7 +176,7 @@
                             </div>
                             <div class="v-line" :style="{left:ch_min_val.ch12_min_val+'%'}">
                             </div>
-                            <span>Radio 12 <strong>{{ ch_raw.ch12_raw }}</strong></span>
+                             <span style="font-size: 25px">Radio 12 <strong>{{ ch_raw.ch12_raw }}</strong></span>
                         </v-progress-linear>
                     </v-col>
                 </v-row>
@@ -191,7 +191,7 @@
                             </div>
                             <div class="v-line" :style="{left:ch_min_val.ch8_min_val+'%'}">
                             </div>
-                            <span>Radio 8 <strong>{{ ch_raw.ch8_raw }}</strong></span>
+                             <span style="font-size: 25px">Radio 8 <strong>{{ ch_raw.ch8_raw }}</strong></span>
                         </v-progress-linear>
                     </v-col>
                     <v-col cols="6">
@@ -204,7 +204,7 @@
                             </div>
                             <div class="v-line" :style="{left:ch_min_val.ch13_min_val+'%'}">
                             </div>
-                            <span>Radio 13 <strong>{{ ch_raw.ch13_raw }}</strong></span>
+                             <span style="font-size: 25px">Radio 13 <strong>{{ ch_raw.ch13_raw }}</strong></span>
                         </v-progress-linear>
                     </v-col>
                 </v-row>
@@ -219,7 +219,7 @@
                             </div>
                             <div class="v-line" :style="{left:ch_min_val.ch9_min_val+'%'}">
                             </div>
-                            <span>Radio 9 <strong>{{ ch_raw.ch9_raw }}</strong></span>
+                             <span style="font-size: 25px">Radio 9 <strong>{{ ch_raw.ch9_raw }}</strong></span>
                         </v-progress-linear>
                     </v-col>
                     <v-col cols="6">
@@ -232,23 +232,25 @@
                             </div>
                             <div class="v-line" :style="{left:ch_min_val.ch14_min_val+'%'}">
                             </div>
-                            <span>Radio 14 <strong>{{ ch_raw.ch14_raw }}</strong></span>
+                             <span style="font-size: 25px">Radio 14 <strong>{{ ch_raw.ch14_raw }}</strong></span>
                         </v-progress-linear>
                     </v-col>
                 </v-row>
             </v-col>
         </v-row>
         <v-divider></v-divider>
-                <v-row justify="center">
-                    <v-btn
-                        depressed
-                        color="success"
-                        width="100"
-                        @click="finish_cali"
-                    >
-                        Finish
-                    </v-btn>
-                </v-row>
+        <v-row justify="center">
+            <v-btn
+                depressed
+                color="success"
+                width="110"
+                height="40"
+                style="font-size: 20px"
+                @click="finish_cali"
+            >
+                Finish
+            </v-btn>
+        </v-row>
     </v-container>
 </template>
 
@@ -256,6 +258,7 @@
 import CaliLeftBar from "../views/CaliLeftBar";
 import axios from "axios";
 import {mixin as VueTimers} from "vue-timers";
+import EventBus from "../EventBus";
 
 export default {
     name: 'RCCalibration',
@@ -511,14 +514,11 @@ export default {
             return ((val - this.SBUS2RC(0)) / (this.SBUS2RC(250) - this.SBUS2RC(0)) * 310);
         },
         receiveFromRC(hex_content_each) {
-            // console.log('receiveFromRC - ' + hex_content_each)
-            // this.RCstrToDrone += 'ff'
             if (this.reverse_roll) {
                 this.ch_raw.ch1_raw = 250 - parseInt(hex_content_each.substr(2, 2), 16)
             } else {
                 this.ch_raw.ch1_raw = parseInt(hex_content_each.substr(2, 2), 16)
             }
-            // this.RCstrToDrone += this.ch_raw.ch1_raw.toString(16)
             this.ch_raw.ch1_raw = this.SBUS2RC(this.ch_raw.ch1_raw)
 
             if (this.reverse_pitch) {
@@ -526,7 +526,6 @@ export default {
             } else {
                 this.ch_raw.ch2_raw = parseInt(hex_content_each.substr(4, 2), 16)
             }
-            // this.RCstrToDrone += this.ch_raw.ch2_raw.toString(16)
             this.ch_raw.ch2_raw = this.SBUS2RC(this.ch_raw.ch2_raw)
 
             if (this.reverse_throttle) {
@@ -534,7 +533,6 @@ export default {
             } else {
                 this.ch_raw.ch3_raw = parseInt(hex_content_each.substr(6, 2), 16)
             }
-            // this.RCstrToDrone += this.ch_raw.ch3_raw.toString(16)
             this.ch_raw.ch3_raw = this.SBUS2RC(this.ch_raw.ch3_raw)
 
             if (this.reverse_yaw) {
@@ -542,44 +540,32 @@ export default {
             } else {
                 this.ch_raw.ch4_raw = parseInt(hex_content_each.substr(8, 2), 16)
             }
-            // this.RCstrToDrone += this.ch_raw.ch4_raw.toString(16)
             this.ch_raw.ch4_raw = this.SBUS2RC(this.ch_raw.ch4_raw)
 
             this.ch_raw.ch5_raw = parseInt(hex_content_each.substr(10, 2), 16)
-            // this.RCstrToDrone += this.ch_raw.ch5_raw.toString(16)
             this.ch_raw.ch5_raw = this.SBUS2RC(this.ch_raw.ch5_raw)
             this.ch_raw.ch6_raw = parseInt(hex_content_each.substr(12, 2), 16)
-            // this.RCstrToDrone += this.ch_raw.ch6_raw.toString(16)
             this.ch_raw.ch6_raw = this.SBUS2RC(this.ch_raw.ch6_raw)
             this.ch_raw.ch7_raw = parseInt(hex_content_each.substr(14, 2), 16)
-            // this.RCstrToDrone += this.ch_raw.ch7_raw.toString(16)
             this.ch_raw.ch7_raw = this.SBUS2RC(this.ch_raw.ch7_raw)
             this.ch_raw.ch8_raw = parseInt(hex_content_each.substr(16, 2), 16)
             // this.RCstrToDrone += this.ch_raw.ch8_raw.toString(16)
             this.ch_raw.ch8_raw = this.SBUS2RC(this.ch_raw.ch8_raw)
             this.ch_raw.ch9_raw = parseInt(hex_content_each.substr(18, 2), 16)
-            // this.RCstrToDrone += this.ch_raw.ch9_raw.toString(16)
             this.ch_raw.ch9_raw = this.SBUS2RC(this.ch_raw.ch9_raw)
             this.ch_raw.ch10_raw = parseInt(hex_content_each.substr(20, 2), 16)
-            // this.RCstrToDrone += this.ch_raw.ch10_raw.toString(16)
             this.ch_raw.ch10_raw = this.SBUS2RC(this.ch_raw.ch10_raw)
             this.ch_raw.ch11_raw = parseInt(hex_content_each.substr(22, 2), 16)
-            // this.RCstrToDrone += this.ch_raw.ch11_raw.toString(16)
             this.ch_raw.ch11_raw = this.SBUS2RC(this.ch_raw.ch11_raw)
             this.ch_raw.ch12_raw = parseInt(hex_content_each.substr(24, 2), 16)
-            // this.RCstrToDrone += this.ch_raw.ch12_raw.toString(16)
             this.ch_raw.ch12_raw = this.SBUS2RC(this.ch_raw.ch12_raw)
             this.ch_raw.ch13_raw = parseInt(hex_content_each.substr(26, 2), 16)
-            // this.RCstrToDrone += this.ch_raw.ch13_raw.toString(16)
             this.ch_raw.ch13_raw = this.SBUS2RC(this.ch_raw.ch13_raw)
             this.ch_raw.ch14_raw = parseInt(hex_content_each.substr(28, 2), 16)
-            // this.RCstrToDrone += this.ch_raw.ch14_raw.toString(16)
             this.ch_raw.ch14_raw = this.SBUS2RC(this.ch_raw.ch14_raw)
             this.ch_raw.ch15_raw = parseInt(hex_content_each.substr(30, 2), 16)
-            // this.RCstrToDrone += this.ch_raw.ch15_raw.toString(16)
             this.ch_raw.ch15_raw = this.SBUS2RC(this.ch_raw.ch15_raw)
             this.ch_raw.ch16_raw = parseInt(hex_content_each.substr(32, 2), 16)
-            // this.RCstrToDrone += this.ch_raw.ch16_raw.toString(16)
             this.ch_raw.ch16_raw = this.SBUS2RC(this.ch_raw.ch16_raw)
 
             if (this.reverse_pan) {
@@ -587,60 +573,44 @@ export default {
             } else {
                 this.ch_raw.ch17_raw = parseInt(hex_content_each.substr(34, 2), 16)
             }
-            // this.RCstrToDrone += this.ch_raw.ch17_raw.toString(16)
             this.ch_raw.ch17_raw = this.SBUS2RC(this.ch_raw.ch17_raw)
             if (this.reverse_tilt) {
                 this.ch_raw.ch18_raw = 250 - parseInt(hex_content_each.substr(36, 2), 16)
             } else {
                 this.ch_raw.ch18_raw = parseInt(hex_content_each.substr(36, 2), 16)
             }
-            // this.RCstrToDrone += this.ch_raw.ch18_raw.toString(16)
             this.ch_raw.ch18_raw = this.SBUS2RC(this.ch_raw.ch18_raw)
             if (this.reverse_zoom) {
                 this.ch_raw.ch19_raw = 250 - parseInt(hex_content_each.substr(38, 2), 16)
             } else {
                 this.ch_raw.ch19_raw = parseInt(hex_content_each.substr(38, 2), 16)
             }
-            // this.RCstrToDrone += this.ch_raw.ch19_raw.toString(16)
             this.ch_raw.ch19_raw = this.SBUS2RC(this.ch_raw.ch19_raw)
             this.ch_raw.ch20_raw = parseInt(hex_content_each.substr(40, 2), 16)
-            // this.RCstrToDrone += this.ch_raw.ch20_raw.toString(16)
             this.ch_raw.ch20_raw = this.SBUS2RC(this.ch_raw.ch20_raw)
             this.ch_raw.ch21_raw = parseInt(hex_content_each.substr(42, 2), 16)
-            // this.RCstrToDrone += this.ch_raw.ch21_raw.toString(16)
             this.ch_raw.ch21_raw = this.SBUS2RC(this.ch_raw.ch21_raw)
             this.ch_raw.ch22_raw = parseInt(hex_content_each.substr(44, 2), 16)
-            // this.RCstrToDrone += this.ch_raw.ch22_raw.toString(16)
             this.ch_raw.ch22_raw = this.SBUS2RC(this.ch_raw.ch22_raw)
             this.ch_raw.ch23_raw = parseInt(hex_content_each.substr(46, 2), 16)
-            // this.RCstrToDrone += this.ch_raw.ch23_raw.toString(16)
             this.ch_raw.ch23_raw = this.SBUS2RC(this.ch_raw.ch23_raw)
             this.ch_raw.ch24_raw = parseInt(hex_content_each.substr(48, 2), 16)
-            // this.RCstrToDrone += this.ch_raw.ch24_raw.toString(16)
             this.ch_raw.ch24_raw = this.SBUS2RC(this.ch_raw.ch24_raw)
             this.ch_raw.ch25_raw = parseInt(hex_content_each.substr(50, 2), 16)
-            // this.RCstrToDrone += this.ch_raw.ch25_raw.toString(16)
             this.ch_raw.ch25_raw = this.SBUS2RC(this.ch_raw.ch25_raw)
             this.ch_raw.ch26_raw = parseInt(hex_content_each.substr(52, 2), 16)
-            // this.RCstrToDrone += this.ch_raw.ch26_raw.toString(16)
             this.ch_raw.ch26_raw = this.SBUS2RC(this.ch_raw.ch26_raw)
             this.ch_raw.ch27_raw = parseInt(hex_content_each.substr(54, 2), 16)
-            // this.RCstrToDrone += this.ch_raw.ch27_raw.toString(16)
             this.ch_raw.ch27_raw = this.SBUS2RC(this.ch_raw.ch27_raw)
             this.ch_raw.ch28_raw = parseInt(hex_content_each.substr(56, 2), 16)
-            // this.RCstrToDrone += this.ch_raw.ch28_raw.toString(16)
             this.ch_raw.ch28_raw = this.SBUS2RC(this.ch_raw.ch28_raw)
             this.ch_raw.ch29_raw = parseInt(hex_content_each.substr(58, 2), 16)
-            // this.RCstrToDrone += this.ch_raw.ch29_raw.toString(16)
             this.ch_raw.ch29_raw = this.SBUS2RC(this.ch_raw.ch29_raw)
             this.ch_raw.ch30_raw = parseInt(hex_content_each.substr(62, 2), 16)
-            // this.RCstrToDrone += this.ch_raw.ch30_raw.toString(16)
             this.ch_raw.ch30_raw = this.SBUS2RC(this.ch_raw.ch30_raw)
             this.ch_raw.ch31_raw = parseInt(hex_content_each.substr(64, 2), 16)
-            // this.RCstrToDrone += this.ch_raw.ch31_raw.toString(16)
             this.ch_raw.ch31_raw = this.SBUS2RC(this.ch_raw.ch31_raw)
             this.ch_raw.ch32_raw = parseInt(hex_content_each.substr(66, 2), 16)
-            // this.RCstrToDrone += this.ch_raw.ch32_raw.toString(16)
             this.ch_raw.ch32_raw = this.SBUS2RC(this.ch_raw.ch32_raw)
 
             // For displaying to progressbar
@@ -676,190 +646,157 @@ export default {
             this.ch_value.ch30_value = this.min_max_scaler(this.ch_raw.ch30_raw)
             this.ch_value.ch31_value = this.min_max_scaler(this.ch_raw.ch31_raw)
             this.ch_value.ch32_value = this.min_max_scaler(this.ch_raw.ch32_raw)
-
-            // this.ch_max.ch1_max = this.ch1_min_max_scaler(this.ch_raw.ch1_raw)
-            // this.ch_max.ch2_max = this.ch2_min_max_scaler(this.ch_raw.ch2_raw)
-            // this.ch_max.ch3_max = this.ch2_min_max_scaler(this.ch_raw.ch3_raw)
-            // this.ch_max.ch4_max = this.ch1_min_max_scaler(this.ch_raw.ch4_raw)
-            // this.ch_max.ch5_max = this.ch5_min_max_scaler(this.ch_raw.ch5_raw)
-            // this.ch_max.ch6_max = this.ch5_min_max_scaler(this.ch_raw.ch6_raw)
-            // this.ch_max.ch7_max = this.ch5_min_max_scaler(this.ch_raw.ch7_raw)
-            // this.ch_max.ch8_max = this.ch5_min_max_scaler(this.ch_raw.ch8_raw)
-            // this.ch_max.ch9_max = this.ch5_min_max_scaler(this.ch_raw.ch9_raw)
-            // this.ch_max.ch10_max = this.ch5_min_max_scaler(this.ch_raw.ch10_raw)
-            // this.ch_max.ch11_max = this.ch5_min_max_scaler(this.ch_raw.ch11_raw)
-            // this.ch_max.ch12_max = this.ch5_min_max_scaler(this.ch_raw.ch12_raw)
-            // this.ch_max.ch13_max = this.ch5_min_max_scaler(this.ch_raw.ch13_raw)
-            // this.ch_max.ch14_max = this.ch5_min_max_scaler(this.ch_raw.ch14_raw)
-            // this.ch_max.ch15_max = this.ch5_min_max_scaler(this.ch_raw.ch15_raw)
-            // this.ch_max.ch16_max = this.ch5_min_max_scaler(this.ch_raw.ch16_raw)
-
-            // this.ch_min.ch1_min = this.ch1_min_max_scaler(this.ch_raw.ch1_raw)
-            // this.ch_min.ch2_min = this.ch2_min_max_scaler(this.ch_raw.ch2_raw)
-            // this.ch_min.ch3_min = this.ch2_min_max_scaler(this.ch_raw.ch3_raw)
-            // this.ch_min.ch4_min = this.ch1_min_max_scaler(this.ch_raw.ch4_raw)
-            // this.ch_min.ch5_min = this.ch5_min_max_scaler(this.ch_raw.ch5_raw)
-            // this.ch_min.ch6_min = this.ch5_min_max_scaler(this.ch_raw.ch6_raw)
-            // this.ch_min.ch7_min = this.ch5_min_max_scaler(this.ch_raw.ch7_raw)
-            // this.ch_min.ch8_min = this.ch5_min_max_scaler(this.ch_raw.ch8_raw)
-            // this.ch_min.ch9_min = this.ch5_min_max_scaler(this.ch_raw.ch9_raw)
-            // this.ch_min.ch10_min = this.ch5_min_max_scaler(this.ch_raw.ch10_raw)
-            // this.ch_min.ch11_min = this.ch5_min_max_scaler(this.ch_raw.ch11_raw)
-            // this.ch_min.ch12_min = this.ch5_min_max_scaler(this.ch_raw.ch12_raw)
-            // this.ch_min.ch13_min = this.ch5_min_max_scaler(this.ch_raw.ch13_raw)
-            // this.ch_min.ch14_min = this.ch5_min_max_scaler(this.ch_raw.ch14_raw)
-            // this.ch_min.ch15_min = this.ch5_min_max_scaler(this.ch_raw.ch15_raw)
-            // this.ch_min.ch16_min = this.ch5_min_max_scaler(this.ch_raw.ch16_raw)
-
-            // this.ch_trim.ch1_trim = this.cal_min_max_scaler(this.ch_raw.ch1_raw)
-            // this.ch_trim.ch2_trim = this.cal_min_max_scaler(this.ch_raw.ch2_raw)
-            // this.ch_trim.ch3_trim = this.cal_min_max_scaler(this.ch_raw.ch3_raw)
-            // this.ch_trim.ch4_trim = this.cal_min_max_scaler(this.ch_raw.ch4_raw)
-            // this.ch_trim.ch5_trim = this.cal_min_max_scaler(this.ch_raw.ch5_raw)
-            // this.ch_trim.ch6_trim = this.cal_min_max_scaler(this.ch_raw.ch6_raw)
-            // this.ch_trim.ch7_trim = this.cal_min_max_scaler(this.ch_raw.ch7_raw)
-            // this.ch_trim.ch8_trim = this.cal_min_max_scaler(this.ch_raw.ch8_raw)
-            // this.ch_trim.ch9_trim = this.cal_min_max_scaler(this.ch_raw.ch9_raw)
-            // this.ch_trim.ch10_trim = this.cal_min_max_scaler(this.ch_raw.ch10_raw)
-            // this.ch_trim.ch11_trim = this.cal_min_max_scaler(this.ch_raw.ch11_raw)
-            // this.ch_trim.ch12_trim = this.cal_min_max_scaler(this.ch_raw.ch12_raw)
-            // this.ch_trim.ch13_trim = this.cal_min_max_scaler(this.ch_raw.ch13_raw)
-            // this.ch_trim.ch14_trim = this.cal_min_max_scaler(this.ch_raw.ch14_raw)
-            // this.ch_trim.ch15_trim = this.cal_min_max_scaler(this.ch_raw.ch15_raw)
-            // this.ch_trim.ch16_trim = this.cal_min_max_scaler(this.ch_raw.ch16_raw)
         },
         calibrateRadio() {
             if (this.ch_max_val.ch1_max_val <= this.ch_value.ch1_value) {
                 this.ch_max_val.ch1_max_val = this.ch_value.ch1_value
-                this.ch_max.ch1_max =this.ch_raw.ch1_raw
+                this.ch_max.ch1_max = this.ch_raw.ch1_raw
             }
             if (this.ch_max_val.ch2_max_val >= this.ch_value.ch2_value) {
                 this.ch_max_val.ch2_max_val = this.ch_value.ch2_value
-                this.ch_max.ch2_max =this.ch_raw.ch2_raw
+                this.ch_max.ch2_max = this.ch_raw.ch2_raw
             }
             if (this.ch_max_val.ch3_max_val >= this.ch_value.ch3_value) {
                 this.ch_max_val.ch3_max_val = this.ch_value.ch3_value
-                this.ch_max.ch3_max =this.ch_raw.ch3_raw
+                this.ch_max.ch3_max = this.ch_raw.ch3_raw
             }
             if (this.ch_max_val.ch4_max_val <= this.ch_value.ch4_value) {
                 this.ch_max_val.ch4_max_val = this.ch_value.ch4_value
-                this.ch_max.ch4_max =this.ch_raw.ch4_raw
+                this.ch_max.ch4_max = this.ch_raw.ch4_raw
             }
             if (this.ch_max_val.ch5_max_val <= this.ch_value.ch5_value) {
                 this.ch_max_val.ch5_max_val = this.ch_value.ch5_value
-                this.ch_max.ch5_max =this.ch_raw.ch5_raw
+                this.ch_max.ch5_max = this.ch_raw.ch5_raw
             }
             if (this.ch_max_val.ch6_max_val <= this.ch_value.ch6_value) {
                 this.ch_max_val.ch6_max_val = this.ch_value.ch6_value
-                this.ch_max.ch6_max =this.ch_raw.ch6_raw
+                this.ch_max.ch6_max = this.ch_raw.ch6_raw
             }
             if (this.ch_max_val.ch7_max_val <= this.ch_value.ch7_value) {
                 this.ch_max_val.ch7_max_val = this.ch_value.ch7_value
-                this.ch_max.ch7_max =this.ch_raw.ch7_raw
+                this.ch_max.ch7_max = this.ch_raw.ch7_raw
             }
             if (this.ch_max_val.ch8_max_val <= this.ch_value.ch8_value) {
                 this.ch_max_val.ch8_max_val = this.ch_value.ch8_value
-                this.ch_max.ch8_max =this.ch_raw.ch8_raw
+                this.ch_max.ch8_max = this.ch_raw.ch8_raw
             }
             if (this.ch_max_val.ch9_max_val <= this.ch_value.ch9_value) {
                 this.ch_max_val.ch9_max_val = this.ch_value.ch9_value
-                this.ch_max.ch9_max =this.ch_raw.ch9_raw
+                this.ch_max.ch9_max = this.ch_raw.ch9_raw
             }
             if (this.ch_max_val.ch10_max_val <= this.ch_value.ch10_value) {
                 this.ch_max_val.ch10_max_val = this.ch_value.ch10_value
-                this.ch_max.ch10_max =this.ch_raw.ch10_raw
+                this.ch_max.ch10_max = this.ch_raw.ch10_raw
             }
             if (this.ch_max_val.ch11_max_val <= this.ch_value.ch11_value) {
                 this.ch_max_val.ch11_max_val = this.ch_value.ch11_value
-                this.ch_max.ch11_max =this.ch_raw.ch11_raw
+                this.ch_max.ch11_max = this.ch_raw.ch11_raw
             }
             if (this.ch_max_val.ch12_max_val <= this.ch_value.ch12_value) {
                 this.ch_max_val.ch12_max_val = this.ch_value.ch12_value
-                this.ch_max.ch12_max =this.ch_raw.ch12_raw
+                this.ch_max.ch12_max = this.ch_raw.ch12_raw
             }
             if (this.ch_max_val.ch13_max_val <= this.ch_value.ch13_value) {
                 this.ch_max_val.ch13_max_val = this.ch_value.ch13_value
-                this.ch_max.ch13_max =this.ch_raw.ch13_raw
+                this.ch_max.ch13_max = this.ch_raw.ch13_raw
             }
             if (this.ch_max_val.ch14_max_val <= this.ch_value.ch14_value) {
                 this.ch_max_val.ch14_max_val = this.ch_value.ch14_value
-                this.ch_max.ch14_max =this.ch_raw.ch14_raw
+                this.ch_max.ch14_max = this.ch_raw.ch14_raw
             }
             if (this.ch_max_val.ch15_max_val <= this.ch_value.ch15_value) {
                 this.ch_max_val.ch15_max_val = this.ch_value.ch15_value
-                this.ch_max.ch15_max =this.ch_raw.ch15_raw
+                this.ch_max.ch15_max = this.ch_raw.ch15_raw
             }
             if (this.ch_max_val.ch16_max_val <= this.ch_value.ch16_value) {
                 this.ch_max_val.ch16_max_val = this.ch_value.ch16_value
-                this.ch_max.ch16_max =this.ch_raw.ch16_raw
+                this.ch_max.ch16_max = this.ch_raw.ch16_raw
             }
 
             if (this.ch_min_val.ch1_min_val >= this.ch_value.ch1_value) {
                 this.ch_min_val.ch1_min_val = this.ch_value.ch1_value
-                this.ch_min.ch1_min =this.ch_raw.ch1_raw
+                this.ch_min.ch1_min = this.ch_raw.ch1_raw
             }
             if (this.ch_min_val.ch2_min_val <= this.ch_value.ch2_value) {
                 this.ch_min_val.ch2_min_val = this.ch_value.ch2_value
-                this.ch_min.ch2_min =this.ch_raw.ch2_raw
+                this.ch_min.ch2_min = this.ch_raw.ch2_raw
             }
             if (this.ch_min_val.ch3_min_val <= this.ch_value.ch3_value) {
                 this.ch_min_val.ch3_min_val = this.ch_value.ch3_value
-                this.ch_min.ch3_min =this.ch_raw.ch3_raw
+                this.ch_min.ch3_min = this.ch_raw.ch3_raw
             }
             if (this.ch_min_val.ch4_min_val >= this.ch_value.ch4_value) {
                 this.ch_min_val.ch4_min_val = this.ch_value.ch4_value
-                this.ch_min.ch4_min =this.ch_raw.ch4_raw
+                this.ch_min.ch4_min = this.ch_raw.ch4_raw
             }
             if (this.ch_min_val.ch5_min_val >= this.ch_value.ch5_value) {
                 this.ch_min_val.ch5_min_val = this.ch_value.ch5_value
-                this.ch_min.ch5_min =this.ch_raw.ch5_raw
+                this.ch_min.ch5_min = this.ch_raw.ch5_raw
             }
             if (this.ch_min_val.ch6_min_val >= this.ch_value.ch6_value) {
                 this.ch_min_val.ch6_min_val = this.ch_value.ch6_value
-                this.ch_min.ch6_min =this.ch_raw.ch6_raw
+                this.ch_min.ch6_min = this.ch_raw.ch6_raw
             }
             if (this.ch_min_val.ch7_min_val >= this.ch_value.ch7_value) {
                 this.ch_min_val.ch7_min_val = this.ch_value.ch7_value
-                this.ch_min.ch7_min =this.ch_raw.ch7_raw
+                this.ch_min.ch7_min = this.ch_raw.ch7_raw
             }
             if (this.ch_min_val.ch8_min_val >= this.ch_value.ch8_value) {
                 this.ch_min_val.ch8_min_val = this.ch_value.ch8_value
-                this.ch_min.ch8_min =this.ch_raw.ch8_raw
+                this.ch_min.ch8_min = this.ch_raw.ch8_raw
             }
             if (this.ch_min_val.ch9_min_val >= this.ch_value.ch9_value) {
                 this.ch_min_val.ch9_min_val = this.ch_value.ch9_value
-                this.ch_min.ch9_min =this.ch_raw.ch9_raw
+                this.ch_min.ch9_min = this.ch_raw.ch9_raw
             }
             if (this.ch_min_val.ch10_min_val >= this.ch_value.ch10_value) {
                 this.ch_min_val.ch10_min_val = this.ch_value.ch10_value
-                this.ch_min.ch10_min =this.ch_raw.ch10_raw
+                this.ch_min.ch10_min = this.ch_raw.ch10_raw
             }
             if (this.ch_min_val.ch11_min_val >= this.ch_value.ch11_value) {
                 this.ch_min_val.ch11_min_val = this.ch_value.ch11_value
-                this.ch_min.ch11_min =this.ch_raw.ch11_raw
+                this.ch_min.ch11_min = this.ch_raw.ch11_raw
             }
             if (this.ch_min_val.ch12_min_val >= this.ch_value.ch12_value) {
                 this.ch_min_val.ch12_min_val = this.ch_value.ch12_value
-                this.ch_min.ch12_min =this.ch_raw.ch12_raw
+                this.ch_min.ch12_min = this.ch_raw.ch12_raw
             }
             if (this.ch_min_val.ch13_min_val >= this.ch_value.ch13_value) {
                 this.ch_min_val.ch13_min_val = this.ch_value.ch13_value
-                this.ch_min.ch13_min =this.ch_raw.ch13_raw
+                this.ch_min.ch13_min = this.ch_raw.ch13_raw
             }
             if (this.ch_min_val.ch14_min_val >= this.ch_value.ch14_value) {
                 this.ch_min_val.ch14_min_val = this.ch_value.ch14_value
-                this.ch_min.ch14_min =this.ch_raw.ch14_raw
+                this.ch_min.ch14_min = this.ch_raw.ch14_raw
             }
             if (this.ch_min_val.ch15_min_val >= this.ch_value.ch15_value) {
                 this.ch_min_val.ch15_min_val = this.ch_value.ch15_value
-                this.ch_min.ch15_min =this.ch_raw.ch15_raw
+                this.ch_min.ch15_min = this.ch_raw.ch15_raw
             }
             if (this.ch_min_val.ch16_min_val >= this.ch_value.ch16_value) {
                 this.ch_min_val.ch16_min_val = this.ch_value.ch16_value
-                this.ch_min.ch16_min =this.ch_raw.ch16_raw
+                this.ch_min.ch16_min = this.ch_raw.ch16_raw
             }
         },
         finish_cali() {
+
+            this.ch_trim.ch1_trim = Math.round((this.ch_max.ch1_max + this.ch_min.ch1_min) / 2)
+            this.ch_trim.ch2_trim = Math.round((this.ch_max.ch2_max + this.ch_min.ch2_min) / 2)
+            this.ch_trim.ch3_trim = Math.round((this.ch_max.ch3_max + this.ch_min.ch3_min) / 2)
+            this.ch_trim.ch4_trim = Math.round((this.ch_max.ch4_max + this.ch_min.ch4_min) / 2)
+            this.ch_trim.ch5_trim = Math.round((this.ch_max.ch5_max + this.ch_min.ch5_min) / 2)
+            this.ch_trim.ch6_trim = Math.round((this.ch_max.ch6_max + this.ch_min.ch6_min) / 2)
+            this.ch_trim.ch7_trim = Math.round((this.ch_max.ch7_max + this.ch_min.ch7_min) / 2)
+            this.ch_trim.ch8_trim = Math.round((this.ch_max.ch8_max + this.ch_min.ch8_min) / 2)
+            this.ch_trim.ch9_trim = Math.round((this.ch_max.ch9_max + this.ch_min.ch9_min) / 2)
+            this.ch_trim.ch10_trim = Math.round((this.ch_max.ch10_max + this.ch_min.ch10_min) / 2)
+            this.ch_trim.ch11_trim = Math.round((this.ch_max.ch11_max + this.ch_min.ch11_min) / 2)
+            this.ch_trim.ch12_trim = Math.round((this.ch_max.ch12_max + this.ch_min.ch12_min) / 2)
+            this.ch_trim.ch13_trim = Math.round((this.ch_max.ch13_max + this.ch_min.ch13_min) / 2)
+            this.ch_trim.ch14_trim = Math.round((this.ch_max.ch14_max + this.ch_min.ch14_min) / 2)
+            this.ch_trim.ch15_trim = Math.round((this.ch_max.ch15_max + this.ch_min.ch15_min) / 2)
+            this.ch_trim.ch16_trim = Math.round((this.ch_max.ch16_max + this.ch_min.ch16_min) / 2)
+
             this.$store.state.MinMaxTrim[0].value = this.ch_max.ch1_max
             this.$store.state.MinMaxTrim[1].value = this.ch_trim.ch1_trim
             this.$store.state.MinMaxTrim[2].value = this.ch_min.ch1_min
@@ -910,7 +847,7 @@ export default {
             this.$store.state.MinMaxTrim[47].value = this.ch_min.ch16_min
             // FC로 Min, Max, Trim 파라미터 전달
             // UI 재설정
-            console.log(this.$store.state.MinMaxTrim)
+            EventBus.$emit('update-cali-table')
         }
     },
     mounted() {
@@ -927,22 +864,8 @@ export default {
 <style>
 .cali {
     position: absolute;
-    left: 230px;
+    left: 330px;
     top: -9px;
-}
-
-.Maxline {
-    position: fixed;
-    left: 242px;
-    top: 48px;
-    width: 90.5%;
-}
-
-.Minline {
-    position: fixed;
-    left: 242px;
-    top: 48px;
-    width: 90.5%;
 }
 
 .v-line {

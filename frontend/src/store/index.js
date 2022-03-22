@@ -19,6 +19,7 @@ export default new Vuex.Store({
             connected: false,
             loading: false
         },
+        droneList: [],
         control_drone: JSON.parse(localStorage.getItem('control_drone_list')) ? JSON.parse(localStorage.getItem('control_drone_list')) : {},
         MinMaxTrim: [
             {
