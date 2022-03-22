@@ -664,7 +664,7 @@ export default {
                                 bpmcolor: 'red',
                                 recv_counter: 1,
                                 system_id: this.$store.state.control_drone[drone.name].system_id,
-                                selected: true,
+                                selected: false,
                                 timer_id: setInterval(() => {
                                     this.$store.state.control_drone[drone.name].bpm = this.$store.state.control_drone[drone.name].recv_counter;
                                     this.$store.state.control_drone[drone.name].recv_counter = 1;
@@ -1061,7 +1061,6 @@ export default {
                             } catch (ex) {
                                 console.log('[ERROR] ' + ex);
                             }
-
                         }
                     })
                 }
