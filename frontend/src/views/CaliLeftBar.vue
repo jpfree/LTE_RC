@@ -510,7 +510,10 @@ export default {
         },
     },
     mounted() {
+        // TODO: FC의 각 채널별 Min, Max, Trim 파라미터 로드
+
         setInterval(this.cali_val, 3 * 1000)
+
         Object.keys(this.$store.state.control_drone).forEach((dName) => {
             console.log(dName, this.$store.state.control_drone[dName].selected)
             if (this.$store.state.control_drone[dName].selected) {
