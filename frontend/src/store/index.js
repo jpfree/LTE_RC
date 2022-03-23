@@ -14,6 +14,7 @@ export default new Vuex.Store({
 
         UDP_connection: {},
         udp_selected: [],
+        RF_Protocol: false,
 
         client: {
             connected: false,
