@@ -28,10 +28,10 @@ router.get('/serialdata', function (req, res, next) {
 router.post('/rfflag', function (req, res, next) {
     if (req.body.connection === 'disconnect') {
         if (rfUDP.hasOwnProperty(req.body.host + ':' + req.body.port)) {
-            res.send('Disconnect ' + rfUDP[req.body.host + ':' + req.body.port].host + ':' + rfUDP[req.body.host + ':' + req.body.port].port);
+            res.send(rfUDP[req.body.host + ':' + req.body.port].host + ':' + rfUDP[req.body.host + ':' + req.body.port].port + ' 연결 해제');
             delete rfUDP[req.body.host + ':' + req.body.port]
         } else {
-            res.send('It is not a connected ' + req.body.host + ':' + req.body.port);
+            res.send('연결되지 않은 ' + req.body.host + ':' + req.body.port);
         }
     } else {
         if (!rfUDP.hasOwnProperty(req.body.host + ':' + req.body.port)) {
@@ -40,7 +40,7 @@ router.post('/rfflag', function (req, res, next) {
             rfUDP[req.body.host + ':' + req.body.port].port = parseInt(req.body.port);
             rfUDP[req.body.host + ':' + req.body.port].status = req.body.connection;
             rfUDP[req.body.host + ':' + req.body.port].client = dgram.createSocket('udp4');
-            res.send('Connect ' + rfUDP[req.body.host + ':' + req.body.port].host + ':' + rfUDP[req.body.host + ':' + req.body.port].port);
+            res.send(rfUDP[req.body.host + ':' + req.body.port].host + ':' + rfUDP[req.body.host + ':' + req.body.port].port + ' 연결');
         } else {
             if (rfUDP[req.body.host + ':' + req.body.port].hasOwnProperty('status')) {
                 if (rfUDP[req.body.host + ':' + req.body.port].status === 'disconnect') {
@@ -48,9 +48,9 @@ router.post('/rfflag', function (req, res, next) {
                     rfUDP[req.body.host + ':' + req.body.port].port = parseInt(req.body.port);
                     rfUDP[req.body.host + ':' + req.body.port].status = req.body.connection;
                     rfUDP[req.body.host + ':' + req.body.port].client = dgram.createSocket('udp4');
-                    res.send('Connect ' + rfUDP[req.body.host + ':' + req.body.port].host + ':' + rfUDP[req.body.host + ':' + req.body.port].port);
+                    res.send(rfUDP[req.body.host + ':' + req.body.port].host + ':' + rfUDP[req.body.host + ':' + req.body.port].port + ' 연결');
                 } else {
-                    res.send('Already connected to ' + rfUDP[req.body.host + ':' + req.body.port].host + ':' + rfUDP[req.body.host + ':' + req.body.port].port);
+                    res.send('이미 연결된 ' + rfUDP[req.body.host + ':' + req.body.port].host + ':' + rfUDP[req.body.host + ':' + req.body.port].port);
                 }
             } else {
                 rfUDP[req.body.host + ':' + req.body.port] = {}
@@ -58,7 +58,7 @@ router.post('/rfflag', function (req, res, next) {
                 rfUDP[req.body.host + ':' + req.body.port].port = parseInt(req.body.port);
                 rfUDP[req.body.host + ':' + req.body.port].status = req.body.connection;
                 rfUDP[req.body.host + ':' + req.body.port].client = dgram.createSocket('udp4');
-                res.send('Reconnect ' + rfUDP[req.body.host + ':' + req.body.port].host + ':' + rfUDP[req.body.host + ':' + req.body.port].port);
+                res.send(rfUDP[req.body.host + ':' + req.body.port].host + ':' + rfUDP[req.body.host + ':' + req.body.port].port + ' 재연결');
             }
         }
     }
@@ -66,15 +66,17 @@ router.post('/rfflag', function (req, res, next) {
 
 setInterval(function () {
     for (let idx in Object.keys(rfUDP)) {
-        rfUDP[Object.keys(rfUDP)[idx]].client.send(Buffer.from(RCData, 'hex'), 0, Buffer.from(RCData, 'hex').length, rfUDP[Object.keys(rfUDP)[idx]].port, rfUDP[Object.keys(rfUDP)[idx]].host,
-            function (err) {
-                if (err) {
-                    console.log(err)
-                    console.log('[' + rfUDP[Object.keys(rfUDP)[idx]].host + ':' + rfUDP[Object.keys(rfUDP)[idx]].port + '] Failure of data transmission via RF');
-                    return;
+        if (rfUDP[Object.keys(rfUDP)[idx]].status === 'connect') {
+            rfUDP[Object.keys(rfUDP)[idx]].client.send(Buffer.from(RCData, 'hex'), 0, Buffer.from(RCData, 'hex').length, rfUDP[Object.keys(rfUDP)[idx]].port, rfUDP[Object.keys(rfUDP)[idx]].host,
+                function (err) {
+                    if (err) {
+                        console.log(err)
+                        console.log('[' + rfUDP[Object.keys(rfUDP)[idx]].host + ':' + rfUDP[Object.keys(rfUDP)[idx]].port + '] Failure of data transmission via RF');
+                        return;
+                    }
                 }
-            }
-        );
+            );
+        }
     }
 }, 40);
 
