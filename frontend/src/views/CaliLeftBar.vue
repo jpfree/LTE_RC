@@ -510,6 +510,7 @@ export default {
         },
     },
     mounted() {
+        setInterval(this.cali_val, 3 * 1000)
         Object.keys(this.$store.state.control_drone).forEach((dName) => {
             console.log(dName, this.$store.state.control_drone[dName].selected)
             if (this.$store.state.control_drone[dName].selected) {

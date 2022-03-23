@@ -779,7 +779,6 @@ export default {
             }
         },
         finish_cali() {
-
             this.ch_trim.ch1_trim = Math.round((this.ch_max.ch1_max + this.ch_min.ch1_min) / 2)
             this.ch_trim.ch2_trim = Math.round((this.ch_max.ch2_max + this.ch_min.ch2_min) / 2)
             this.ch_trim.ch3_trim = Math.round((this.ch_max.ch3_max + this.ch_min.ch3_min) / 2)
