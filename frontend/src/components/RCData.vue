@@ -618,8 +618,6 @@ export default {
             RCstrFromeGCSLength: 0,
 
             RCstrToDrone: '',
-
-            logs: []
         }
     },
     mixins: [VueTimers],
@@ -677,7 +675,7 @@ export default {
                                     }
                                 }, 10000)
                             }
-                            console.log('control_drone Info -', this.$store.state.control_drone[drone.name])
+                            console.log('control_drone Info\n', drone.name, this.$store.state.control_drone[drone.name])
 
                             let topic = '/Mobius/' + this.$store.state.VUE_APP_MOBIUS_GCS + '/RC_Data/' + drone.name + '/status'
                             let qos = 0
@@ -1043,6 +1041,7 @@ export default {
 
             if (this.$store.state.client.connected) {  // LTE
                 if (this.ch_raw.ch11_raw > 1700) {  // MAVLink
+                    EventBus.$emit('mode_update', 'MAVLink')
                     Object.keys(this.$store.state.control_drone).forEach((dName) => {
                         if (this.$store.state.control_drone[dName].selected) {
                             let topic = '/Mobius/' + this.$store.state.VUE_APP_MOBIUS_GCS + '/GCS_Data/' + dName
@@ -1064,14 +1063,76 @@ export default {
                         }
                     })
                 }
+
+                if (this.ch_raw.ch12_raw > 1700) {  // RF
+                    EventBus.$emit('mode_update', 'RF')
+                    this.$store.state.RF_Protocol = true
+                    Object.keys(this.$store.state.control_drone).forEach((dName) => {
+                        this.$store.state.control_drone[dName].status = 'RF'
+                    })
+                } else {
+                    this.$store.state.RF_Protocol = false
+                    Object.keys(this.$store.state.UDP_connection).forEach((udp) => {
+                        if (this.$store.state.UDP_connection[udp] === 'connect') {
+                            let serverip = udp.split(':')
+                            axios.post('http://localhost:3000/rfflag', {
+                                "connection": 'disconnect',
+                                "host": serverip[0],
+                                "port": serverip[1]
+                            })
+                                .then((response) => {
+                                        EventBus.$emit('log_update', response.data)
+                                        this.$store.state.UDP_connection[udp] = 'disconnect'
+                                        // console.log(response.data)
+                                    }
+                                ).catch((e) => {
+                                    console.log("Could not send UDP 'disconnect' message")
+                                    EventBus.$emit('log_update', "UDP 연결 해제가 불가능합니다.")
+                                    console.log(e)
+                                }
+                            )
+                        }
+                    })
+                    EventBus.$emit('mode_update', 'LTE')
+                }
+
                 this.$store.state.client.publish('/Mobius/' + this.$store.state.VUE_APP_MOBIUS_GCS + '/RC_Data/' + this.$store.state.VUE_APP_MOBIUS_RC, Buffer.from(hex_content_each, 'hex'))
                 // this.RCstrToDrone = ''
-            }
-
-            if (this.ch_raw.ch12_raw > 1700) {  // RF
-                Object.keys(this.$store.state.control_drone).forEach((dName) => {
-                    this.$store.state.control_drone[dName].status = 'RF'
-                })
+            } else {
+                if (this.ch_raw.ch12_raw > 1700) {  // RF
+                    EventBus.$emit('mode_update', 'RF')
+                    this.$store.state.RF_Protocol = true
+                    Object.keys(this.$store.state.control_drone).forEach((dName) => {
+                        this.$store.state.control_drone[dName].status = 'RF'
+                    })
+                } else {
+                    this.$store.state.RF_Protocol = false
+                    Object.keys(this.$store.state.UDP_connection).forEach((udp) => {
+                        if (this.$store.state.UDP_connection[udp] === 'connect') {
+                            let serverip = udp.split(':')
+                            axios.post('http://localhost:3000/rfflag', {
+                                "connection": 'disconnect',
+                                "host": serverip[0],
+                                "port": serverip[1]
+                            })
+                                .then((response) => {
+                                        EventBus.$emit('log_update', response.data)
+                                        this.$store.state.UDP_connection[udp] = 'disconnect'
+                                        // console.log(response.data)
+                                    }
+                                ).catch((e) => {
+                                    console.log("Could not send UDP 'disconnect' message")
+                                    EventBus.$emit('log_update', "UDP 연결 해제가 불가능합니다.")
+                                    console.log(e)
+                                }
+                            )
+                        }
+                    })
+                    EventBus.$emit('mode_update', 'Disconnected')
+                    Object.keys(this.$store.state.control_drone).forEach((dName) => {
+                        this.$store.state.control_drone[dName].status = 'disconnected'
+                    })
+                }
             }
         },
         beforeDestroy() {
@@ -1080,6 +1141,10 @@ export default {
         }
     },
     mounted() {
+        setInterval(function () {
+            EventBus.$emit('log_update', '')
+        }, 5 * 60 * 1000)
+
         this.$timer.start('SerialData')
 
         EventBus.$on('mqttConnection', () => {
@@ -1105,4 +1170,5 @@ export default {
     /*color: #000000;*/
     transform: rotate(270deg);
 }
+
 </style>
