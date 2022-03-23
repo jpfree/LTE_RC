@@ -5,9 +5,9 @@
             <router-view></router-view>
         </v-main>
         <v-row class="Mode">
-            {{Mode}}
+            [Mode] {{$store.state.Mode}}
         </v-row>
-        <v-row v-if="Mode==='[Mode] ' + 'RF'" class="Log">
+        <v-row v-if="$store.state.Mode==='RF'" class="Log">
             {{UDPLog}}
         </v-row>
     </v-app>
@@ -27,12 +27,11 @@ export default {
     data() {
         return {
             UDPLog: '',
-            Mode:''
         }
     },
     mounted() {
         EventBus.$on('mode_update', (mode) => {
-            this.Mode = '[Mode] ' + mode
+            this.$store.state.Mode = mode
         })
         EventBus.$on('log_update', (log) => {
             this.UDPLog = log
