@@ -5,7 +5,7 @@ const dgram = require("dgram");
 
 let rcPort = null;
 let rcPort_info = {
-    Path: 'COM2',
+    Path: 'COM3',
     BaudRate: 115200
 }
 
