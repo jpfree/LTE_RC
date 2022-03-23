@@ -120,7 +120,7 @@
                             </div>
                             <div class="v-line" :style="{left:ch_min_val.ch10_min_val+'%'}">
                             </div>
-                             <span style="font-size: 25px">Radio 10 <strong>{{ ch_raw.ch10_raw }}</strong></span>
+                            <span style="font-size: 25px">Radio 10 <strong>{{ ch_raw.ch10_raw }}</strong></span>
                         </v-progress-linear>
                     </v-col>
                 </v-row>
@@ -135,7 +135,7 @@
                             </div>
                             <div class="v-line" :style="{left:ch_min_val.ch6_min_val+'%'}">
                             </div>
-                             <span style="font-size: 25px">Radio 6 <strong>{{ ch_raw.ch6_raw }}</strong></span>
+                            <span style="font-size: 25px">Radio 6 <strong>{{ ch_raw.ch6_raw }}</strong></span>
                         </v-progress-linear>
                     </v-col>
                     <v-col cols="6">
@@ -148,7 +148,7 @@
                             </div>
                             <div class="v-line" :style="{left:ch_min_val.ch11_min_val+'%'}">
                             </div>
-                             <span style="font-size: 25px">Radio 11 <strong>{{ ch_raw.ch11_raw }}</strong></span>
+                            <span style="font-size: 25px">Radio 11 <strong>{{ ch_raw.ch11_raw }}</strong></span>
                         </v-progress-linear>
                     </v-col>
                 </v-row>
@@ -163,7 +163,7 @@
                             </div>
                             <div class="v-line" :style="{left:ch_min_val.ch7_min_val+'%'}">
                             </div>
-                             <span style="font-size: 25px">Radio 7 <strong>{{ ch_raw.ch7_raw }}</strong></span>
+                            <span style="font-size: 25px">Radio 7 <strong>{{ ch_raw.ch7_raw }}</strong></span>
                         </v-progress-linear>
                     </v-col>
                     <v-col cols="6">
@@ -176,7 +176,7 @@
                             </div>
                             <div class="v-line" :style="{left:ch_min_val.ch12_min_val+'%'}">
                             </div>
-                             <span style="font-size: 25px">Radio 12 <strong>{{ ch_raw.ch12_raw }}</strong></span>
+                            <span style="font-size: 25px">Radio 12 <strong>{{ ch_raw.ch12_raw }}</strong></span>
                         </v-progress-linear>
                     </v-col>
                 </v-row>
@@ -191,7 +191,7 @@
                             </div>
                             <div class="v-line" :style="{left:ch_min_val.ch8_min_val+'%'}">
                             </div>
-                             <span style="font-size: 25px">Radio 8 <strong>{{ ch_raw.ch8_raw }}</strong></span>
+                            <span style="font-size: 25px">Radio 8 <strong>{{ ch_raw.ch8_raw }}</strong></span>
                         </v-progress-linear>
                     </v-col>
                     <v-col cols="6">
@@ -204,7 +204,7 @@
                             </div>
                             <div class="v-line" :style="{left:ch_min_val.ch13_min_val+'%'}">
                             </div>
-                             <span style="font-size: 25px">Radio 13 <strong>{{ ch_raw.ch13_raw }}</strong></span>
+                            <span style="font-size: 25px">Radio 13 <strong>{{ ch_raw.ch13_raw }}</strong></span>
                         </v-progress-linear>
                     </v-col>
                 </v-row>
@@ -219,7 +219,7 @@
                             </div>
                             <div class="v-line" :style="{left:ch_min_val.ch9_min_val+'%'}">
                             </div>
-                             <span style="font-size: 25px">Radio 9 <strong>{{ ch_raw.ch9_raw }}</strong></span>
+                            <span style="font-size: 25px">Radio 9 <strong>{{ ch_raw.ch9_raw }}</strong></span>
                         </v-progress-linear>
                     </v-col>
                     <v-col cols="6">
@@ -232,7 +232,7 @@
                             </div>
                             <div class="v-line" :style="{left:ch_min_val.ch14_min_val+'%'}">
                             </div>
-                             <span style="font-size: 25px">Radio 14 <strong>{{ ch_raw.ch14_raw }}</strong></span>
+                            <span style="font-size: 25px">Radio 14 <strong>{{ ch_raw.ch14_raw }}</strong></span>
                         </v-progress-linear>
                     </v-col>
                 </v-row>
@@ -240,16 +240,21 @@
         </v-row>
         <v-divider></v-divider>
         <v-row justify="center">
-            <v-btn
-                depressed
-                color="success"
-                width="110"
-                height="40"
-                style="font-size: 20px"
-                @click="finish_cali"
-            >
-                Finish
-            </v-btn>
+            <v-col cols="4" align="center">
+                <v-btn
+                    depressed
+                    color="success"
+                    width="110"
+                    height="40"
+                    style="font-size: 20px"
+                    @click="finish_cali"
+                >
+                    Finish
+                </v-btn>
+            </v-col>
+            <v-col cols="8" class="CaliLog" align="center">
+                {{ CaliLog }}
+            </v-col>
         </v-row>
     </v-container>
 </template>
@@ -483,6 +488,7 @@ export default {
 
             RC_RATE: 0.64,
 
+            CaliLog: '',
         }
     },
     mixins: [VueTimers],
@@ -844,12 +850,16 @@ export default {
             this.$store.state.MinMaxTrim[45].value = this.ch_max.ch16_max
             this.$store.state.MinMaxTrim[46].value = this.ch_trim.ch16_trim
             this.$store.state.MinMaxTrim[47].value = this.ch_min.ch16_min
-            // FC로 Min, Max, Trim 파라미터 전달
-            // UI 재설정
+
             EventBus.$emit('update-cali-table')
         }
     },
     mounted() {
+        if (this.$store.state.Mode === 'RF') {
+            this.CaliLog = '뒤로 돌아가서 LTE 모드로 변경하세요.'
+        }
+        this.$store.state.Mode = 'Calibration'
+
         this.$timer.start('SerialData')
         this.$timer.start('calibrateRadio')
     },
@@ -871,6 +881,11 @@ export default {
     border-right: thick solid #ff0000;
     height: 100%;
     position: absolute;
+}
+
+.CaliLog {
+    font-size: 25px;
+    font-weight: bold;
 }
 
 </style>
