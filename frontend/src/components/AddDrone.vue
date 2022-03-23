@@ -125,27 +125,14 @@
                 > Unlink
                 </v-btn>
             </v-row>
-            <div class="mt-8 aside-line"></div>
-            <v-row class="ml-2 mb-3 white--text font-weight-bold" style="font-size: 22px">
+            <div v-if="$store.state.RF_Protocol" class="mt-8 aside-line"></div>
+            <v-row
+                v-if="$store.state.RF_Protocol"
+                class="ml-2 mb-3 white--text font-weight-bold" style="font-size: 22px">
                 RF Protocol
             </v-row>
-            <!--            <v-row align="center" class="ml-2 white&#45;&#45;text font-weight-bold" style="font-size: 20px;">-->
-            <!--                <v-col cols="2" align="end" class="mr-2">-->
-            <!--                    UDP-->
-            <!--                </v-col>-->
-            <!--                <v-col cols="2" class="mr-1">-->
-            <!--                    <v-switch-->
-            <!--                        v-model="RF_Protocol"-->
-            <!--                        inset-->
-            <!--                        color="red"-->
-            <!--                    ></v-switch>-->
-            <!--                </v-col>-->
-            <!--                <v-col cols="7" align="start">-->
-            <!--                    Serial-->
-            <!--                </v-col>-->
-            <!--            </v-row>-->
             <v-text-field
-                v-if="!RF_Protocol"
+                v-if="$store.state.RF_Protocol"
                 class="custom-placeholer-color mx-2"
                 dense
                 ref="drone"
@@ -159,7 +146,7 @@
                 background-color="white"
             ></v-text-field>
             <v-data-table
-                v-if="udp_list.length > 0 && !RF_Protocol"
+                v-if="$store.state.RF_Protocol"
                 :headers="udp_header"
                 :items="udp_list"
                 item-key="name"
@@ -186,7 +173,7 @@
                     </v-btn>
                 </template>
             </v-data-table>
-            <v-row v-if="!RF_Protocol" class="mt-2" align="center" justify="space-around">
+            <v-row v-if="$store.state.RF_Protocol" class="mt-2" align="center" justify="space-around">
                 <v-btn
                     fab
                     height="45"
@@ -201,7 +188,7 @@
             </v-row>
             <v-row align="center" justify="space-around">
                 <v-btn
-                    v-if="UDPServerIP !== '' && !RF_Protocol"
+                    v-if="$store.state.RF_Protocol"
                     fab
                     height="45"
                     width="100"
@@ -213,7 +200,7 @@
                 > Link
                 </v-btn>
                 <v-btn
-                    v-if="UDPServerIP !== '' && !RF_Protocol"
+                    v-if="$store.state.RF_Protocol"
                     fab
                     height="45"
                     width="100"
@@ -298,7 +285,7 @@ export default {
                     value: 'delete',
                 }
             ],
-            udp_list: [],
+            udp_list: JSON.parse(localStorage.getItem('RF_udp_list')) ? JSON.parse(localStorage.getItem('RF_udp_list')) : [],
 
             mavVersion: 'v1',
             mavVersions: ['v1', 'v2'],
@@ -488,42 +475,61 @@ export default {
             return (2 / this.$store.state.control_drone[item.name].bpm).toString() + 's'
         },
         RFlink() {
-            this.$store.state.udp_selected.forEach((udpHostPort) => {
-                let serverip = udpHostPort.split(':')
-                this.$store.state.UDP_connection[udpHostPort] = 'connect'
-                axios.post('http://localhost:3000/rfflag', {
-                    "connection": this.$store.state.UDP_connection[udpHostPort],
-                    "host": serverip[0],
-                    "port": serverip[1]
-                })
-                    .then((response) => {
-                            console.log(response.data)
+            if (this.$store.state.udp_selected.length > 0) {
+                this.$store.state.udp_selected.forEach((udpHostPort) => {
+                    let serverip = udpHostPort.split(':')
+                    axios.post('http://localhost:3000/rfflag', {
+                        "connection": 'connect',
+                        "host": serverip[0],
+                        "port": serverip[1]
+                    })
+                        .then((response) => {
+                                EventBus.$emit('log_update', response.data)
+                                this.$store.state.UDP_connection[udpHostPort] = 'connect'
+                                // console.log(response.data)
+                            }
+                        ).catch((e) => {
+                            console.log("Could not send UDP 'connect' message")
+                            EventBus.$emit('log_update', "UDP 연결이 불가능합니다.")
+                            console.log(e)
                         }
-                    ).catch((e) => {
-                        console.log("Could not send UDP connect message")
-                        console.log(e)
+                    )
+                })
+                this.$store.state.udp_selected.forEach((udpHostPort) => {
+                    let connected_list = []
+                    if (this.$store.state.UDP_connection[udpHostPort] === 'connect') {
+                        connected_list.push(udpHostPort)
+                        EventBus.$emit('log_update', '연결된 드론\n' + connected_list)
                     }
-                )
-            })
+                })
+            } else {
+                EventBus.$emit('log_update', '연결할 UDP를 선택하세요.')
+            }
         },
         RFunlink() {
-            this.$store.state.udp_selected.forEach((udpHostPort) => {
-                let serverip = udpHostPort.split(':')
-                this.$store.state.UDP_connection[udpHostPort] = 'disconnect'
-                axios.post('http://localhost:3000/rfflag', {
-                    "connection": this.$store.state.UDP_connection[udpHostPort],
-                    "host": serverip[0],
-                    "port": serverip[1]
-                })
-                    .then((response) => {
-                            console.log(response.data)
+            if (this.$store.state.udp_selected.length > 0) {
+                this.$store.state.udp_selected.forEach((udpHostPort) => {
+                    let serverip = udpHostPort.split(':')
+                    axios.post('http://localhost:3000/rfflag', {
+                        "connection": 'disconnect',
+                        "host": serverip[0],
+                        "port": serverip[1]
+                    })
+                        .then((response) => {
+                                EventBus.$emit('log_update', response.data)
+                                this.$store.state.UDP_connection[udpHostPort] = 'disconnect'
+                                // console.log(response.data)
+                            }
+                        ).catch((e) => {
+                            console.log("Could not send UDP 'disconnect' message")
+                            EventBus.$emit('log_update', "UDP 연결 해제가 불가능합니다.")
+                            console.log(e)
                         }
-                    ).catch((e) => {
-                        console.log("Could not send UDP disconnect message")
-                        console.log(e)
-                    }
-                )
-            })
+                    )
+                })
+            } else {
+                EventBus.$emit('log_update', '연결할 UDP를 선택하세요.')
+            }
         },
         setUDPServer(serverIP, del = false) {
             let flag = 0
@@ -538,13 +544,16 @@ export default {
                         "port": serverIP_arr[1]
                     })
                         .then((response) => {
-                                console.log(response.data)
+                                EventBus.$emit('log_update', response.data)
+                                // console.log(response.data)
                                 this.udp_list = this.udp_list.filter(ip => ip.name !== '127.0.0.1:' + serverIP_arr[1])
                                 this.$store.state.udp_selected = this.$store.state.udp_selected.filter(ip => ip !== '127.0.0.1:' + serverIP_arr[1])
                                 delete this.$store.state.UDP_connection['127.0.0.1:' + serverIP_arr[1]]
+                                localStorage.setItem('RF_udp_list', JSON.stringify(this.udp_list))
                             }
                         ).catch((e) => {
                             console.log("Could not send UDP disconnect message")
+                            EventBus.$emit('log_update', "UDP 연결 해제가 불가능합니다.")
                             console.log(e)
                         }
                     )
@@ -558,13 +567,16 @@ export default {
                         "port": serverIP_arr[1]
                     })
                         .then((response) => {
-                                console.log(response.data)
+                                EventBus.$emit('log_update', response.data)
+                                // console.log(response.data)
                                 this.udp_list = this.udp_list.filter(ip => ip.name !== serverIP.name)
                                 this.$store.state.udp_selected = this.$store.state.udp_selected.filter(ip => ip !== serverIP.name)
                                 delete this.$store.state.UDP_connection[serverIP.name]
+                                localStorage.setItem('RF_udp_list', JSON.stringify(this.udp_list))
                             }
                         ).catch((e) => {
                             console.log("Could not send UDP disconnect message")
+                            EventBus.$emit('log_update', "UDP 연결 해제가 불가능합니다.")
                             console.log(e)
                         }
                     )
@@ -592,6 +604,7 @@ export default {
                         this.$store.state.UDP_connection[serverIP] = 'disconnect'
                     }
                 }
+                localStorage.setItem('RF_udp_list', JSON.stringify(this.udp_list))
             }
         },
         UDProwClicked: function (item, row) {
@@ -602,15 +615,11 @@ export default {
                     if (!selectState) {
                         this.$store.state.udp_selected = this.$store.state.udp_selected.filter(
                             selectedKeyID => selectedKeyID !== row.item.name)
-                        // this.$store.state.control_drone[row.item.name].selected = false
                     } else {
                         this.$store.state.udp_selected.push(row.item.name)
-                        // this.$store.state.udp_selected.push(row.item.name)
-                        // this.$store.state.control_drone[row.item.name].selected = true
                     }
                 }
             })
-            // console.log('UDProwClicked', this.$store.state.udp_selected)
         },
     },
     mounted() {
