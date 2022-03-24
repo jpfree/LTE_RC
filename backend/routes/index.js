@@ -2,6 +2,7 @@ var express = require('express');
 const SerialPort = require("serialport");
 var router = express.Router();
 const dgram = require("dgram");
+const {response} = require("express");
 
 let rcPort = null;
 let rcPort_info = {
@@ -26,42 +27,47 @@ router.get('/serialdata', function (req, res, next) {
     res.send(RCData);
 });
 router.post('/rfflag', function (req, res, next) {
+    let res_text = ''
+
+    let key = req.body.host + ':' + req.body.port
+
     if (req.body.connection === 'disconnect') {
-        if (rfUDP.hasOwnProperty(req.body.host + ':' + req.body.port)) {
-            res.send(rfUDP[req.body.host + ':' + req.body.port].host + ':' + rfUDP[req.body.host + ':' + req.body.port].port + ' 연결 해제');
-            delete rfUDP[req.body.host + ':' + req.body.port]
+        if (rfUDP.hasOwnProperty(key)) {
+            res_text = rfUDP[key].host + ':' + rfUDP[key].port + ' 연결 해제';
+            delete rfUDP[key]
         } else {
-            res.send('연결되지 않은 ' + req.body.host + ':' + req.body.port);
+            res_text = '연결되지 않은 ' + key;
         }
     } else {
-        if (!rfUDP.hasOwnProperty(req.body.host + ':' + req.body.port)) {
-            rfUDP[req.body.host + ':' + req.body.port] = {}
-            rfUDP[req.body.host + ':' + req.body.port].host = req.body.host;
-            rfUDP[req.body.host + ':' + req.body.port].port = parseInt(req.body.port);
-            rfUDP[req.body.host + ':' + req.body.port].status = req.body.connection;
-            rfUDP[req.body.host + ':' + req.body.port].client = dgram.createSocket('udp4');
-            res.send(rfUDP[req.body.host + ':' + req.body.port].host + ':' + rfUDP[req.body.host + ':' + req.body.port].port + ' 연결');
+        if (!rfUDP.hasOwnProperty(key)) {
+            rfUDP[key] = {}
+            rfUDP[key].host = req.body.host;
+            rfUDP[key].port = parseInt(req.body.port);
+            rfUDP[key].status = req.body.connection;
+            rfUDP[key].client = dgram.createSocket('udp4');
+            res_text = rfUDP[key].host + ':' + rfUDP[key].port + ' 연결';
         } else {
-            if (rfUDP[req.body.host + ':' + req.body.port].hasOwnProperty('status')) {
-                if (rfUDP[req.body.host + ':' + req.body.port].status === 'disconnect') {
-                    rfUDP[req.body.host + ':' + req.body.port].host = req.body.host;
-                    rfUDP[req.body.host + ':' + req.body.port].port = parseInt(req.body.port);
-                    rfUDP[req.body.host + ':' + req.body.port].status = req.body.connection;
-                    rfUDP[req.body.host + ':' + req.body.port].client = dgram.createSocket('udp4');
-                    res.send(rfUDP[req.body.host + ':' + req.body.port].host + ':' + rfUDP[req.body.host + ':' + req.body.port].port + ' 연결');
+            if (rfUDP[key].hasOwnProperty('status')) {
+                if (rfUDP[key].status === 'disconnect') {
+                    rfUDP[key].host = req.body.host;
+                    rfUDP[key].port = parseInt(req.body.port);
+                    rfUDP[key].status = req.body.connection;
+                    rfUDP[key].client = dgram.createSocket('udp4');
+                    res_text = rfUDP[key].host + ':' + rfUDP[key].port + ' 연결';
                 } else {
-                    res.send('이미 연결된 ' + rfUDP[req.body.host + ':' + req.body.port].host + ':' + rfUDP[req.body.host + ':' + req.body.port].port);
+                    res_text = '이미 연결된 ' + rfUDP[key].host + ':' + rfUDP[key].port;
                 }
             } else {
-                rfUDP[req.body.host + ':' + req.body.port] = {}
-                rfUDP[req.body.host + ':' + req.body.port].host = req.body.host;
-                rfUDP[req.body.host + ':' + req.body.port].port = parseInt(req.body.port);
-                rfUDP[req.body.host + ':' + req.body.port].status = req.body.connection;
-                rfUDP[req.body.host + ':' + req.body.port].client = dgram.createSocket('udp4');
-                res.send(rfUDP[req.body.host + ':' + req.body.port].host + ':' + rfUDP[req.body.host + ':' + req.body.port].port + ' 재연결');
+                rfUDP[key] = {}
+                rfUDP[key].host = req.body.host;
+                rfUDP[key].port = parseInt(req.body.port);
+                rfUDP[key].status = req.body.connection;
+                rfUDP[key].client = dgram.createSocket('udp4');
+                res_text = rfUDP[key].host + ':' + rfUDP[key].port + ' 재연결';
             }
         }
     }
+    res.send(res_text)
 });
 
 setInterval(function () {

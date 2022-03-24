@@ -146,7 +146,7 @@
                 background-color="white"
             ></v-text-field>
             <v-data-table
-                v-if="$store.state.RF_Protocol"
+                v-if="$store.state.RF_Protocol && udp_list.length > 0"
                 :headers="udp_header"
                 :items="udp_list"
                 item-key="name"
@@ -475,8 +475,10 @@ export default {
             return (2 / this.$store.state.control_drone[item.name].bpm).toString() + 's'
         },
         RFlink() {
+            let res_flag = false
             if (this.$store.state.udp_selected.length > 0) {
                 this.$store.state.udp_selected.forEach((udpHostPort) => {
+                    udpHostPort = udpHostPort.replace('\t', '')
                     let serverip = udpHostPort.split(':')
                     axios.post('http://localhost:3000/rfflag', {
                         "connection": 'connect',
@@ -484,9 +486,13 @@ export default {
                         "port": serverip[1]
                     })
                         .then((response) => {
-                                EventBus.$emit('log_update', response.data)
-                                this.$store.state.UDP_connection[udpHostPort] = 'connect'
-                                // console.log(response.data)
+                                if (!res_flag) {
+                                    EventBus.$emit('log_update', response.data)
+                                    this.$store.state.UDP_connection[udpHostPort] = 'connect'
+                                    res_flag = true
+                                } else {
+                                    res_flag = false
+                                }
                             }
                         ).catch((e) => {
                             console.log("Could not send UDP 'connect' message")
@@ -507,8 +513,10 @@ export default {
             }
         },
         RFunlink() {
+            let res_flag = false
             if (this.$store.state.udp_selected.length > 0) {
                 this.$store.state.udp_selected.forEach((udpHostPort) => {
+                    udpHostPort = udpHostPort.replace('\t', '')
                     let serverip = udpHostPort.split(':')
                     axios.post('http://localhost:3000/rfflag', {
                         "connection": 'disconnect',
@@ -516,9 +524,13 @@ export default {
                         "port": serverip[1]
                     })
                         .then((response) => {
-                                EventBus.$emit('log_update', response.data)
-                                this.$store.state.UDP_connection[udpHostPort] = 'disconnect'
-                                // console.log(response.data)
+                                if (!res_flag) {
+                                    EventBus.$emit('log_update', response.data)
+                                    this.$store.state.UDP_connection[udpHostPort] = 'disconnect'
+                                    res_flag = true
+                                } else {
+                                    res_flag = false
+                                }
                             }
                         ).catch((e) => {
                             console.log("Could not send UDP 'disconnect' message")

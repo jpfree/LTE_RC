@@ -1040,6 +1040,7 @@ export default {
             this.ch_value.ch32_value = this.min_max_scaler(this.ch_raw.ch32_raw)
 
             if (this.$store.state.client.connected) {  // LTE
+                EventBus.$emit('mode_update', 'LTE')
                 if (this.ch_raw.ch11_raw > 1700) {  // MAVLink
                     EventBus.$emit('mode_update', 'MAVLink')
                     Object.keys(this.$store.state.control_drone).forEach((dName) => {
@@ -1075,15 +1076,20 @@ export default {
                     Object.keys(this.$store.state.UDP_connection).forEach((udp) => {
                         if (this.$store.state.UDP_connection[udp] === 'connect') {
                             let serverip = udp.split(':')
+                            let res_flag = false
                             axios.post('http://localhost:3000/rfflag', {
                                 "connection": 'disconnect',
                                 "host": serverip[0],
                                 "port": serverip[1]
                             })
                                 .then((response) => {
-                                        EventBus.$emit('log_update', response.data)
-                                        this.$store.state.UDP_connection[udp] = 'disconnect'
-                                        // console.log(response.data)
+                                        if (!res_flag) {
+                                            EventBus.$emit('log_update', response.data)
+                                            this.$store.state.UDP_connection[udp] = 'disconnect'
+                                            res_flag = true
+                                        } else {
+                                            res_flag = false
+                                        }
                                     }
                                 ).catch((e) => {
                                     console.log("Could not send UDP 'disconnect' message")
@@ -1093,7 +1099,6 @@ export default {
                             )
                         }
                     })
-                    EventBus.$emit('mode_update', 'LTE')
                 }
 
                 this.$store.state.client.publish('/Mobius/' + this.$store.state.VUE_APP_MOBIUS_GCS + '/RC_Data/' + this.$store.state.VUE_APP_MOBIUS_RC, Buffer.from(hex_content_each, 'hex'))
@@ -1110,15 +1115,20 @@ export default {
                     Object.keys(this.$store.state.UDP_connection).forEach((udp) => {
                         if (this.$store.state.UDP_connection[udp] === 'connect') {
                             let serverip = udp.split(':')
+                            let res_flag = false
                             axios.post('http://localhost:3000/rfflag', {
                                 "connection": 'disconnect',
                                 "host": serverip[0],
                                 "port": serverip[1]
                             })
                                 .then((response) => {
-                                        EventBus.$emit('log_update', response.data)
-                                        this.$store.state.UDP_connection[udp] = 'disconnect'
-                                        // console.log(response.data)
+                                        if (!res_flag) {
+                                            EventBus.$emit('log_update', response.data)
+                                            this.$store.state.UDP_connection[udp] = 'disconnect'
+                                            res_flag = true
+                                        } else {
+                                            res_flag = false
+                                        }
                                     }
                                 ).catch((e) => {
                                     console.log("Could not send UDP 'disconnect' message")
