@@ -15,6 +15,11 @@ let RCData = '';
 let RCstrFromeGCS = '';
 let RCstrFromeGCSLength = 0;
 
+let rfPort = null;
+
+let SerialPortsList = [];
+let SerialPortsObject = [];
+
 let rfUDP = {};
 
 /* GET home page. */
@@ -26,6 +31,21 @@ router.get('/serialdata', function (req, res, next) {
     res.set({'access-control-allow-origin': '*'});
     res.send(RCData);
 });
+
+// router.get('/serialports', function (req, res, next) {
+//     res.set({'access-control-allow-origin': '*'});
+//     res.send(SerialPortsObject);
+// });
+router.post('/rfport', function (req, res, next) {
+    if (req.body.connect) {
+        setTimeout(RFSerialConnect, 500, req.body.port, req.body.baudrate);
+        res.send('[ ' + req.body.port + ':' + req.body.baudrate + ' ]' + ' Connect');
+    } else {
+        rfPort.close()
+        res.send('[ ' + req.body.port + ':' + req.body.baudrate + ' ]' + ' Disonnect');
+    }
+});
+
 router.post('/rfflag', function (req, res, next) {
     let res_text = ''
 
@@ -80,6 +100,7 @@ setInterval(function () {
                         console.log('[' + rfUDP[Object.keys(rfUDP)[idx]].host + ':' + rfUDP[Object.keys(rfUDP)[idx]].port + '] Failure of data transmission via RF');
                         return;
                     }
+                    // console.log('send to [',Object.keys(rfUDP)[idx],'] - ', RCData)
                 }
             );
         }
@@ -139,5 +160,87 @@ function rcPortData(message) {
         }
     }
 }
+
+//
+// let tempSerialPort = null;
+// setInterval(function () {
+//     SerialPort.list().then(function (ports) {
+//         ports.forEach(function (port) {
+//             if (!SerialPortsList.includes(port.path)) {
+//                 SerialPortsList.push(port.path)
+//                 SerialPortsObject.push({"title": port.path, "status": "Free"})
+//
+//                 tempSerialPort = new SerialPort(port.path, {
+//                     baudRate: parseInt(115200, 10),
+//                 });
+//                 tempSerialPort.on('open', function () {
+//                     tempSerialPort.close()
+//                 });
+//                 tempSerialPort.on('close', function () {
+//                     SerialPortsObject.forEach((list) => {
+//                         if (list.title === port.path) {
+//                             list.status = "Free"
+//                         }
+//                     })
+//                 });
+//                 tempSerialPort.on('error', function () {
+//                     SerialPortsObject.forEach((list) => {
+//                         if (list.title === port.path) {
+//                             list.status = "Using"
+//                         }
+//                     })
+//                 });
+//                 tempSerialPort.on('data', function (data) {
+//                     // TODO: 암호화 모듈 구분
+//                 });
+//             }
+//         })
+//     });
+// }, 2000);
+
+function RFSerialConnect(port, baudrate) {
+    if (rfPort === null) {
+        console.log(port)
+        rfPort = new SerialPort(port, {
+            baudRate: parseInt(baudrate, 10),
+        });
+
+        rfPort.on('open', rfPortOpen);
+        rfPort.on('close', rfPortClose);
+        rfPort.on('error', rfPortError);
+        // rfPort.on('data', rfPortData);
+    } else {
+        if (rfPort.isOpen) {
+            console.log('This is an already open RC port.')
+        } else {
+            rfPort.open();
+        }
+    }
+}
+
+function rfPortOpen() {
+    console.log('rfPort open. ' + rfPort.path + ' Data rate: ' + rfPort.baudRate);
+}
+
+function rfPortClose() {
+    console.log('rfPort closed.');
+}
+
+function rfPortError(error) {
+    console.log('[rfPort error]: ' + error.message);
+
+    setTimeout(RFSerialConnect, 2000);
+}
+
+// function rfPortData(message) {
+//     console.log(message.toString())
+// }
+
+setInterval(function () {
+    if (rfPort !== null) {
+        rfPort.write(Buffer.from(RCData, 'hex'));
+        // console.log('send to [', rfPort.path, rfPort.baudRate, '] - ', RCData);
+    }
+}, 40);
 
 module.exports = router;

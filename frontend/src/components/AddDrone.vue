@@ -131,8 +131,25 @@
                 class="ml-2 mb-3 white--text font-weight-bold" style="font-size: 22px">
                 RF Protocol
             </v-row>
-            <v-text-field
+            <v-row
                 v-if="$store.state.RF_Protocol"
+                align="center" justify="center" class="mt-n5 white--text font-weight-bold" style="font-size: 20px;">
+                <v-col cols="5" align="end">
+                    UDP
+                </v-col>
+                <v-col cols="2" align="start">
+                    <v-switch
+                        v-model="rfType"
+                        inset
+                        color="red"
+                    ></v-switch>
+                </v-col>
+                <v-col cols="5" align="start">
+                    Serial
+                </v-col>
+            </v-row>
+            <v-text-field
+                v-if="$store.state.RF_Protocol && !rfType"
                 class="custom-placeholer-color mx-2"
                 dense
                 ref="drone"
@@ -146,7 +163,7 @@
                 background-color="white"
             ></v-text-field>
             <v-data-table
-                v-if="$store.state.RF_Protocol && udp_list.length > 0"
+                v-if="$store.state.RF_Protocol && !rfType && udp_list.length > 0"
                 :headers="udp_header"
                 :items="udp_list"
                 item-key="name"
@@ -173,7 +190,7 @@
                     </v-btn>
                 </template>
             </v-data-table>
-            <v-row v-if="$store.state.RF_Protocol" class="mt-2" align="center" justify="space-around">
+            <v-row v-if="$store.state.RF_Protocol && !rfType" class="mt-2" align="center" justify="space-around">
                 <v-btn
                     fab
                     height="45"
@@ -188,7 +205,7 @@
             </v-row>
             <v-row align="center" justify="space-around">
                 <v-btn
-                    v-if="$store.state.RF_Protocol"
+                    v-if="$store.state.RF_Protocol && !rfType"
                     fab
                     height="45"
                     width="100"
@@ -200,7 +217,7 @@
                 > Link
                 </v-btn>
                 <v-btn
-                    v-if="$store.state.RF_Protocol"
+                    v-if="$store.state.RF_Protocol && !rfType"
                     fab
                     height="45"
                     width="100"
@@ -209,6 +226,99 @@
                     elevation="5"
                     style="font-size: 20px;font-weight: bold"
                 > Unlink
+                </v-btn>
+            </v-row>
+            <v-row
+                v-if="$store.state.RF_Protocol && rfType"
+                class="mx-2" justify="center">
+                <!--                <v-menu-->
+                <!--                    bottom offset-y>-->
+                <!--                    <template v-slot:activator="{ on, attrs }">-->
+                <!--                        <v-btn-->
+                <!--                            v-if="$store.state.UDP_connection !== 'connect'"-->
+                <!--                            class="mb-16"-->
+                <!--                            style="font-size: 20px; font-weight: bold"-->
+                <!--                            width="60%"-->
+                <!--                            height="50"-->
+                <!--                            color="primary"-->
+                <!--                            dark-->
+                <!--                            v-bind="attrs"-->
+                <!--                            v-on="on"-->
+                <!--                        >-->
+                <!--                            Select Serial-->
+                <!--                        </v-btn>-->
+                <!--                    </template>-->
+                <!--                    <v-list>-->
+                <!--                        <v-list-item-->
+                <!--                            v-for="(item, index) in SerialPortsList"-->
+                <!--                            :key="index"-->
+                <!--                            @click="RFSerialPort(SerialPortsList[index].title)"-->
+                <!--                        >-->
+                <!--                            <v-list-item-title-->
+                <!--                                style="font-size: 18px"-->
+                <!--                            >{{ item.title }} {{ item.status }}-->
+                <!--                            </v-list-item-title>-->
+                <!--                        </v-list-item>-->
+                <!--                    </v-list>-->
+                <!--                </v-menu>-->
+                <v-row class="mt-n4 mx-2 white--text font-weight-bold" style="font-size: 22px">
+                    Serial Port
+                </v-row>
+                <v-text-field
+                    v-if="$store.state.RF_Protocol && rfType"
+                    class="custom-placeholer-color mt-4 mx-2"
+                    dense
+                    ref="drone"
+                    v-model="SerialPort" :rules="SerialPort_rule"
+                    placeholder=""
+                    label="UDP server address*"
+                    required
+                    filled
+                    height="60"
+                    style="font-size: 25px;"
+                    background-color="white"
+                ></v-text-field>
+                <v-row class="mt-n4 mx-2 white--text font-weight-bold" style="font-size: 22px">
+                    Baud Rate
+                </v-row>
+                <v-text-field
+                    v-if="$store.state.RF_Protocol && rfType"
+                    class="custom-placeholer-color mt-4 mx-2"
+                    dense
+                    ref="drone"
+                    v-model="SerialBaudRate" :rules="SerialBaudRate_rule"
+                    placeholder=""
+                    label="UDP server address*"
+                    required
+                    filled
+                    height="60"
+                    style="font-size: 25px;"
+                    background-color="white"
+                ></v-text-field>
+            </v-row>
+            <v-row align="center" justify="space-around">
+                <v-btn
+                    v-if="$store.state.RF_Protocol && rfType"
+                    fab
+                    height="45"
+                    width="110"
+                    class="mt-2 rounded-lg"
+                    @click="SerialConnect(true)"
+                    elevation="5"
+                    color="primary"
+                    style="font-size: 18px;font-weight: bold"
+                > Connect
+                </v-btn>
+                <v-btn
+                    v-if="$store.state.RF_Protocol && rfType"
+                    fab
+                    height="45"
+                    width="140"
+                    class="mt-2 rounded-lg"
+                    @click="SerialConnect(false)"
+                    elevation="5"
+                    style="font-size: 18px;font-weight: bold"
+                > Disconnect
                 </v-btn>
             </v-row>
             <div class="mt-8 mb-4 aside-line"></div>
@@ -233,6 +343,7 @@
 <script>
 import EventBus from "../EventBus";
 import axios from "axios";
+// import {mixin as VueTimers} from "vue-timers";
 
 export default {
     name: 'AddDrone',
@@ -263,7 +374,11 @@ export default {
             drone_selected: [],
             rc_hub_status: ['disconnected', 'ready', 'connected', 'send', 'disabled'],
 
-            RF_Protocol: false,
+            mavVersion: 'v1',
+            mavVersions: ['v1', 'v2'],
+
+            rfType: false,
+
             UDPServerIP: '',
             UDPServerIP_rule: [
                 v => !!v || '서버 주소는 필수 입력사항입니다.',
@@ -287,10 +402,24 @@ export default {
             ],
             udp_list: JSON.parse(localStorage.getItem('RF_udp_list')) ? JSON.parse(localStorage.getItem('RF_udp_list')) : [],
 
-            mavVersion: 'v1',
-            mavVersions: ['v1', 'v2'],
+            SerialPortsList: [],
+            SerialPort: '',
+            SerialPort_rule: [
+                v => !!v || '포트 설정은 필수입니다.',
+                v => !/[~!@#$%^&*()+|<>?{}]/.test(v) || '포트 이름에는 특수문자를 사용할 수 없습니다.',
+                v => !!/[COM]/.test(v) || '올바른 포트가 아닙니다.'
+            ],
+            SerialBaudRate: 115200,
+            SerialBaudRate_rule: [
+                v => !!v || 'Baud Rate는 필수 입력사항입니다.',
+                v => /^[0-9]*$/.test(v) || 'Baud Rate에는 숫자만 입력할 수 있습니다.'
+            ],
         }
     },
+    // mixins: [VueTimers],
+    // timers: {
+    //     SerialPorts: {time: 2000, repeat: true},
+    // },
     methods: {
         selectedMavVersion: function (event) {
             // console.log("selectedMavVersion", event)
@@ -633,8 +762,71 @@ export default {
                 }
             })
         },
+        // SerialPorts() {
+        //     axios.get('http://localhost:3000/serialports')
+        //         .then((response) => {
+        //                 this.SerialPortsList = response.data
+        //             }
+        //         ).catch(() => {
+        //             console.log("Can't find serial port")
+        //         }
+        //     )
+        // },
+        SerialConnect(flag) {
+            axios.post('http://localhost:3000/rfport', {
+                "port": this.SerialPort,
+                "baudrate": this.SerialBaudRate,
+                "connect": flag
+            })
+                .then((response) => {
+                        console.log(response.data)
+                    }
+                ).catch(() => {
+                    console.log("Couldn't send serial port for RF")
+                }
+            )
+        }
+    },
+    watch: {
+        rfType(flag) {
+            if (flag) {
+                let res_flag = false
+                if (this.udp_list.length > 0) {
+                    this.udp_list.forEach((udpHostPort) => {
+                        udpHostPort = udpHostPort.name.replace('\t', '')
+                        let serverip = udpHostPort.split(':')
+                        axios.post('http://localhost:3000/rfflag', {
+                            "connection": 'disconnect',
+                            "host": serverip[0],
+                            "port": serverip[1]
+                        })
+                            .then((response) => {
+                                    if (!res_flag) {
+                                        EventBus.$emit('log_update', response.data)
+                                        this.$store.state.UDP_connection[udpHostPort] = 'disconnect'
+                                        res_flag = true
+                                    } else {
+                                        res_flag = false
+                                    }
+                                }
+                            ).catch((e) => {
+                                console.log("Could not send UDP 'disconnect' message")
+                                EventBus.$emit('log_update', "UDP 연결 해제가 불가능합니다.")
+                                console.log(e)
+                            }
+                        )
+                    })
+                } else {
+                    EventBus.$emit('log_update', '연결할 UDP를 선택하세요.')
+                }
+            } else {
+                this.SerialConnect(false)
+            }
+        }
     },
     mounted() {
+        // this.$timer.start('SerialPorts')
+
         EventBus.$on('update-table', (drone) => {
             this.UpdateTable(drone);
         });
@@ -653,6 +845,8 @@ export default {
             }
         }
         this.drone_list = []
+
+        // this.$timer.stop('SerialPorts')
     }
 }
 </script>
