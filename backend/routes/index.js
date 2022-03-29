@@ -41,7 +41,8 @@ router.post('/rfport', function (req, res, next) {
         setTimeout(RFSerialConnect, 500, req.body.port, req.body.baudrate);
         res.send('[ ' + req.body.port + ':' + req.body.baudrate + ' ]' + ' Connect');
     } else {
-        rfPort.close()
+        rfPort.close();
+        rfPort = null;
         res.send('[ ' + req.body.port + ':' + req.body.baudrate + ' ]' + ' Disonnect');
     }
 });
