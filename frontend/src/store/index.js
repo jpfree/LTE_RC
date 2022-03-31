@@ -10,6 +10,8 @@ export default new Vuex.Store({
         VUE_APP_MOBIUS_GCS: 'KETI_MUV',
         VUE_APP_MOBIUS_RC: 'KETI_RC',
 
+        TYPE: false, // false=LTE, true=RF
+
         Mode: '',
 
         mavVersion: (localStorage.getItem('mavVersion') === 'v1') ? localStorage.getItem('mavVersion') : 'v2',

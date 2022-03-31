@@ -1065,14 +1065,12 @@ export default {
                     })
                 }
 
-                if (this.ch_raw.ch12_raw > 1700) {  // RF
+                if (this.$store.state.TYPE) {  // RF
                     EventBus.$emit('mode_update', 'RF')
-                    this.$store.state.RF_Protocol = true
                     Object.keys(this.$store.state.control_drone).forEach((dName) => {
                         this.$store.state.control_drone[dName].status = 'RF'
                     })
                 } else {
-                    this.$store.state.RF_Protocol = false
                     Object.keys(this.$store.state.UDP_connection).forEach((udp) => {
                         if (this.$store.state.UDP_connection[udp] === 'connect') {
                             let serverip = udp.split(':')
@@ -1104,14 +1102,12 @@ export default {
                 this.$store.state.client.publish('/Mobius/' + this.$store.state.VUE_APP_MOBIUS_GCS + '/RC_Data/' + this.$store.state.VUE_APP_MOBIUS_RC, Buffer.from(hex_content_each, 'hex'))
                 // this.RCstrToDrone = ''
             } else {
-                if (this.ch_raw.ch12_raw > 1700) {  // RF
+                if (this.$store.state.TYPE) {  // RF
                     EventBus.$emit('mode_update', 'RF')
-                    this.$store.state.RF_Protocol = true
                     Object.keys(this.$store.state.control_drone).forEach((dName) => {
                         this.$store.state.control_drone[dName].status = 'RF'
                     })
                 } else {
-                    this.$store.state.RF_Protocol = false
                     Object.keys(this.$store.state.UDP_connection).forEach((udp) => {
                         if (this.$store.state.UDP_connection[udp] === 'connect') {
                             let serverip = udp.split(':')

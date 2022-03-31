@@ -2,9 +2,31 @@
     <div>
         <div class='left'>
             <v-row class="ml-2 white--text font-weight-bold" style="font-size: 25px">
+                TYPE
+            </v-row>
+            <v-row align="center" justify="center" class="mt-n5 white--text font-weight-bold" style="font-size: 20px;">
+                <v-col cols="5" align="end">
+                    LTE
+                </v-col>
+                <v-col cols="2" align="start">
+                    <v-switch
+                        v-model="COM_PROTOCOL_TYPE"
+                        inset
+                        color="success"
+                    ></v-switch>
+                </v-col>
+                <v-col cols="5" align="start">
+                    RF
+                </v-col>
+            </v-row>
+            <v-row
+                v-if="!COM_PROTOCOL_TYPE"
+                class="ml-2 white--text font-weight-bold" style="font-size: 25px">
                 MAVLink Version
             </v-row>
-            <v-row class="mx-1 mb-2">
+            <v-row
+                v-if="!COM_PROTOCOL_TYPE"
+                class="mx-1 mb-2">
                 <v-col>
                     <v-select
                         class="text-h5"
@@ -15,11 +37,16 @@
                     ></v-select>
                 </v-col>
             </v-row>
-            <div class="my-4 aside-line"></div>
-            <v-row class="ml-2 white--text font-weight-bold" style="font-size: 22px">
+            <div
+                v-if="!COM_PROTOCOL_TYPE"
+                class="my-4 aside-line"></div>
+            <v-row
+                v-if="!COM_PROTOCOL_TYPE"
+                class="ml-2 white--text font-weight-bold" style="font-size: 22px">
                 Drone Name
             </v-row>
             <v-text-field
+                v-if="!COM_PROTOCOL_TYPE"
                 class="custom-placeholer-color mx-2 mt-5"
                 dense
                 ref="drone"
@@ -32,7 +59,9 @@
                 style="font-size: 25px;"
                 background-color="white"
             ></v-text-field>
-            <v-row class="mt-n2" align="center" justify="space-around">
+            <v-row
+                v-if="!COM_PROTOCOL_TYPE"
+                class="mt-n2" align="center" justify="space-around">
                 <v-btn
                     fab
                     height="45"
@@ -45,12 +74,16 @@
                 > ADD
                 </v-btn>
             </v-row>
-            <div class="mt-8 aside-line"></div>
-            <v-row class="mt-4 ml-2 white--text font-weight-bold" style="font-size: 22px">
+            <div
+                v-if="!COM_PROTOCOL_TYPE"
+                class="mt-8 aside-line"></div>
+            <v-row
+                v-if="!COM_PROTOCOL_TYPE"
+                class="mt-4 ml-2 white--text font-weight-bold" style="font-size: 22px">
                 Drone List
             </v-row>
             <v-data-table
-                v-if="drone_list.length > 0"
+                v-if="!COM_PROTOCOL_TYPE && drone_list.length > 0"
                 :headers="header"
                 :items="drone_list"
                 item-key="name"
@@ -83,7 +116,9 @@
                     </thead>
                 </template>
             </v-data-table>
-            <v-row class="mt-1" align="center" justify="space-around">
+            <v-row
+                v-if="!COM_PROTOCOL_TYPE"
+                class="mt-1" align="center" justify="space-around">
                 <v-btn
                     v-if="drone_selected.length > 0"
                     fab
@@ -98,7 +133,9 @@
                 > Delete
                 </v-btn>
             </v-row>
-            <v-row align="center" justify="space-around">
+            <v-row
+                v-if="!COM_PROTOCOL_TYPE"
+                align="center" justify="space-around">
                 <v-btn
                     v-if="drone_selected.length > 0"
                     fab
@@ -125,14 +162,13 @@
                 > Unlink
                 </v-btn>
             </v-row>
-            <div v-if="$store.state.RF_Protocol" class="mt-8 aside-line"></div>
             <v-row
-                v-if="$store.state.RF_Protocol"
+                v-if="COM_PROTOCOL_TYPE"
                 class="ml-2 mb-3 white--text font-weight-bold" style="font-size: 22px">
                 RF Protocol
             </v-row>
             <v-row
-                v-if="$store.state.RF_Protocol"
+                v-if="COM_PROTOCOL_TYPE"
                 align="center" justify="center" class="mt-n5 white--text font-weight-bold" style="font-size: 20px;">
                 <v-col cols="5" align="end">
                     UDP
@@ -148,89 +184,99 @@
                     Serial
                 </v-col>
             </v-row>
-            <v-text-field
-                v-if="$store.state.RF_Protocol && !rfType"
-                class="custom-placeholer-color mx-2"
-                dense
-                ref="drone"
-                v-model="UDPServerIP" :rules="UDPServerIP_rule"
-                placeholder=""
-                label="UDP server address*"
-                required
-                filled
-                height="60"
-                style="font-size: 25px;"
-                background-color="white"
-            ></v-text-field>
-            <v-data-table
-                v-if="$store.state.RF_Protocol && !rfType && udp_list.length > 0"
-                :headers="udp_header"
-                :items="udp_list"
-                item-key="name"
-                hide-default-header
-                hide-default-footer
-                class="control_drone_name elevation-1 mx-2 mt-n2"
-                @click:row="UDProwClicked">
-                <template v-slot:item.delete="{ item }">
+            <div v-if="COM_PROTOCOL_TYPE" class="mt-2 aside-line"></div>
+            <v-row
+                v-if="COM_PROTOCOL_TYPE && !rfType"
+                class="mt-2 mx-2" justify="center">
+                <v-row
+                    class="mx-2 white--text font-weight-bold" style="font-size: 22px">
+                    UDP Address
+                </v-row>
+                <v-text-field
+                    class="custom-placeholer-color mx-2 mt-4"
+                    dense
+                    ref="drone"
+                    v-model="UDPServerIP" :rules="UDPServerIP_rule"
+                    placeholder=""
+                    label="UDP server address*"
+                    required
+                    filled
+                    height="60"
+                    style="font-size: 25px;"
+                    background-color="white"
+                ></v-text-field>
+                <v-data-table
+                    v-if="COM_PROTOCOL_TYPE && !rfType && udp_list.length > 0"
+                    :headers="udp_header"
+                    :items="udp_list"
+                    item-key="name"
+                    hide-default-header
+                    hide-default-footer
+                    class="control_drone_name elevation-1 mx-2 mt-n2"
+                    @click:row="UDProwClicked">
+                    <template v-slot:item.delete="{ item }">
+                        <v-btn
+                            fab
+                            height="40"
+                            width="50"
+                            class="rounded-lg"
+                            @click="setUDPServer(item, true)"
+                            elevation="5"
+                            style="font-size: 20px;font-weight: bold"
+                            color="error"
+                        >
+                            <font-awesome-icon
+                                class="control_drone_icon mt-n1 v-avatar--metronome"
+                                icon="trash"
+                                style="color: white"
+                                size="2x"/>
+                        </v-btn>
+                    </template>
+                </v-data-table>
+                <v-row v-if="COM_PROTOCOL_TYPE && !rfType" align="center" justify="space-around">
                     <v-btn
                         fab
-                        height="40"
-                        width="50"
-                        class="rounded-lg"
-                        @click="setUDPServer(item, true)"
+                        height="45"
+                        width="170"
+                        class="mt-2 rounded-lg"
+                        @click="setUDPServer(UDPServerIP)"
                         elevation="5"
                         style="font-size: 20px;font-weight: bold"
-                        color="error"
-                    >
-                        <font-awesome-icon
-                            class="control_drone_icon mt-n1 v-avatar--metronome"
-                            icon="trash"
-                            style="color: white"
-                            size="2x"/>
+                        color="success"
+                    > ADD Server
                     </v-btn>
-                </template>
-            </v-data-table>
-            <v-row v-if="$store.state.RF_Protocol && !rfType" class="mt-2" align="center" justify="space-around">
-                <v-btn
-                    fab
-                    height="45"
-                    width="170"
-                    class="mt-2 rounded-lg"
-                    @click="setUDPServer(UDPServerIP)"
-                    elevation="5"
-                    style="font-size: 20px;font-weight: bold"
-                    color="success"
-                > ADD Server
-                </v-btn>
-            </v-row>
-            <v-row align="center" justify="space-around">
-                <v-btn
-                    v-if="$store.state.RF_Protocol && !rfType"
-                    fab
-                    height="45"
-                    width="100"
-                    class="mt-2 rounded-lg"
-                    @click="RFlink"
-                    elevation="5"
-                    color="primary"
-                    style="font-size: 20px;font-weight: bold"
-                > Link
-                </v-btn>
-                <v-btn
-                    v-if="$store.state.RF_Protocol && !rfType"
-                    fab
-                    height="45"
-                    width="100"
-                    class="mt-2 rounded-lg"
-                    @click="RFunlink"
-                    elevation="5"
-                    style="font-size: 20px;font-weight: bold"
-                > Unlink
-                </v-btn>
+                </v-row>
+                <v-row
+                    v-if="COM_PROTOCOL_TYPE"
+                    align="center" justify="space-around">
+                    <v-btn
+                        v-if="!rfType"
+                        fab
+                        height="45"
+                        width="100"
+                        class="mt-2 rounded-lg"
+                        @click="RFlink"
+                        elevation="5"
+                        color="primary"
+                        style="font-size: 20px;font-weight: bold"
+                    > Link
+                    </v-btn>
+                    <v-btn
+                        v-if="!rfType"
+                        fab
+                        height="45"
+                        width="100"
+                        class="mt-2 rounded-lg"
+                        @click="RFunlink"
+                        elevation="5"
+                        style="font-size: 20px;font-weight: bold"
+                    > Unlink
+                    </v-btn>
+                </v-row>
             </v-row>
             <v-row
-                v-if="$store.state.RF_Protocol && rfType"
-                class="mx-2" justify="center">
+                v-if="COM_PROTOCOL_TYPE && rfType"
+                class="mt-2 mx-2" justify="center">
                 <!--                <v-menu-->
                 <!--                    bottom offset-y>-->
                 <!--                    <template v-slot:activator="{ on, attrs }">-->
@@ -261,34 +307,36 @@
                 <!--                        </v-list-item>-->
                 <!--                    </v-list>-->
                 <!--                </v-menu>-->
-                <v-row class="mt-n4 mx-2 white--text font-weight-bold" style="font-size: 22px">
+                <v-row
+                    class="mx-2 white--text font-weight-bold" style="font-size: 22px">
                     Serial Port
                 </v-row>
                 <v-text-field
-                    v-if="$store.state.RF_Protocol && rfType"
+                    v-if="rfType"
                     class="custom-placeholer-color mt-4 mx-2"
                     dense
                     ref="drone"
                     v-model="SerialPort" :rules="SerialPort_rule"
                     placeholder=""
-                    label="UDP server address*"
+                    label="Serial Port*"
                     required
                     filled
                     height="60"
                     style="font-size: 25px;"
                     background-color="white"
                 ></v-text-field>
-                <v-row class="mt-n4 mx-2 white--text font-weight-bold" style="font-size: 22px">
+                <v-row
+                    class="mt-n4 mx-2 white--text font-weight-bold" style="font-size: 22px">
                     Baud Rate
                 </v-row>
                 <v-text-field
-                    v-if="$store.state.RF_Protocol && rfType"
+                    v-if="rfType"
                     class="custom-placeholer-color mt-4 mx-2"
                     dense
                     ref="drone"
                     v-model="SerialBaudRate" :rules="SerialBaudRate_rule"
                     placeholder=""
-                    label="UDP server address*"
+                    label="Serial Baud Rate*"
                     required
                     filled
                     height="60"
@@ -296,9 +344,11 @@
                     background-color="white"
                 ></v-text-field>
             </v-row>
-            <v-row align="center" justify="space-around">
+            <v-row
+                v-if="COM_PROTOCOL_TYPE"
+                align="center" justify="space-around">
                 <v-btn
-                    v-if="$store.state.RF_Protocol && rfType"
+                    v-if="rfType"
                     fab
                     height="45"
                     width="110"
@@ -310,7 +360,7 @@
                 > Connect
                 </v-btn>
                 <v-btn
-                    v-if="$store.state.RF_Protocol && rfType"
+                    v-if="rfType"
                     fab
                     height="45"
                     width="140"
@@ -350,6 +400,8 @@ export default {
     data() {
         return {
             MOBIUS_CONNECTION_CONNECTED: (localStorage.getItem('mobius_connected') === 'true') ? localStorage.getItem('mobius_connected') : false,
+
+            COM_PROTOCOL_TYPE: this.$store.state.TYPE,
 
             add_drone: "",
             add_drone_rule: [
@@ -638,7 +690,7 @@ export default {
                     }
                 })
             } else {
-                EventBus.$emit('log_update', '연결할 UDP를 선택하세요.')
+                EventBus.$emit('log_update', '연결할 UDP를 입력하세요.')
             }
         },
         RFunlink() {
@@ -669,7 +721,7 @@ export default {
                     )
                 })
             } else {
-                EventBus.$emit('log_update', '연결할 UDP를 선택하세요.')
+                EventBus.$emit('log_update', '연결할 UDP를 입력하세요.')
             }
         },
         setUDPServer(serverIP, del = false) {
@@ -788,9 +840,22 @@ export default {
         }
     },
     watch: {
-        rfType(flag) {
-            if (flag) {
+        COM_PROTOCOL_TYPE(flag){
+            this.$store.state.TYPE = flag
+            if(flag){  // RF
+                // LTE 연결 해제
+                if (this.$store.state.client.connected) {
+                    Object.keys(this.$store.state.control_drone).forEach((dName) => {
+                        let topic = '/Mobius/' + this.$store.state.VUE_APP_MOBIUS_GCS + '/RC_Data/' + dName + '/conn'
+                        this.$store.state.client.publish(topic, Buffer.from('unsubscribe'))
+                        console.log('send unsubscribe to', topic)
+                    })
+                }
+            } else {  // LTE
+                // 연결되어 있던 RF 초기화
+                this.SerialConnect(false)
                 let res_flag = false
+
                 if (this.udp_list.length > 0) {
                     this.udp_list.forEach((udpHostPort) => {
                         udpHostPort = udpHostPort.name.replace('\t', '')
@@ -816,11 +881,52 @@ export default {
                             }
                         )
                     })
-                } else {
-                    EventBus.$emit('log_update', '연결할 UDP를 선택하세요.')
                 }
+                // 드론 인증 준비
+                if (this.$store.state.client.connected) {
+                    Object.keys(this.$store.state.control_drone).forEach((dName) => {
+                        let topic = '/Mobius/' + this.$store.state.VUE_APP_MOBIUS_GCS + '/RC_Data/' + dName + '/conn'
+                        this.$store.state.client.publish(topic, Buffer.from('ready'))
+                    })
+                }
+            }
+        },
+        rfType(flag) {
+            if (!flag) {  // UDP
+                this.SerialConnect(false)  // 연결되어 있는 Serial 연결 초기화
+
+                EventBus.$emit('log_update', 'UDP 연결')
             } else {
-                this.SerialConnect(false)
+                EventBus.$emit('log_update', 'Serial 연결')
+
+                let res_flag = false
+
+                if (this.udp_list.length > 0) {
+                    this.udp_list.forEach((udpHostPort) => {
+                        udpHostPort = udpHostPort.name.replace('\t', '')
+                        let serverip = udpHostPort.split(':')
+                        axios.post('http://localhost:3000/rfflag', {
+                            "connection": 'disconnect',
+                            "host": serverip[0],
+                            "port": serverip[1]
+                        })
+                            .then((response) => {
+                                    if (!res_flag) {
+                                        EventBus.$emit('log_update', response.data)
+                                        this.$store.state.UDP_connection[udpHostPort] = 'disconnect'
+                                        res_flag = true
+                                    } else {
+                                        res_flag = false
+                                    }
+                                }
+                            ).catch((e) => {
+                                console.log("Could not send UDP 'disconnect' message")
+                                EventBus.$emit('log_update', "UDP 연결 해제가 불가능합니다.")
+                                console.log(e)
+                            }
+                        )
+                    })
+                }
             }
         }
     },
