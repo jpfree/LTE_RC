@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
-import RCCalibration from "../views/RCCalibration";
+import RCCalibration from "../views/Calibration/RCCalibration";
+import RCDeadZone from "../views/DeadZone/RCDeadZone";
 
 Vue.use(VueRouter)
 
@@ -12,9 +13,14 @@ const routes = [
         component: Home
     },
     {
-        path: '/calibration',
-        name: 'calibration',
+        path: '/Calibration',
+        name: 'Calibration',
         component: RCCalibration
+    },
+    {
+        path: '/DeadZone',
+        name: 'DeadZone',
+        component: RCDeadZone
     }
 ]
 
