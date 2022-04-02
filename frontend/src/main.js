@@ -19,11 +19,12 @@ import {
     faExclamationCircle,
     faPlay,
     faExclamationTriangle,
-    faTrash
+    faTrash,
+    faCaretDown
 } from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
 
-library.add(faSpinner, faTimes, faTimesCircle, faUnlink, faLink, faCircle, faExclamationCircle, faPlay, faExclamationTriangle, faTrash)
+library.add(faSpinner, faTimes, faTimesCircle, faUnlink, faLink, faCircle, faExclamationCircle, faPlay, faExclamationTriangle, faTrash, faCaretDown)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 //쿠키를 사용한다.
