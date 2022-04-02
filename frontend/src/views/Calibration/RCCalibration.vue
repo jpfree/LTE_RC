@@ -260,10 +260,10 @@
 </template>
 
 <script>
-import CaliLeftBar from "../views/CaliLeftBar";
+import CaliLeftBar from "./CaliLeftBar";
 import axios from "axios";
 import {mixin as VueTimers} from "vue-timers";
-import EventBus from "../EventBus";
+import EventBus from "../../EventBus";
 
 export default {
     name: 'RCCalibration',

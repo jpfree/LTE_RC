@@ -27,11 +27,11 @@
                         :style="{color:iconColor(item), animationDuration: iconDuration(item)}"
                         size="1x"/>
                     <thead v-if="$store.state.control_drone[item.name].status === 'RF'">
-                    <tr>
-                        <th class="text-left">
-                            RF
-                        </th>
-                    </tr>
+                        <tr>
+                            <th class="text-left">
+                                RF
+                            </th>
+                        </tr>
                     </thead>
                 </template>
             </v-data-table>
@@ -111,7 +111,7 @@
     </div>
 </template>
 <script>
-import mavlink, {MAVLink} from "../mavlibrary/mavlink";
+import mavlink, {MAVLink} from "../../mavlibrary/mavlink";
 
 export default {
     name: 'CalieftBar',
@@ -483,7 +483,6 @@ export default {
                         // if ((this.$store.state.control_drone[dName].status === 'ready') || (this.$store.state.control_drone[dName].status === 'connected') || (this.$store.state.control_drone[dName].status === 'send')) {
                         let topic = '/Mobius/' + this.$store.state.VUE_APP_MOBIUS_GCS + '/GCS_Data/' + dName
 
-
                         this.calibrated_value.forEach((params) => {
                             this.set_param.target_system = this.$store.state.control_drone[dName].system_id
                             this.set_param.target_component = 1
@@ -496,6 +495,7 @@ export default {
                                 if (rc_param == null) {
                                     console.log("mavlink message is null");
                                 } else {
+                                    console.log(dName + '\n', params)
                                     // console.log(dName + '\n' + rc_param.toString('hex'))
                                     this.$store.state.client.publish(topic, rc_param);
                                 }
@@ -532,11 +532,13 @@ export default {
         if (this.timer_id) {
             clearInterval(this.timer_id);
         }
-        for (let idx in this.drone_list) {
-            let topic = '/Mobius/' + this.$store.state.VUE_APP_MOBIUS_GCS + '/RC_Data/' + this.drone_list[idx] + '/conn'
-            this.$store.state.client.publish(topic, Buffer.from('unsubscribe'))
+        if (this.$store.state.client.connected) {
+            for (let idx in this.drone_list) {
+                let topic = '/Mobius/' + this.$store.state.VUE_APP_MOBIUS_GCS + '/RC_Data/' + this.drone_list[idx] + '/conn'
+                this.$store.state.client.publish(topic, Buffer.from('unsubscribe'))
+            }
+            this.drone_list = []
         }
-        this.drone_list = []
     }
 }
 </script>
