@@ -372,21 +372,6 @@
                 </v-btn>
             </v-row>
             <div class="mt-8 mb-4 aside-line"></div>
-            <v-row justify="center" style="position:absolute; bottom:3%;width: 100%">
-                <router-link to="/calibration" align="center">
-                    <v-btn
-                        fab
-                        height="50"
-                        width="60%"
-                        style="font-size: 20px;font-weight: bold"
-                        class="rounded-lg ml-5"
-                        elevation="5"
-                        color="cyan"
-                        dark
-                    > Calibration
-                    </v-btn>
-                </router-link>
-            </v-row>
         </div>
     </div>
 </template>
