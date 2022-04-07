@@ -153,6 +153,7 @@ function rcPortData(message) {
             let RCLength = 34 * 2;
 
             RCData = RCstrFromeGCS.substr(0, RCLength);
+            // TODO: RF 모드 일 때, 조종기 모드별 채널 매핑
 
             RCstrFromeGCS = RCstrFromeGCS.substr(RCLength);
             RCstrFromeGCSLength = 0;
