@@ -877,7 +877,7 @@ export default {
         },
         receiveFromRC(hex_content) {
             // console.log('receiveFromRC - ' + hex_content_each)
-            let remoteMode = this.SBUS2RC(parseInt(hex_content.substr(24, 2), 16))
+            let remoteMode = this.SBUS2RC(parseInt(hex_content.substr(22, 2), 16))
             this.RCstrToDrone = 'ff'
             let hex_content_each = ''
 
@@ -1143,7 +1143,7 @@ export default {
 
             if (this.$store.state.client.connected) {  // LTE
                 EventBus.$emit('mode_update', 'LTE')
-                if (this.ch_raw.ch11_raw > 1700) {  // MAVLink
+                if (this.ch_raw.ch12_raw > 1700) {  // MAVLink
                     EventBus.$emit('mode_update', 'MAVLink')
                     Object.keys(this.$store.state.control_drone).forEach((dName) => {
                         if (this.$store.state.control_drone[dName].selected) {
