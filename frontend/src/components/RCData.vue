@@ -726,7 +726,7 @@ export default {
                     let status = topic_arr[topic_arr.length - 1]
 
                     if (status === 'status') {
-                        if (this.ch_raw.ch12_raw <= 1700) {
+                        if (!this.$store.state.TYPE) {
                             EventBus.$emit('add-counter', drone)
                             let msg = JSON.parse(message.toString())
                             if (msg.status === 'disconnected') {

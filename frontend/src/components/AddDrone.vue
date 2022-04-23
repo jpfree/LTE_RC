@@ -825,9 +825,9 @@ export default {
         }
     },
     watch: {
-        COM_PROTOCOL_TYPE(flag){
+        COM_PROTOCOL_TYPE(flag) {
             this.$store.state.TYPE = flag
-            if(flag){  // RF
+            if (flag) {  // RF
                 // LTE 연결 해제
                 if (this.$store.state.client.connected) {
                     Object.keys(this.$store.state.control_drone).forEach((dName) => {
