@@ -41,9 +41,13 @@ router.post('/rfport', function (req, res, next) {
         setTimeout(RFSerialConnect, 500, req.body.port, req.body.baudrate);
         res.send('[ ' + req.body.port + ':' + req.body.baudrate + ' ]' + ' Connect');
     } else {
-        rfPort.close();
-        rfPort = null;
-        res.send('[ ' + req.body.port + ':' + req.body.baudrate + ' ]' + ' Disonnect');
+        try {
+            rfPort.close();
+            rfPort = null;
+            res.send('[ ' + req.body.port + ':' + req.body.baudrate + ' ]' + ' Disonnect');
+        } catch (e) {
+            res.send('연결된 Serial 포트가 없습니다.')
+        }
     }
 });
 
@@ -57,7 +61,8 @@ router.post('/rfflag', function (req, res, next) {
             res_text = rfUDP[key].host + ':' + rfUDP[key].port + ' 연결 해제';
             delete rfUDP[key]
         } else {
-            res_text = '연결되지 않은 ' + key;
+            // res_text = '연결되지 않은 ' + key;
+            res_text = '';
         }
     } else {
         if (!rfUDP.hasOwnProperty(key)) {
