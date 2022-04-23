@@ -1157,8 +1157,9 @@ export default {
                                 if (rc_signal == null) {
                                     console.log("mavlink message is null");
                                 } else {
-                                    // console.log(rc_signal.toString('hex'))
-                                    this.$store.state.client.publish(topic, rc_signal);
+                                    if (this.$store.state.control_drone[dName].status === 'send'){
+                                        this.$store.state.client.publish(topic, rc_signal);
+                                    }
                                 }
                             } catch (ex) {
                                 console.log('[ERROR] ' + ex);
